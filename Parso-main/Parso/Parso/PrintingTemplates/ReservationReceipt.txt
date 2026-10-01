@@ -1,0 +1,47 @@
+          PANGO
+a Mobile Smart City Company 
+---------------------------
+
+       RESERVATION
+         RECEIPT
+
+      Receipt #:####
+
+---------------------------
+
+Location
+***** *******, **
+
+Zone
+***************
+
+Reservation Type
+**** *** *
+
+License Plate
+*******, **
+
+Start Date/Time
+**/**/*** **:** **
+
+End Date/Time
+**/**/*** **:** **
+
+----------------------------
+
+Purchase         **/**/****
+Date:            **:**:** **
+
+Reservation
+Fee:             $**.**
+
+Total:           $**.**
+
+Payment
+Method:          ******
+
+----------------------------
+
+Customer support at 1 (877)
+697-2646,One Financial Plaza
+at 100 Southeast Third avenue,

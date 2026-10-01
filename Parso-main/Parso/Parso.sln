@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parso", "Parso\Parso.csproj", "{1DC9E61B-AD86-4417-9892-3160A2792B59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailProtocolCore", "RetailProtocolCore\RetailProtocolCore.csproj", "{724BAA08-3091-4E31-2F3D-6972BE6EE6EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DC9E61B-AD86-4417-9892-3160A2792B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC9E61B-AD86-4417-9892-3160A2792B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DC9E61B-AD86-4417-9892-3160A2792B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DC9E61B-AD86-4417-9892-3160A2792B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724BAA08-3091-4E31-2F3D-6972BE6EE6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724BAA08-3091-4E31-2F3D-6972BE6EE6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724BAA08-3091-4E31-2F3D-6972BE6EE6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724BAA08-3091-4E31-2F3D-6972BE6EE6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90FFDEFE-F2A2-4B86-ACF2-916184B87FA1}
+	EndGlobalSection
+EndGlobal

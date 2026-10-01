@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PicobController</name>
+    </assembly>
+    <members>
+        <member name="T:PicobControllers.Controllers.PicobController">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobController.IsPortOpen">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobController.OpenPicobPort(System.String,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobController.SendToPicobAndReceive(System.String,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobController.ClosePort">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobController.SendToPicob(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:PicobControllers.Controllers.PicobLiteController.PicobDataRequest(System.Int32)">
+            <summary>
+            Method return the datas of the signals of the Picob Device
+            NO NEED timeout if used in a While
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PicobControllers.Helpers.Utils.DivideCommand(System.String)">
+            <summary>
+            Metodo para devolver un string en bytes, la cadena de datos que reciba siempre debe ser par
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="T:PicobControllers.IPicob">
+            <summary>
+            Defines the contract for controlling a Picob device via a serial port.
+            Used for Picob V2 (AL1 and SBK)
+            Its a general no specific use for the Picob device
+            </summary>
+        </member>
+        <member name="M:PicobControllers.IPicob.IsPortOpen">
+            <summary>
+            Gets whether the serial port to the Picob device is open.
+            </summary>
+            <returns>
+            <c>true</c> if the port is open; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:PicobControllers.IPicob.OpenPicobPort(System.String,System.Int32)">
+            <summary>
+            Opens the serial-port connection to the Picob device.
+            </summary>
+            <param name="serialPort">
+            The port name (e.g., "COM3").
+            </param>
+            <param name="baudRate">
+            The baud rate in bits per second (default is <c>115200</c>).
+            </param>
+            <returns>
+            <c>true</c> if the port opened successfully; otherwise, <c>false</c>.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+              When <paramref name="serialPort"/> is null, empty or has an invalid format.
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+              When the current process does not have permission to access the serial port.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+              When the serial port cannot be opened due to an I/O error.
+            </exception>
+        </member>
+        <member name="M:PicobControllers.IPicob.SendToPicobAndReceive(System.String,System.Int32)">
+            <summary>
+            Sends a command character to the Picob device and waits up to <paramref name="maxTimeout"/> ms for a response.
+            </summary>
+            <param name="command">The command characters (case-insensitive).</param>
+            <param name="maxTimeout">Timeout in milliseconds (default is <c>1500</c> ms).</param>
+            <returns>The response string from the device.</returns>
+            <exception cref="T:System.TimeoutException">
+              When no response is received within <paramref name="maxTimeout"/> milliseconds.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+              When there is a communication error sending the command.
+            </exception>
+        </member>
+        <member name="M:PicobControllers.IPicob.SendToPicob(System.String)">
+            <summary>
+            Sends a command character to the Picob device without waiting for a response.
+            </summary>
+            <param name="command">The command characters (case-insensitive).</param>
+            <exception cref="T:System.IO.IOException">
+              When there is a communication error sending the command.
+            </exception>
+        </member>
+        <member name="M:PicobControllers.IPicob.ClosePort">
+            <summary>
+            Closes the serial-port connection to the Picob device.
+            </summary>
+            <returns>
+            <c>true</c> once the port is closed; <c>false</c> if it remains open.
+            </returns>
+            <exception cref="T:System.IO.IOException">
+              When there is an error closing the serial port.
+            </exception>
+        </member>
+        <member name="T:PicobControllers.IPicobLite">
+            <summary>
+            Interface for PicobLite
+            </summary>
+        </member>
+        <member name="M:PicobControllers.IPicobLite.PicobDataRequest(System.Int32)">
+            <summary>
+            Sends a command character to the Picob device and waits up to<paramref name="maxTimeout"/> ms for a response.
+            </summary>
+            <param name="maxTimeout"> Timeout in milliseconds (default is <c>1500</c> ms). </param>
+            <returns>Array with all Picob Lite standart response</returns>
+            <exception cref="T:System.TimeoutException">
+            When no response is received within <paramref name="maxTimeout"/> milliseconds.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+              When there is a communication error sending the command.
+            </exception>
+        </member>
+        <member name="M:PicobControllers.IPicobLite.PicobDataRequest">
+            <summary>
+            Sends a command character to the Picob device and waits up a max of 1500ms for a response.
+            </summary>
+            <returns>Array with all Picob Lite standart response</returns>
+            <exception cref="T:System.TimeoutException">
+              When no response is received within 1500 milliseconds.
+            </exception>
+            <exception cref="T:System.IO.IOException">
+              When there is a communication error sending the command.
+            </exception>
+        </member>
+        <member name="M:Serialport.SerialPortController.OpenPort(System.String,System.Int32,System.Int32,System.IO.Ports.StopBits,System.IO.Ports.Parity,System.IO.Ports.Handshake)">
+            <summary>
+            Metodo para abrir los puertos seriales con ciertos datos predefinidos
+            </summary>
+            <param name="port">Nombre del puerto COM que se va a abrir con formato: COM9 </param>
+        </member>
+        <member name="M:Serialport.SerialPortController.ClosePort">
+            <summary>
+            Metodo utilizado para cerrar los puerto com abiertos
+            </summary>
+        </member>
+        <member name="P:Serialport.SerialPortController.IsPortOpen">
+            <summary>
+            metodo para saber si el puerto esta abierto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Serialport.SerialPortController.OnDataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+            <summary>
+            Evento que se lanza cuando se reciben datos en el puerto serial
+            </summary>
+            <param name="s"></param>
+            <param name="e"></param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,4 @@
+Disclaimer:
+This program is supplied as is. 
+Current Components, Inc. and Globalcom disclaims all warranties, express or implied, including, without limitation, the warranties of merchantability and of fitness of this program for any purpose. 
+Current Components, Inc. and Globalcom assumes no liability for damages direct or consequential, which may result from the use of these programs.

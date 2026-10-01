@@ -1,0 +1,22 @@
+<root>
+	<variable>
+		<id>ST</id> <!--Cualquier combinación de letras y palabras, DEBE SER ÚNICO-->
+		<textId>#Subtotal#</textId> <!--Palabra de reemplazo para el formato de impresión-->
+	</variable>
+	<variable>
+		<id>TO</id>
+		<textId>#Total#</textId>
+	</variable>
+	<variable>
+		<id>DES</id>
+		<textId>#Descuento#</textId>
+	</variable>
+	<variable>
+		<id>NOM</id>
+		<textId>#NombreB#</textId>
+	</variable>
+	<template>
+		<id>A</id> <!--Debe ser una sola letranumbe, o sea solo puede haber un total de 26 formatos de impresión existentes-->
+		<templateFileName>PrintingTest.txt</templateFileName>
+	</template>
+</root>

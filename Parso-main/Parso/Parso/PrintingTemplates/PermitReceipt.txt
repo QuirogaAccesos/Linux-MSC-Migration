@@ -1,0 +1,49 @@
+          PANGO
+a Mobile Smart City Company 
+---------------------------
+
+      PERMIT RECEIPT
+
+Receipt #:*********
+
+---------------------------
+
+Location
+***** *******, **
+
+Zone
+***************
+
+Permit Type
+**** *** *
+
+License Plate
+*******, **
+
+Start Date/Time
+**/**/*** **:** **
+
+End Date/Time
+**/**/*** **:** **
+
+----------------------------
+
+Purchase         **/**/****
+Date:            **:**:** **
+
+Permit Fee:      $**.**
+
+Transaction
+Fee:             $**.**
+
+Total:           $**.**
+
+Payment
+Method:          ******
+
+-----------------------------
+
++1 (877) 697-2646 | 100 SE 3rd
+Av | Ft. Lauderdale | FL 33394
+MOBILE SMART CITY CORP | ALL 
+RIGHTS RESERVED

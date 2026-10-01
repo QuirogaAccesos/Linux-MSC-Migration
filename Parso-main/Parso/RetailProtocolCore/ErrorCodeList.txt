@@ -1,0 +1,117 @@
+
+// NOTE : If updating please also updated the translation function. ReceiptXMLHelper.GetGBCTranslation(tbGbcCode.Text);
+
+
+// Not used by the application just for reference.
+//TERMDATA_TRANS_ERROR codes
+#define TE_NO_ERROR						 0
+#define TE_GENERAL_ERROR				-1
+#define TE_COMMUNICATION_ERROR			-2		// Communication issue talking to host.  Could be LAN connection or Parameter issue.
+#define TE_EMV_INIT_ERROR				-3		// Not active; problem found in the initialization of EMV contact card management.
+#define TE_NO_CARD_AVAILABLE_1			-4		// Error on the tack2 information, format, not valid for payments (for example, the expiry date, pan, service code missing)
+#define TE_NO_CARD_AVAILABLE_2			-5
+#define TE_NO_CARD_AVAILABLE_3			-6
+#define TE_NO_CARD_AVAILABLE_4			-7		// Tracks is not read correctly or no tracks found.
+#define TE_UNKNOWN_TRACK				-8		// Swipe for the card not allowed
+#define TE_EXPIRED_TRACK				-9		// Expired Card
+#define TE_MAG_FILE_NOT_PRESENT		    -10
+#define TE_MAG_FILE_ERROR_1			    -11
+#define TE_MAG_FILE_ERROR_2			    -12
+#define TE_MAG_FILE_ERROR_3			    -13
+#define TE_MAG_FILE_ERROR_4			    -14
+#define TE_MAG_FILE_ERROR_5			    -15
+#define TE_MAG_FILE_ERROR_6			    -16
+#define TE_MAG_FILE_ERROR_7			    -17
+#define TE_MAG_FILE_ERROR_8			    -18
+#define TE_REFUND_UNAVAILABLE			-19
+#define TE_FALLBACK 					-20		// Fallback due to failure on the initialization of reading the EMV contact card.
+#define TE_ABORTED						-21		// One Condition. Abort during Interac Acct Prompt
+#define TE_AUTHENTICATION				-22		// Failure on Offline Data Auth EMV phase.
+#define TE_PROCESSING_1					-23
+#define TE_PROCESSING_2					-24     // Pin Entry Issue
+#define TE_PROCESSING_3					-25
+#define TE_PROCESSING_4					-26
+#define TE_PROCESSING_5					-27
+#define TE_PROCESSING_6					-28
+#define TE_PROCESSING_7					-29
+#define TE_PROCESSING_8					-30
+#define TE_CARD							-31		// Failure on Card Action Analisys EMV phase.  Card Pulled Early is one condition.
+#define TE_NOT_ACCEPTED					-32		// EMV process failure during the contact completion phase or NMI App check of partial approval for contactless card (amount > of preaut amount) or (CFN) Host Decline see DE39 for Specifics
+#define TE_REJECTED_BY_CARD				-33		// Card Declined Result
+#define TE_SERVICE_NOT_ALLOWED			-34
+#define TE_KEY_SLOT_NOT_SET				-35
+#define TE_PINPAD_NOT_PRESENT_1			-36
+#define TE_PINPAD_NOT_PRESENT_2			-37
+#define TE_PINPAD_NOT_PRESENT_3			-38
+#define TE_ALARM_BOARD_1				-39
+#define TE_ALARM_BOARD_2				-40
+#define TE_ALARM_BOARD_3				-41
+#define TE_PROMPT_MESSAGE_NOT_FOUND_1	-42
+#define TE_PROMPT_MESSAGE_NOT_FOUND_2	-43
+#define TE_PROMPT_MESSAGE_NOT_FOUND_3	-44
+#define	TE_PROMPT_GENERAL_ERROR_1		-45
+#define	TE_PROMPT_GENERAL_ERROR_2		-46
+#define	TE_PROMPT_GENERAL_ERROR_3		-47
+#define	TE_PROMPT_ABORT_BY_USER_1		-48
+#define	TE_PROMPT_ABORT_BY_USER_2		-49   // One Codition. Abort during PIN
+#define	TE_PROMPT_ABORT_BY_USER_3		-50
+#define	TE_PROMPT_ABORT_BY_USER_4		-51
+#define	TE_PROMPT_TIMEOUT_1				-52
+#define	TE_PROMPT_TIMEOUT_2				-53
+#define	TE_PROMPT_TIMEOUT_3				-54
+#define	TE_PROMPT_TIMEOUT_4				-55
+#define	TE_PIN_TRY_EXCEEDED_1			-56
+#define	TE_PIN_TRY_EXCEEDED_2			-57
+#define TE_UNMATCHING_APPLICATION_1		-58		// No matching application between card and managed terminal application.
+#define TE_UNMATCHING_APPLICATION_2		-59		// There is no matching application in the Candidate List.
+#define TE_UNMATCHING_APPLICATION_3		-60		// Selected EMV application is invalidated by card and no other valid application is present.
+#define TE_UNMATCHING_APPLICATION_4		-61		// Error found reading EMV data from contact cards (not directly related to Application match).
+#define TE_PINBLOCK_KEY_NOT_FOUND		-62
+#define TE_PINBLOCK_KEY_INVALID			-63
+#define TE_HOST_RESPONSE_TIMEOUT		-64		// Host Timeout
+#define TE_NO_TRACK_AVAILABLE			-65
+#define TE_TRACK_LENGTH_ERROR			-66
+#define TE_KEY_DATA_SLOT_NOT_SET		-67
+#define TE_KEY_DATA_SLOT_INVALID		-68
+#define	TE_DATA_KEY_NOT_FOUND			-69		// Missing Data Encryption Key
+#define	TE_DUKPT_CYPHER_ERROR			-70
+#define	TE_LENGTH_PAN_ERROR				-71
+#define TE_FALLBACK_NOT_ENABLED			-72		// Failure on the initialization of reading the EMV contact card but Fallback not allowed.
+#define TE_INVALID_ARGUMENT				-73		// Missing Configuration.  Ex.  TerminalID or DeviceAddress depending on host.
+#define	TE_INTERNAL_ERROR				-74	    // Possible FS Corruption
+#define	TE_OUT_OF_MEMORY				-75
+#define TE_PREAUTH_UNAVAILABLE			-76
+#define	TE_INVALID_RESPONSE				-77
+#define TE_PARSING_RESPONSE				-78		// Unabled to parse host response due to format error.
+#define TE_SET_STAN_ERROR				-79
+#define TE_SINGLE_FLOOR_LIMIT			-80
+#define TE_TOTAL_FLOOR_LIMIT			-81
+#define TE_OFFLINE_FILE_HANDLE			-82
+#define TE_PAN_LENGTH_ERROR				-83
+#define TE_AMOUNT_ERROR					-84
+#define	TE_PROMPT_ABORT_BY_USER_5		-85
+#define	TE_WRONG_CL_CARD				-86
+#define	TE_CARD_TIMEOUT					-87
+#define	TE_MAG_CASH_ATM					-88
+#define TE_MAG_SERV_COD_ERROR			-89
+#define TE_ENC_MALLOC_ERROR				-90
+#define TE_INIT_APP_PROCESS				-91		// There is an failure on initialization of payment process, the reasons can be related to wrong amount, format data returned by card, missing of mandatory data element from card...
+#define	TE_MAG_PAN_ERROR				-92
+#define	TE_MAG_KSN_ERROR				-93
+#define	TE_CL_DATA_ERROR				-94
+#define TE_CL_DATA_TRACK_ERROR			-95
+#define TE_CHIP_DATA_TRACK_ERROR		-96
+#define TE_EMV_CARD_EXPIRED				-97
+#define TE_TRACK_ERROR					-98
+#define TE_TRACK_1_ERROR				-99
+#define TE_P2PE_INTEGRITY_ERROR			-100
+#define TE_SCA_TRY_ANOTHER_IF           -101
+#define TE_SCA_TRY_AGAIN_CVM_LMT0       -102
+#define TE_SCA_DECLINED                 -103
+#define TE_DNS_NOT_RESOLVED				-104	// Could not resolve DNS 
+#define TE_TRY_ANOTHER_IF_ERROR         -105
+#define TE_INVALID_NOTIFY_AMT			-106	// Notify Failures due to amount over original PreAuth.
+#define TE_THIRD_PROMPT_REQUESTED       -107    // Petroleum Fleet Prompts
+#define TE_THIRD_PROMPT_COMMUNICATION_ERROR	-108
+#define TE_INVALID_DRIVER_ID			-109   //  Invalid Driver ID (Petroleum)
+#define TE_TERMINAL_INVALID				-110   // CFN Sale Response Only

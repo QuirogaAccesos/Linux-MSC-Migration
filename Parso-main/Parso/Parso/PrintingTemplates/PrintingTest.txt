@@ -1,0 +1,7 @@
+[BOLD]#NombreB#[Normal]
+--------------------
+
+#Subtotal#
+#Descuento#
+
+#Total#
