@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Parso.Utils;
 using Parso.Utils.Objects;
 using Serilog;
 using System.Collections.Concurrent;
@@ -47,10 +48,11 @@ namespace Parso.Classes
         private void Run()
         {
             listeningSocket = CreateSocket();
-            listeningSocket.Bind(new IPEndPoint(0, 1994));
+            IPAddress listenAddress = ResolveListenAddress();
+            listeningSocket.Bind(new IPEndPoint(listenAddress, 1994));
             listeningSocket.Listen(10);
 
-            Log.Information("Server started and listening on port 1994");
+            Log.Information($"Server started and listening on {listenAddress}:1994");
 
             while (_isRunning)
             {
@@ -172,6 +174,18 @@ namespace Parso.Classes
         private Socket CreateSocket()
         {
             return new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+        private IPAddress ResolveListenAddress()
+        {
+            string configured = ProjectConstants.Instance.LISTEN_ADDRESS;
+            if (IPAddress.TryParse(configured, out IPAddress? address) && address.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return address;
+            }
+
+            Log.Warning($"Invalid AppSettings:ListenAddress '{configured}', it must be an IPv4 address. Listening on all interfaces.");
+            return IPAddress.Any;
         }
 
         private void Stop()
