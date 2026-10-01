@@ -1,6 +1,6 @@
 # Migration plan: Pango on Linux, Parso as the hardware gateway
 
-Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Nothing here has been implemented yet.
+Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Only T1 is implemented so far; the ticked boxes in section 5 show progress.
 
 ## 1. Decisions
 
@@ -53,7 +53,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 
 ### Phase T: tooling
 
-- [ ] **T1. Parso test client (S).** A stdlib-only Python 3 script in a `tools/` folder in the repo root (not inside either project) that sends one length-prefixed UTF-8 JSON request to Parso (host and port as arguments), prints the reply, and can keep listening for broadcast frames such as the card-inserted message. It lets each Parso task be checked from a terminal against the `TestingMode` simulators or real hardware before any Pango change exists. Depends on: none.
+- [x] **T1. Parso test client (S).** A stdlib-only Python 3 script in a `tools/` folder in the repo root (not inside either project) that sends one length-prefixed UTF-8 JSON request to Parso (host and port as arguments), prints the reply, and can keep listening for broadcast frames such as the card-inserted message. It lets each Parso task be checked from a terminal against the `TestingMode` simulators or real hardware before any Pango change exists. Depends on: none.
 
 ### Phase A: prerequisites (User)
 
@@ -68,7 +68,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 - [ ] **B3. `PicobSession` (M).** New `Classes/Helpers/PicobSession.cs`: a process-wide singleton (`Program.cs` builds a second `CommandProcessor`, so a per-helper port would be opened twice). It owns the `PicobController`, opens the port once with the configured DTR/RTS, and exposes `Send(command, waitForReply)` as the only write path. One lock covers all access, and a gate sleeps the remainder of `MinCommandIntervalMs` since the last write, so `A` right after `C` waits. Not wired in yet. Depends on: B1, A1.
 - [ ] **B4. Poller, cache and reconnect (M).** In `PicobSession`: a background thread sends `C` every `PollIntervalMs` (never faster than the gate, and skipping its turn while a command is waiting), parses `{"C":n}` and stores the value and its timestamp. After `DisconnectAfterFailures` consecutive failures it marks the session disconnected, closes the port and retries opening with backoff through the same gate. `GetStatus()` returns connected, age and `C`. Depends on: B3.
 - [ ] **B5. Route key "2" (M).** `Classes/Helpers/PicobHelper.cs`, `Program.cs`. With `PersistentConnection=TRUE`: start the session at startup and skip the automatic Picob clock set (the committed `AutoSetTimeEnabled=TRUE` sends a JSON object that the current firmware does not understand); implement the reply rules in section 3. With the flag off, the current code path is untouched. Depends on: B4.
-- [ ] **B6. Test-mode simulator (S).** `Classes/Helpers/Testing/`. With `EnablePicobTest=TRUE`, both testers answer like the current firmware: `STATUS` returns the shape in section 3, `C` toggles presence (so a developer can simulate a car), `A` returns `{"A": 1}` and `H` returns success. Neither `A` nor `H` may call `Environment.Exit` (today `A` and `K` in `ParsoTester` and `H` in `A1Tester` do). Depends on: none (the contract is fixed).
+- [ ] **B6. Test-mode simulator (S).** `Classes/Helpers/Testing/`. Today `A1Tester` (the default) has no `C` or `A`, and `ParsoTester` answers `C` with an array. With `EnablePicobTest=TRUE`, both testers answer like the current firmware: `STATUS` returns the shape in section 3, `C` toggles presence (so a developer can simulate a car), `A` returns `{"A": 1}` and `H` returns success. Neither `A` nor `H` may call `Environment.Exit` (today `A` and `K` in `ParsoTester` and `H` in `A1Tester` do). Depends on: none (the contract is fixed).
 
 ### Phase C: Parso printing (QR on ESC/POS)
 
@@ -127,7 +127,7 @@ E1 + C3 -> E6, E7     E1 + B5 + C3 -> E8
 B5 + C1 -> H2         H2 + F1..F3 -> H3
 ```
 
-T1, B1, B6 and E1 have no dependencies and can start immediately. T1 is optional for everything else but makes B5, B6 and C2 much easier to verify. B1, C1 and B5 edit the same files (`Program.cs`, `ProjectConstants.cs`), so keep them sequential.
+T1, B1, B6 and E1 have no dependencies and can start immediately. T1 is optional for everything else but makes B5, B6 and C2 much easier to verify. Do B6 before B5: until the simulators follow the Picob table, presence, `A`, `H` and `STATUS` can only be tried on real hardware. B1, C1 and B5 edit the same files (`Program.cs`, `ProjectConstants.cs`), so keep them sequential.
 
 ## 7. Open decisions and risks
 
@@ -152,6 +152,8 @@ Facts still needed from the kiosks:
 Append one dated line per result or decision that later tasks depend on (A1 to A3 outcomes, answers to the open decisions above, hardware captures).
 
 - 2026-10-01: Direction agreed (sections 1 and 2). Picob firmware facts recorded in `CLAUDE.md`. Detection lag of up to about 1.1 s accepted. AMP deferred. QR scanner stays a wedge.
+- 2026-10-01: T1 done (`tools/parso_client.py`, run with `python3 tools/parso_client.py '{"2":"C"}'`, `--listen [seconds]` keeps reading frames). Checked only against a stub server, not against Parso. Parso's `DeviceResponse` is a string holding the device's JSON, and the card-inserted broadcast is the bare text `CARDINSERTED` (the `RPCardInsertedMessage` setting), not JSON.
+- 2026-10-01: The Picob simulators in Parso do not follow the engineer's table (`A1Tester` lacks `C` and `A`; `ParsoTester` answers `C` with an array; `A`, `K` and `H` call `Environment.Exit`). B6 should precede B5, and the T1 client is only useful for Picob checks against the simulators once B6 is done.
 
 ## 9. Picking this up in a new chat
 
