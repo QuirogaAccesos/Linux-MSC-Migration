@@ -53,7 +53,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 
 ### Phase T: tooling
 
-- [ ] **T1. Parso test client (S).** A stdlib-only Python 3 script in a `tools/` folder in the repo root (not inside either project) that sends one length-prefixed UTF-8 JSON request to Parso (host and port as arguments), prints the reply, and can keep listening for broadcast frames such as the card-inserted message. It lets each Parso task be checked from a terminal against the `TestingMode` simulators or real hardware before any Pango change exists. Depends on: none.
+- [x] **T1. Parso test client (S).** A stdlib-only Python 3 script in a `tools/` folder in the repo root (not inside either project) that sends one length-prefixed UTF-8 JSON request to Parso (host and port as arguments), prints the reply, and can keep listening for broadcast frames such as the card-inserted message. It lets each Parso task be checked from a terminal against the `TestingMode` simulators or real hardware before any Pango change exists. Depends on: none.
 
 ### Phase A: prerequisites (User)
 
@@ -152,6 +152,7 @@ Facts still needed from the kiosks:
 Append one dated line per result or decision that later tasks depend on (A1 to A3 outcomes, answers to the open decisions above, hardware captures).
 
 - 2026-10-01: Direction agreed (sections 1 and 2). Picob firmware facts recorded in `CLAUDE.md`. Detection lag of up to about 1.1 s accepted. AMP deferred. QR scanner stays a wedge.
+- 2026-10-01: T1 done (`tools/parso_client.py`, run with `python3 tools/parso_client.py '{"2":"C"}'`, `--listen [seconds]` keeps reading frames). Checked only against a stub server, not against Parso. Parso's `DeviceResponse` is a string holding the device's JSON, and the card-inserted broadcast is the bare text `CARDINSERTED` (the `RPCardInsertedMessage` setting), not JSON.
 
 ## 9. Picking this up in a new chat
 
