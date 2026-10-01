@@ -37,9 +37,20 @@ namespace Parso.Classes.Helpers.Testing
                         JsonConvert.SerializeObject(new { picob.Z }, Formatting.None)), Formatting.None);
                     break;
                 case "H":
+                    result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: COMMAND SENT"), Formatting.None);
+                    break;
+                case "A":
                     result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: COMMAND SENT AND RESPONSE RECEIVED",
-                        JsonConvert.SerializeObject(new { picob.H }, Formatting.None)), Formatting.None);
-                    Environment.Exit(0);
+                        JsonConvert.SerializeObject(new { A = 1 }, Formatting.None)), Formatting.None);
+                    break;
+                case "C":
+                    picob.C ^= 1;
+                    result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: COMMAND SENT AND RESPONSE RECEIVED",
+                        JsonConvert.SerializeObject(new { picob.C }, Formatting.None)), Formatting.None);
+                    break;
+                case "STATUS":
+                    result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: COMMAND SENT AND RESPONSE RECEIVED",
+                        JsonConvert.SerializeObject(new { connected = true, ageMs = 100, picob.C }, Formatting.None)), Formatting.None);
                     break;
                 case "T":
                     result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: COMMAND SENT AND RESPONSE RECEIVED",
