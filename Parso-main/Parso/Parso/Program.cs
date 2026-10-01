@@ -57,6 +57,23 @@ internal class Program
             _projectConstants.PICOB_REPONSE_TIMEOUT_MS = int.Parse(config[$"AppSettings:Picob:ResponseTimeoutMs"]);
             _projectConstants.PICOB_BAUD_RATE = int.Parse(config[$"AppSettings:Picob:BaudRate"]);
             _projectConstants.PICOB_AUTO_SET_TIME_ENABLED = config[$"AppSettings:Picob:AutoSetTimeEnabled"] == "TRUE";
+            _projectConstants.PICOB_PERSISTENT_CONNECTION = ReadBool(config, "AppSettings:Picob:PersistentConnection", false);
+            _projectConstants.PICOB_DTR_ENABLE = ReadBool(config, "AppSettings:Picob:DtrEnable", true);
+            _projectConstants.PICOB_RTS_ENABLE = ReadBool(config, "AppSettings:Picob:RtsEnable", true);
+            _projectConstants.PICOB_MIN_COMMAND_INTERVAL_MS = ReadInt(config, "AppSettings:Picob:MinCommandIntervalMs", 800);
+            _projectConstants.PICOB_POLL_INTERVAL_MS = ReadInt(config, "AppSettings:Picob:PollIntervalMs", 1000);
+            _projectConstants.PICOB_DISCONNECT_AFTER_FAILURES = ReadInt(config, "AppSettings:Picob:DisconnectAfterFailures", 3);
+            _projectConstants.PICOB_FIRE_AND_FORGET_COMMANDS = (config["AppSettings:Picob:FireAndForgetCommands"] ?? "H")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(c => c.ToUpperInvariant())
+                .ToArray();
+
+            // The firmware needs at least 800 ms between commands
+            if (_projectConstants.PICOB_PERSISTENT_CONNECTION && _projectConstants.PICOB_MIN_COMMAND_INTERVAL_MS < 800)
+            {
+                Log.Warning($"Picob:MinCommandIntervalMs {_projectConstants.PICOB_MIN_COMMAND_INTERVAL_MS} is below the 800 ms the firmware needs. Using 800.");
+                _projectConstants.PICOB_MIN_COMMAND_INTERVAL_MS = 800;
+            }
 
             //Card Payment
             _projectConstants.CARD_PAYMENT_CARD_READER_TYPE = int.Parse(config[$"AppSettings:CardReader:CardReaderType"]);
@@ -79,6 +96,8 @@ internal class Program
             _projectConstants.CUSTOM_PROCESSOR = config["AppSettings:CustomProcessor"] == "TRUE";
             _projectConstants.PRINTING_TEMPLATE_FOLDER_LOCATION = config[$"AppSettings:PrintingTemplatesAbsoluteLocation"];
             _projectConstants.PRINTING_CONFIG_FILE_NAME = config[$"AppSettings:PrintingConfigFileName"];
+            string? listenAddress = config["AppSettings:ListenAddress"];
+            _projectConstants.LISTEN_ADDRESS = string.IsNullOrWhiteSpace(listenAddress) ? "0.0.0.0" : listenAddress.Trim();
         }
         catch (Exception ex)
         {
@@ -88,6 +107,7 @@ internal class Program
 
         Log.Information($"DetectedOS: {os}");
         Log.Information($"Picob COM Port: {_projectConstants.PICOB_COM_PORT}");
+        Log.Information($"Picob persistent connection: {_projectConstants.PICOB_PERSISTENT_CONNECTION}. Listen address: {_projectConstants.LISTEN_ADDRESS}");
 
         if (_projectConstants.PICOB_AUTO_SET_TIME_ENABLED)
         {
@@ -107,5 +127,22 @@ internal class Program
 
         // NOW start the server (after constants are set)
         ServerListener.Instance.StartServer();
+    }
+
+    // Optional settings: a missing or invalid value gives the default instead of aborting startup
+    private static bool ReadBool(IConfiguration config, string key, bool defaultValue)
+    {
+        string? value = config[key];
+        return string.IsNullOrWhiteSpace(value) ? defaultValue : value.Trim().Equals("TRUE", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static int ReadInt(IConfiguration config, string key, int defaultValue)
+    {
+        string? value = config[key];
+        if (string.IsNullOrWhiteSpace(value)) return defaultValue;
+        if (int.TryParse(value, out int result)) return result;
+
+        Log.Warning($"Invalid value '{value}' for {key}. Using {defaultValue}.");
+        return defaultValue;
     }
 }
