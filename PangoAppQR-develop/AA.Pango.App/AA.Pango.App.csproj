@@ -1,0 +1,526 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9F52D50D-E157-4E53-9D65-700D815F6090}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AA.Pango.App</RootNamespace>
+    <AssemblyName>AA.Pango.App</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\PrecompiledWeb\QR_SYSTEM_APP\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>AA.Pango.App.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>10B67A32915C18D8B4EC11029F182CBBD5F724C4</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>AA.Pango.App_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="LiteDB, Version=5.0.11.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.5.0.11\lib\net45\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.7.2.1\lib\net461\Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.15.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.15.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="V2\FormV2WS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V2\FormV2WS.Designer.cs">
+      <DependentUpon>FormV2WS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V2\FormV2PayByPlate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V2\FormV2PayByPlate.Designer.cs">
+      <DependentUpon>FormV2PayByPlate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V2\FormV2ShowQrCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V2\FormV2ShowQrCode.Designer.cs">
+      <DependentUpon>FormV2ShowQrCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V2\FormV2PullTicket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V2\FormV2PullTicket.Designer.cs">
+      <DependentUpon>FormV2PullTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V2\FormV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V2\FormV2.Designer.cs">
+      <DependentUpon>FormV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V1\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V1\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3BlackList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3BlackList.Designer.cs">
+      <DependentUpon>FormV3BlackList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3_1opt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3_1opt.Designer.cs">
+      <DependentUpon>FormV3_1opt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3_QRTicket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3_QRTicket.Designer.cs">
+      <DependentUpon>FormV3_QRTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3_3opt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3_3opt.Designer.cs">
+      <DependentUpon>FormV3_3opt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3PayByPlate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3PayByPlate.Designer.cs">
+      <DependentUpon>FormV3PayByPlate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3PullTicket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3PullTicket.Designer.cs">
+      <DependentUpon>FormV3PullTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3ShowQrCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3ShowQrCode.Designer.cs">
+      <DependentUpon>FormV3ShowQrCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3.Designer.cs">
+      <DependentUpon>FormV3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\FormV3PangoPassOK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V3\FormV3PangoPassOK.Designer.cs">
+      <DependentUpon>FormV3PangoPassOK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V3\PlateOrPhone.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="V3\PlateOrPhone.Designer.cs">
+      <DependentUpon>PlateOrPhone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4BlackList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4BlackList.Designer.cs">
+      <DependentUpon>FormV4BlackList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4CheckPermitPlate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4CheckPermitPlate.Designer.cs">
+      <DependentUpon>FormV4CheckPermitPlate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4_1opt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4_1opt.Designer.cs">
+      <DependentUpon>FormV4_1opt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4ShowQrCode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4ShowQrCode.Designer.cs">
+      <DependentUpon>FormV4ShowQrCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4PullTicket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4PullTicket.Designer.cs">
+      <DependentUpon>FormV4PullTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4PayByPlate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4PayByPlate.Designer.cs">
+      <DependentUpon>FormV4PayByPlate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4PangoPassOK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4PangoPassOK.Designer.cs">
+      <DependentUpon>FormV4PangoPassOK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4FreeFlowEntry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4FreeFlowEntry.Designer.cs">
+      <DependentUpon>FormV4FreeFlowEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4_QRTicket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4_QRTicket.Designer.cs">
+      <DependentUpon>FormV4_QRTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4_3opt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4_3opt.Designer.cs">
+      <DependentUpon>FormV4_3opt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4.Designer.cs">
+      <DependentUpon>FormV4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\FormV4_Ticket_PH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="V4\FormV4_Ticket_PH.Designer.cs">
+      <DependentUpon>FormV4_Ticket_PH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="V4\PlateOrPhone.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="V4\PlateOrPhone.Designer.cs">
+      <DependentUpon>PlateOrPhone.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="V2\FormV2WS.resx">
+      <DependentUpon>FormV2WS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V2\FormV2PayByPlate.resx">
+      <DependentUpon>FormV2PayByPlate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V2\FormV2ShowQrCode.resx">
+      <DependentUpon>FormV2ShowQrCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V2\FormV2PullTicket.resx">
+      <DependentUpon>FormV2PullTicket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V2\FormV2.resx">
+      <DependentUpon>FormV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V1\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3BlackList.resx">
+      <DependentUpon>FormV3BlackList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3_1opt.resx">
+      <DependentUpon>FormV3_1opt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3_QRTicket.resx">
+      <DependentUpon>FormV3_QRTicket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3PangoPassOK.resx">
+      <DependentUpon>FormV3PangoPassOK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3_3opt.resx">
+      <DependentUpon>FormV3_3opt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3PayByPlate.resx">
+      <DependentUpon>FormV3PayByPlate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3PullTicket.resx">
+      <DependentUpon>FormV3PullTicket.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3ShowQrCode.resx">
+      <DependentUpon>FormV3ShowQrCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\FormV3.resx">
+      <DependentUpon>FormV3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V3\PlateOrPhone.resx">
+      <DependentUpon>PlateOrPhone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4BlackList.resx">
+      <DependentUpon>FormV4BlackList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4CheckPermitPlate.resx">
+      <DependentUpon>FormV4CheckPermitPlate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4_1opt.resx">
+      <DependentUpon>FormV4_1opt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4ShowQrCode.resx">
+      <DependentUpon>FormV4ShowQrCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4PullTicket.resx">
+      <DependentUpon>FormV4PullTicket.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4PayByPlate.resx">
+      <DependentUpon>FormV4PayByPlate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4PangoPassOK.resx">
+      <DependentUpon>FormV4PangoPassOK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4FreeFlowEntry.resx">
+      <DependentUpon>FormV4FreeFlowEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4_QRTicket.resx">
+      <DependentUpon>FormV4_QRTicket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4_3opt.resx">
+      <DependentUpon>FormV4_3opt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4.resx">
+      <DependentUpon>FormV4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\FormV4_Ticket_PH.resx">
+      <DependentUpon>FormV4_Ticket_PH.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="V4\PlateOrPhone.resx">
+      <DependentUpon>PlateOrPhone.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="AA.Pango.App_TemporaryKey.pfx" />
+    <None Include="en.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="es.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="styles.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ticketEntry.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo-Pango-MSC-v2.0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AA.Pango.Model\AA.Pango.Model.csproj">
+      <Project>{667b3b9e-8101-4ace-859f-cccda41d1686}</Project>
+      <Name>AA.Pango.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AA.Pango.ServiceLayer\AA.Pango.ServiceLayer.csproj">
+      <Project>{ad9d41ea-780b-4cf1-9691-c39a47a2e55f}</Project>
+      <Name>AA.Pango.ServiceLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AA.Pango.TestWinApp\AA.Pango.App.UI.Utils.csproj">
+      <Project>{b1d68efb-1264-4b07-9055-08e0bc9f4732}</Project>
+      <Name>AA.Pango.App.UI.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="languagesSupported.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\arrowRigthBlue.png" />
+    <Content Include="Resources\arrowRigthGreen.png" />
+    <None Include="Resources\arrow_right_white.png" />
+    <Content Include="Resources\barrierOpen.png" />
+    <None Include="Resources\btnScanQR.png" />
+    <None Include="Resources\btnPullTicket.png" />
+    <None Include="Resources\btnScanQR_Hamilton.png" />
+    <None Include="Resources\btnPullTicket_Hamilton.png" />
+    <None Include="Resources\btnPayPlateState.png" />
+    <None Include="Resources\btnPayPlate.png" />
+    <None Include="Resources\btnPayPlate_1opt.png" />
+    <None Include="Resources\btnPayPlate_3opt.png" />
+    <None Include="Resources\btnPayPlateState_1opt.png" />
+    <None Include="Resources\btnPayPlateState_3opt.png" />
+    <None Include="Resources\btnPayPlate_Hamilton.png" />
+    <None Include="Resources\btn24h.png" />
+    <None Include="Resources\btnPullTicket_Skyport.png" />
+    <None Include="Resources\btn24h_white.png" />
+    <Content Include="Resources\btnPayPlate_Hamilton2.png" />
+    <None Include="Resources\btnPermitHolder.png" />
+    <Content Include="Resources\btnPullTicket_Hamilton2.png" />
+    <None Include="Resources\btnStart_1opt.png" />
+    <None Include="Resources\btnStart_1opt_black.png" />
+    <None Include="Resources\btnTicket_white.png" />
+    <None Include="Resources\btnPullTicket_Pease.png" />
+    <Content Include="Resources\cameraOrange.png" />
+    <None Include="Resources\camera_white.png" />
+    <Content Include="Resources\carBlue.png" />
+    <None Include="Resources\LogoHamilton.png" />
+    <None Include="Resources\imgEntryTicket.png" />
+    <None Include="Resources\car_white.png" />
+    <None Include="Resources\qrPango.png" />
+    <None Include="Resources\logo_pango_white.png" />
+    <None Include="Resources\imgPullTicket_Pease.png" />
+    <None Include="Resources\imgShowQR.png" />
+    <Content Include="Resources\imgTicket.png" />
+    <None Include="Resources\imgTicket_Pease.png" />
+    <None Include="Resources\LogoPEASE.png" />
+    <Content Include="Resources\LogoHamiltonPrincess.png" />
+    <Content Include="Resources\LogoPango.png" />
+    <Content Include="Resources\LogoPangoMSC.png" />
+    <Content Include="Resources\LogoSkyport.png" />
+    <Content Include="Resources\orImage.png" />
+    <Content Include="Resources\pangoPassPermit.png" />
+    <Content Include="Resources\PassQRShow.png" />
+    <None Include="Resources\qrLogoPango.png" />
+    <Content Include="Resources\phonePayProceed.png" />
+    <None Include="Resources\phone_white.png" />
+    <Content Include="Resources\plateDetectedFrame.png" />
+    <Content Include="Resources\platePayProceed.png" />
+    <None Include="Resources\TapForTicket.png" />
+    <None Include="Resources\platePayProceedNoState.png" />
+    <Content Include="Resources\tapToScanPlate.png" />
+    <Content Include="Resources\lpr.png" />
+    <Content Include="readme.txt" />
+    <Content Include="Resources\downloadApp.png" />
+    <Content Include="Resources\imageHandMobile.png" />
+    <Content Include="Resources\imageQRLector.png" />
+    <None Include="Resources\Logo-Pango-MSC-v2.0-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

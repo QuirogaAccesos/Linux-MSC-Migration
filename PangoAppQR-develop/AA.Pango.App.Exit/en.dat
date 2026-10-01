@@ -1,0 +1,116 @@
+﻿<Language name="en">
+	<Localized name="BackgroundColor" value="#dae3f3" />
+	<Localized name="FontColor" value="#FFFFFF" />
+	<Localized name="FontFamily" value="Comfortaa" />
+	<Localized name="FontSize" value="30" />
+	<Localized name="Hello" value="Hello!" />
+	<Localized name="Morning" value="Good morning!" />
+	<Localized name="Afternoon" value="Good afternoon!" />
+	<Localized name="Night" value="Good night!" />
+	<Localized name="Exit-VehiclePresentMsg" value="INSERT YOUR CARD" />
+	<Localized name="Entry-VehiclePresentMsg" value="INSERT YOUR CARD OR PRESS THE BUTTON" />
+	<Localized name="CardAccepted" value="CARD ACCEPTED" />
+	<Localized name="CardInvalid" value="INVALID CARD" />
+	<Localized name="EntryTerminalDescription" value="ENTRY" />
+	<Localized name="ExitTerminalDescription" value="EXIT" />
+	<Localized name="OutputDeviceConnected" value="CONNECTED" />
+	<Localized name="Entry-IssuingVisitorCard" value="Thank you - Have a nice day" />
+	<Localized name="Entry-ReadingRecurrentClientCard" value="PLEASE WAIT" />
+	<Localized name="Entry-EntryEventRegistered" value="PLEASE WAIT" />
+	<Localized name="Entry-OutOfService" value="OUT OF SERVICE" />
+	<Localized name="Entry-RecurrentClientCardAccepted" value="GRAB YOUR CARD" />
+	<Localized name="Entry-EntryGranted" value="Wait for Gate to open and proceed..." />
+	<Localized name="Entry-RecurrentClientCardDenied" value="ACCESS DENIED" />
+	<Localized name="Exit-InvalidCard" value="INVALID CARD, GO TO NEAREST CASHIER" />
+	<Localized name="Entry-ClientGrabbedCard" value="CLIENTE SACA TARJETA DEL LECTOR" />
+	<Localized name="CardReaderConnectedError" value="ERROR" />
+	<Localized name="OutputDeviceConnectedError" value="ERROR" />
+	<Localized name="GoodByeMsg" value="HAVE A NICE DAY. SEE YOU SOON." />
+	<Localized name="CardReaderConnected" value="READ OK." />
+	<Localized name="TerminalOnline" value="EN LINEA." />
+
+	<!--Commons-->
+	<!--PlateOrPhone-->
+	<Localized name="PlateOrPhone_Plate" value="Press for Plate" />
+	<Localized name="PlateOrPhone_Phone" value="Press for Cell Phone" />
+	<!--Keyboards-->
+	<Localized name="Form_Keyboard_HeaderPlate" value="Enter License Plate" />
+	<Localized name="Form_Keyboard_HeaderPlateInstructions" value="Please Enter Same Plate You Entered When Arriving" />
+	<Localized name="Form_Keyboard_HeaderPhone" value="Enter 10 Digit Phone Number" />
+	<Localized name="Form_Keyboard_HeaderPhoneInstructions" value="Please Enter Same Phone Number You Entered When Arriving" />
+	<Localized name="Form_Keyboard_btnConfirm" value="Confirm" />
+	<Localized name="Form_Keyboard_btnClear" value="CLEAR" />
+	<Localized name="Form_Keyboard_btnBack" value="&#60;&#60; BACK - MAIN SCREEN" />
+	<Localized name="Form_Keyboard_Price" value="$1 PER HOUR | $10 DAY RATE PLUS TRANSACTION FEE 16%" />
+	<Localized name="Form_Keyboard_DownloadApp" value="Download App" />
+	<!--PaymentOptions-->
+	<Localized name="PaymentOptions_Pango" value="PRESS PAY WITH PANGO" />
+	<Localized name="PaymentOptions_LG1" value="PRESS PAY WITH CARD" />
+
+	<!--FormV4-->
+	<Localized name="FormV4_Welcome" value="PARKING PAYMENT" />
+	<Localized name="FormV4_Instructions" value="" />
+	<Localized name="FormV4_Instructions2" value="" />
+	<Localized name="FormV4_ChargingHours" value="Charging Hours: 8AM-6PM Mon-Sat" />
+	<Localized name="FormV4_InitMsg" value="Thank You For Parking With Us" />
+	<Localized name="FormV4_BtnShowQR" value="Scan QR Below" />
+	<Localized name="FormV4_BtnPayPlate" value="" />
+	<Localized name="FormV4_DownloadApp" value="Download App" />
+	<Localized name="FormV4_EnterData" value="Enter Same License Plate or Cell Phone # You Entered When Arriving" />
+	<Localized name="FormV4_btnBack" value="&#60;&#60; BACK - MAIN SCREEN"/>
+	<Localized name="FormV4_BtnPayPlateClick" value="PLEASE WAIT..." />
+
+	<Localized name="FormV4Loading" value="PLEASE WAIT..."/>
+
+	<!--FormV4_QRTicket-->
+	<Localized name="FormV4_QRTicket_BtnShowQR" value="Scan QR Below" />
+	<Localized name="FormV4_QRTicket_BtnScanTicket" value="Scan Ticket" />
+	<Localized name="FormV4_QRTicket_BtnScanTicketClick" value="PLEASE WAIT..." />
+
+	<!--FormV4_3opt-->
+	<Localized name="FormV4_3opt_BtnShowQR" value="" />
+	<Localized name="FormV4_3opt_BtnScanTicket" value="" />
+	<Localized name="FormV4_3opt_BtnPayPlate" value="" />
+
+	<!--FormV4_Ticket_PH-->
+	<Localized name="FormV4_Ticket_PH_BtnPermitHolder" value="" />
+	<Localized name="FormV4_Ticket_PH_NotFound" value="INFORMATION NOT FOUND" />
+	<Localized name="FormV4_Ticket_PH_NotFoundMsg" value="FOR ASSISTANCE PUSH BUTTON BELOW" />
+	<Localized name="FormV4_Ticket_PH_RetryMsg" value="PLEASE RE-ENTER AGAIN" />
+	<Localized name="FormV4_Ticket_PH_RetryPhone" value="PHONE NUMBER:" />
+	<Localized name="FormV4_Ticket_PH_RetryPlate" value="PLATE NUMBER:" />
+	<Localized name="FormV4_Ticket_PH_PaymMethod" value="PERMIT EXPIRED. CHOOSE PAYMENT OPTION" />
+	<Localized name="FormV4_Ticket_PH_PangoPaymFail" value="PANGO PAYMENT ERROR" />
+	<Localized name="FormV4_Ticket_PH_PangoPaymFailMsg" value="PLEASE PAY WITH CARD..." />
+
+	<!--FormV4ShowQRCode-->
+	<Localized name="FormV4ShowQRCode_ShowQR" value="Please hold QR to the QR reader" />
+	<Localized name="FormV4ShowQRCode_InstructionsQR" value="When gate opens, please exit garage" />
+	<Localized name="FormV4ShowQRCode_CodeOK" value="QR code accepted. Please proceed through gate" />
+	<Localized name="FormV4ShowQRCode_InstructionsOK" value="THANK YOU!" />
+	<Localized name="FormV4ShowQRCode_CodeKO" value="QR code NOT accepted" />
+	<Localized name="FormV4ShowQRCode_InstructionsKO" value="Enter Same License Plate or Cell Phone # You Entered When Arriving" />
+	<Localized name="FormV4ShowQRCode_TicketOK" value="Ticket accepted" />
+	<Localized name="FormV4ShowQRCode_InstructionsTicket" value="Calculating amount, please wait" />
+	<Localized name="FormV4ShowQRCode_PangoPassError" value="PANGO PASS ERROR" />
+	<Localized name="FormV4ShowQRCode_PangoPaymCvv" value="Pango Payment Error" />
+	<Localized name="FormV4ShowQRCode_InstructionsCvv" value="Please enter CVV in your Pango APP to complete the transaction" />
+	<Localized name="FormV4ShowQRCode_BtnSkipPangoPaymCvv" value="PAY WITH CARD" />
+
+	<!--FormV4ShowReceipt-->
+	<Localized name="FormV4ShowReceipt_Header" value="PARKING PAYMENT" />
+	<Localized name="FormV4ShowReceipt_InstructionsCC" value="Tap or Insert Card Below" />
+	<Localized name="FormV4ShowReceipt_PaymentOK" value="PAYMENT ACCEPTED. PLEASE PROCEED THROUGH GATE" />
+	<Localized name="FormV4ShowReceipt_PaymentFreeOK" value="LICENSE PLATE ACCEPTED. PLEASE PROCEED THROUGH GATE" />
+	<Localized name="FormV4ShowReceipt_InstructionsOK" value="THANK YOU!" />
+	<Localized name="FormV4ShowReceipt_PriceDetail_FlatFee" value="FLAT FEE" />
+	<Localized name="FormV4ShowReceipt_LabelPlateDefault" value="Amount" />
+
+	<!--FormV4PangoPassOK-->
+	<Localized name="FormV4PangoPassOK_StatusOK" value="PLEASE PROCEED THROUGH GATE" />
+	<Localized name="FormV4PangoPassOK_InstructionsOK" value="THANK YOU!" />
+	<Localized name="FormV4PangoPassOK_StatusOK_Permit" value="PERMIT ACCEPTED. PLEASE PROCEED THROUGH GATE" />
+
+	<!--FormV4ShowTicket-->
+	<Localized name="FormV4ShowTicket_Instructions" value="Please scan the barcode receipt" />
+</Language>

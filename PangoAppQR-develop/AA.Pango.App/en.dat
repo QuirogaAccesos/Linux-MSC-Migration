@@ -1,0 +1,160 @@
+﻿<Language name="en">
+  <Localized name="BackgroundColor" value="#dae3f3" />
+  <Localized name="FontColor" value="#FFFFFF" />
+  <Localized name="FontFamily" value="Comfortaa" />
+  <Localized name="FontSize" value="30" />
+  <Localized name="Hello" value="Hello!" />
+  <Localized name="Morning" value="Good morning!" />
+  <Localized name="Afternoon" value="Good afternoon!" />
+  <Localized name="Night" value="Good night!" />
+  <Localized name="Exit-VehiclePresentMsg" value="INSERT YOUR CARD" />
+  <Localized name="Entry-VehiclePresentMsg" value="INSERT YOUR CARD OR PRESS THE BUTTON" />
+  <Localized name="CardAccepted" value="CARD ACCEPTED" />
+  <Localized name="CardInvalid" value="INVALID CARD" />
+  <Localized name="EntryTerminalDescription" value="ENTRY" />
+  <Localized name="ExitTerminalDescription" value="EXIT" />
+  <Localized name="OutputDeviceConnected" value="CONNECTED" />
+  <Localized name="Entry-IssuingVisitorCard" value="Wait for Gate to open and proceed..." />
+  <Localized name="Entry-ReadingRecurrentClientCard" value="PLEASE WAIT" />
+  <Localized name="Entry-EntryEventRegistered" value="PLEASE WAIT" />
+  <Localized name="Entry-OutOfService" value="OUT OF SERVICE" />
+  <Localized name="Entry-RecurrentClientCardAccepted" value="GRAB YOUR CARD" />
+  <Localized name="Entry-EntryGranted" value="Wait for Gate to open and proceed..." />
+  <Localized name="Entry-RecurrentClientCardDenied" value="We cannot locate your account. Please get ticket at the dispenser" />
+  <Localized name="Exit-InvalidCard" value="INVALID CARD, GO TO NEAREST CASHIER" />
+  <Localized name="Entry-ClientGrabbedCard" value="CLIENTE SACA TARJETA DEL LECTOR" />
+  <Localized name="CardReaderConnectedError" value="ERROR" />
+  <Localized name="OutputDeviceConnectedError" value="ERROR" />
+  <Localized name="GoodByeMsg" value="HAVE A NICE DAY. SEE YOU SOON." />
+  <Localized name="CardReaderConnected" value="READ OK." />
+  <Localized name="TerminalOnline" value="EN LINEA." />
+	
+	<!--Commons-->
+	<!--PlateOrPhone-->
+	<Localized name="PlateOrPhone_Plate" value="Press for Plate" />
+	<Localized name="PlateOrPhone_Phone" value="Press for Cell Phone" />
+	<Localized name="PlateOrPhone_Ticket" value="Press for Print Ticket" />
+	<!--Keyboards-->
+	<Localized name="Form_Keyboard_HeaderPlate" value="Enter License Plate" />
+	<Localized name="Form_Keyboard_HeaderPlateInstructions" value="Enter Same Plate At Exit" />
+	<Localized name="Form_Keyboard_HeaderPhone" value="Enter 10 Digit Phone Number" />
+	<Localized name="Form_Keyboard_HeaderPhoneInstructions" value="Enter Same Cell Phone At Exit" />
+	<Localized name="Form_Keyboard_btnConfirm" value="Confirm" />
+	<Localized name="Form_Keyboard_btnClear" value="CLEAR" />
+	<Localized name="Form_Keyboard_btnBack" value="&#60;&#60; BACK - PREVIOUS SCREEN" />
+	<Localized name="Form_Keyboard_Price" value="$1 PER HOUR | $10 DAY RATE PLUS TRANSACTION FEE 16%" />
+	<Localized name="Form_Keyboard_DownloadApp" value="Download App" />
+
+	<!--FormV3-->
+	<Localized name="FormV3_Welcome" value="Welcome to The Centennial Garage" />
+	<Localized name="FormV3_Instructions" value="Choose Entry and Press Icon" />
+	<Localized name="FormV3_DownloadApp" value="Download App" />
+	<Localized name="FormV3_Price" value="$1 PER HOUR | $10 DAY RATE PLUS TRANSACTION FEE 16%" />
+	<Localized name="FormV3_btnBack" value="&#60;&#60; BACK - PREVIOUS SCREEN"/>
+
+	<!--Ticketless-->
+	<Localized name="FormV3_Ticketless" value="TICKETLESS SYSTEM" />
+	<Localized name="FormV3_Ticketless_Start" value="PRESS TO START" />
+	<Localized name="FormV3_Ticketless_PayAtExit" value="PAY WITH CREDIT CARD OR WITH PANGO APP QR CODE AT EXIT" />
+
+	<!--FormV3ShowQRCode-->
+	<Localized name="FormV3ShowQRCode_ShowQR" value="Please HOLD QR to the QR reader" />
+	<Localized name="FormV3ShowQRCode_InstructionsQR" value="When gate opens, please enter garage and use your QR to exit" />
+	<Localized name="FormV3ShowQRCode_CodeOK" value="QR CODE ACCEPTED" />
+	<Localized name="FormV3ShowQRCode_InstructionsOK" value="Please proceed through gate" />
+	<Localized name="FormV3ShowQRCode_CodeKO" value="QR CODE NOT ACCEPTED" />
+	<Localized name="FormV3ShowQRCode_InstructionsKO" value="Enter License Plate or Cell Phone # to Pay at Exit" />
+	<Localized name="FormV3ShowQRCode_StatusKO_PlateOrPhone" value="Thank You!" />
+	<Localized name="FormV3ShowQRCode_CodeKOPhone" value="QR CODE NOT ACCEPTED - Enter 10 Digit Phone Number" />
+
+	<!--FormV3PayByPlate-->
+	<Localized name="FormV3PayByPlate_StatusOK" value="Thank You!" />
+	<Localized name="FormV3PayByPlate_Reading" value="Reading plate..." />
+	<Localized name="FormV3PayByPlate_InstructionsOK" value="Please proceed through gate" />
+	<Localized name="FormV3PayByPlate_InstructionsOK_2" value="Please pay at exit" />
+	<Localized name="FormV3PayByPlate_StatusKO" value="Enter License Plate or Cell Phone #" />
+	<Localized name="FormV3PayByPlate_StatusKOPhone" value="Unable to read Plate - Enter 10 Digit Phone Number" />
+
+	<!--FormV3PangoPassOK-->
+	<Localized name="FormV3PangoPassOK_StatusOK" value="PANGO PASS ACCEPTED" />
+	<Localized name="FormV3PangoPassOK_InstructionsOK" value="Please proceed through gate" />
+
+	<!--FormV3BlackList-->
+	<Localized name="FormV3BlackList_StatusKO" value="PLATE NOT ACCEPTED" />
+	<Localized name="FormV3BlackList_InstructionsKO" value="This vehicle is Unable to park here. Please Call at +1 4XX XXX XXXX" />
+
+	<!--FormV3PullTicket-->
+	<Localized name="FormV3PullTicket_GetTicket" value="Please pull a ticket from the ticket dispenser" />
+	<Localized name="FormV3PullTicket_Instructions" value="Please pull a ticket from the ticket dispenser
+			   
+			   To pay you have two options:
+			   
+			   1. Download Pango APP, scan ticket, and pay using Pango or use kiosk in lobby.
+			   
+			   2. Pay at the Paystations located in the garage." />
+
+	<!--FormV4-->
+	<Localized name="FormV4_Welcome" value="Welcome to Porstmouth International Airport" />
+	<Localized name="FormV4_Instructions" value="Choose Entry and Press Icon" />
+	<Localized name="FormV4_ChargingHours" value="Charging Hours: 8AM-6PM Mon-Sat" />
+	<Localized name="FormV4_Instructions2" value="PAY WITH CREDIT CARD AT EXIT" />
+	<Localized name="FormV4_DownloadApp" value="Download App" />
+	<Localized name="FormV4_Price" value="$1 PER HOUR | $10 DAY RATE PLUS TRANSACTION FEE 16%" />
+	<Localized name="FormV4_btnBack" value="&#60;&#60; BACK - PREVIOUS SCREEN"/>
+	<Localized name="FormV4_btnPrintTicket" value="Tap For Ticket"/>
+	<Localized name="FormV4_VehicleNotPresent" value="No Vehicle Detected" />
+
+	<!--FormV4ShowQRCode-->
+	<Localized name="FormV4ShowQRCode_ShowQR" value="Please HOLD QR to the QR reader" />
+	<Localized name="FormV4ShowQRCode_InstructionsQR" value="When gate opens, please enter garage and use your QR to exit" />
+	<Localized name="FormV4ShowQRCode_CodeOK" value="QR CODE ACCEPTED" />
+	<Localized name="FormV4ShowQRCode_InstructionsOK" value="Please proceed through gate" />
+	<Localized name="FormV4ShowQRCode_InstructionsOK_Ticket" value="Please pick up your ticket and proceed through gate" />
+	<Localized name="FormV4ShowQRCode_CodeKO" value="QR CODE NOT ACCEPTED" />
+	<Localized name="FormV4ShowQRCode_InstructionsKO_1opt" value="Print Your Ticket to Pay at Exit" />
+	<Localized name="FormV4ShowQRCode_InstructionsKO_2opt" value="Enter License Plate or Cell Phone # to Pay at Exit" />
+	<Localized name="FormV4ShowQRCode_InstructionsKO_3opt" value="Enter License Plate or Cell Phone # or Print Your Ticket to Pay at Exit" />
+	<Localized name="FormV4ShowQRCode_StatusKO_PlateOrPhone" value="Thank You!" />
+	<Localized name="FormV4ShowQRCode_PangoPassError" value="PANGO PASS ERROR" />
+
+	<!--FormV4PayByPlate-->
+	<Localized name="FormV4PayByPlate_StatusOK" value="Thank You!" />
+	<Localized name="FormV4PayByPlate_Reading" value="Reading plate..." />
+	<Localized name="FormV4PayByPlate_InstructionsOK" value="Please proceed through gate" />
+	<Localized name="FormV4PayByPlate_InstructionsOK_Ticket" value="Please pick up your ticket and proceed through gate" />
+	<Localized name="FormV4PayByPlate_InstructionsOK_2" value="Please pay at exit" />
+	<Localized name="FormV4PayByPlate_StatusKO_1opt" value="Print Your Ticket" />
+	<Localized name="FormV4PayByPlate_StatusKO_2opt" value="Enter License Plate or Cell Phone #" />
+	<Localized name="FormV4PayByPlate_StatusKO_3opt" value="Enter License Plate or Cell Phone # or Print Your Ticket" />
+
+	<!--FormV4PangoPassOK-->
+	<Localized name="FormV4PangoPassOK_StatusOK" value="PANGO PASS ACCEPTED" />
+	<Localized name="FormV4PangoPassOK_InstructionsOK" value="Please proceed through gate" />
+	<!--FormV4FreeFlowEntry (CR-378)-->
+	<Localized name="FormV4FreeFlowEntry_Status" value="WELCOME" />
+	<Localized name="FormV4FreeFlowEntry_Instructions" value="Please proceed through gate" />
+
+	<!--FormV4BlackList-->
+	<Localized name="FormV4BlackList_StatusKO" value="PLATE NOT ACCEPTED" />
+	<Localized name="FormV4BlackList_InstructionsKO" value="This vehicle is Unable to park here. Please Call at +1 4XX XXX XXXX" />
+
+	<!--FormV4PullTicket-->
+	<Localized name="FormV4PullTicket_GetTicket" value="Please pull a ticket from the ticket dispenser" />
+	<Localized name="FormV4PullTicket_Instructions" value="Please pull a ticket from the ticket dispenser
+			   
+			   To pay you have two options:
+			   
+			   1. Download Pango APP, scan ticket and pay using Pango.
+			   
+			   2. Pay at the Paystations located in the garage." />
+	<Localized name="FormV4PullTicket_StatusOK" value="Thank You!" />
+	<Localized name="FormV4PullTicket_InstructionsOK" value="Please pick up your ticket and proceed through gate" />
+	<Localized name="FormV4PullTicket_InstructionsOK_2" value="Please pay at exit" />
+
+	<!--FormV4CheckPermitPlate-->
+	<Localized name="FormV4CheckPermitPlate_StatusOK" value="Thank You!" />
+	<Localized name="FormV4CheckPermitPlate_Reading" value="Reading plate..." />
+	<Localized name="FormV4CheckPermitPlate_InstructionsOK" value="Please proceed through gate" />
+	<Localized name="FormV4CheckPermitPlate_InstructionsOK_2" value="Please pay at exit" />
+	<Localized name="FormV4CheckPermitPlate_StatusKO" value="Enter License Plate or Cell Phone #" />
+</Language>

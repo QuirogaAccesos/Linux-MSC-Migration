@@ -1,0 +1,150 @@
+﻿<Language name="es">
+  <Localized name="BackgroundColor" value="#dae3f3" />
+  <Localized name="FontColor" value="#FFFFFF" />
+  <Localized name="FontFamily" value="Comfortaa" />
+  <Localized name="FontSize" value="30" />
+  <Localized name="Hello" value="¡Hola!" />
+  <Localized name="Morning" value="¡Buenos días!" />
+  <Localized name="Afternoon" value="¡Buenas tardes!" />
+  <Localized name="Night" value="¡Buenas noches!" />
+  <Localized name="Exit-VehiclePresentMsg" value="INSERTE SU TARJETA POR FAVOR" />
+  <Localized name="Entry-VehiclePresentMsg" value="INSERTE SU TARJETA O PRESIONE EL BOTÓN" />
+  <Localized name="CardAccepted" value="TARJETA ACEPTADA" />
+  <Localized name="CardInvalid" value="TARJETA NO VÁLIDA" />
+  <Localized name="EntryTerminalDescription" value="ENTRADA" />
+  <Localized name="ExitTerminalDescription" value="SALIDA" />
+  <Localized name="OutputDeviceConnected" value="CONECTADO" />
+  <Localized name="Entry-IssuingVisitorCard" value="Gracias - Tenga un buen día" />
+  <Localized name="Entry-ReadingRecurrentClientCard" value="ESPERE POR FAVOR" />
+  <Localized name="Entry-EntryEventRegistered" value="ESPERE POR FAVOR" />
+  <Localized name="Entry-OutOfService" value="TERMINAL FUERA DE SERVICIO" />
+  <Localized name="Entry-RecurrentClientCardAccepted" value="RETIRE SU TARJETA" />
+  <Localized name="Entry-EntryGranted" value="Espere a que se abra la barrera y avance..." />
+  <Localized name="Entry-RecurrentClientCardDenied" value="ACCESO DENEGADO" />
+  <Localized name="Exit-InvalidCard" value="NO VALIDA, PASE POR LA CAJA DE COBRO" />
+  <Localized name="Entry-ClientGrabbedCard" value="CLIENTE SACA TARJETA DEL LECTOR" />
+  <Localized name="CardReaderConnectedError" value="ERROR" />
+  <Localized name="OutputDeviceConnectedError" value="ERROR" />
+  <Localized name="GoodByeMsg" value="QUE TENGA UN BUEN DIA. LO ESPERAMOS PRONTO." />
+  <Localized name="CardReaderConnected" value="LECTOR OK." />
+  <Localized name="TerminalOnline" value="EN LINEA." />
+
+	<!--Commons-->
+	<!--PlateOrPhone-->
+	<Localized name="PlateOrPhone_Plate" value="Pulse para Matrícula" />
+	<Localized name="PlateOrPhone_Phone" value="Pulse para Teléfono" />
+	<!--Keyboards-->
+	<Localized name="Form_Keyboard_HeaderPlate" value="Introduzca Matrícula" />
+	<Localized name="Form_Keyboard_HeaderPlateInstructions" value="Introduzca La Misma Matrícula De La Entrada" />
+	<Localized name="Form_Keyboard_HeaderPhone" value="Introduzca Teléfono de 10 Dígitos" />
+	<Localized name="Form_Keyboard_HeaderPhoneInstructions" value="Introduzca El Mismo Teléfono De La Entrada" />
+	<Localized name="Form_Keyboard_btnConfirm" value="Confirmar" />
+	<Localized name="Form_Keyboard_btnClear" value="LIMPIAR" />
+	<Localized name="Form_Keyboard_btnBack" value="&#60;&#60; VOLVER - PANTALLA PREVIA" />
+	<Localized name="Form_Keyboard_Price" value="$1 POR HORA | $10 TARIFA DE DIA MAS GASTOS DE GESTION 16%" />
+	<Localized name="Form_Keyboard_DownloadApp" value="Descargar App" />
+	<!--PaymentOptions-->
+	<Localized name="PaymentOptions_Pango" value="Pulse para Pagar con Pango" />
+	<Localized name="PaymentOptions_LG1" value="Pulse para Pagar con Tarjeta" />
+
+	<!--FormV3-->
+	<Localized name="FormV3_Welcome" value="Pago Parking" />
+	<Localized name="FormV3_Instructions" value="Para SALIR del garaje, PRESIONE una de las siguientes opciones:" />
+	<Localized name="FormV3_InitMsg" value="Gracias Por Aparcar Con Nosotros" />
+	<Localized name="FormV3_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV3_BtnPayPlate" value="Presiona para pagar con Tarjeta" />
+	<Localized name="FormV3_DownloadApp" value="Descargar App" />
+	<Localized name="FormV3_EnterData" value="Introduzca la Misma Matrícula o Teléfono que Introdujo Cuando Llegó" />
+	<Localized name="FormV3_btnBack" value="&#60;&#60; VOLVER - PANTALLA PREVIA"/>
+
+	<!--FormV3_QRTicket-->
+	<Localized name="FormV3_QRTicket_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV3_QRTicket_BtnScanTicket" value="Escanea Ticket" />
+
+	<!--FormV3_3opt-->
+	<Localized name="FormV3_3opt_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV3_3opt_BtnScanTicket" value="Escanea Ticket" />
+	<Localized name="FormV3_3opt_BtnPayPlate" value="Presiona para pagar con Tarjeta" />
+
+	<!--FormV3ShowQRCode-->
+	<Localized name="FormV3ShowQRCode_ShowQR" value="Por favor enseñe el QR al lector de QR" />
+	<Localized name="FormV3ShowQRCode_InstructionsQR" value="Cuando la barrera se abra, por favor salga del garage" />
+	<Localized name="FormV3ShowQRCode_CodeOK" value="Código QR aceptado" />
+	<Localized name="FormV3ShowQRCode_InstructionsOK" value="Por favor, pase por la salida" />
+	<Localized name="FormV3ShowQRCode_CodeKO" value="Código QR NO aceptado" />
+	<Localized name="FormV3ShowQRCode_InstructionsKO" value="Introduzca la Misma Matrícula o Teléfono que Introdujo Cuando Llegó" />
+
+	<!--FormV3ShowReceipt-->
+	<Localized name="FormV3ShowReceipt_Header" value="Pago Parking" />
+	<Localized name="FormV3ShowReceipt_InstructionsCC" value="Tap or Insert Card Below" />
+	<Localized name="FormV3ShowReceipt_PaymentOK" value="PAGO ACEPTADO - ¡GRACIAS!" />
+	<Localized name="FormV3ShowReceipt_PaymentFreeOK" value="MATRÍCULA ACEPTADA - ¡GRACIAS!" />
+	<Localized name="FormV3ShowReceipt_InstructionsOK" value="Por favor, pase por la salida" />
+
+	<!--FormV3PangoPassOK-->
+	<Localized name="FormV3PangoPassOK_StatusOK" value="PANGO PASS ACEPTADO" />
+	<Localized name="FormV3PangoPassOK_InstructionsOK" value="Por favor, pase por la salida" />
+
+	<!--FormV3ShowTicket-->
+	<Localized name="FormV3ShowTicket_Instructions" value="Por favor, escanea el recibo con el código de barras" />
+
+	<!--FormV4-->
+	<Localized name="FormV4_Welcome" value="Pago Parking" />
+	<Localized name="FormV4_Instructions" value="Para SALIR del garaje, PRESIONE una de las siguientes opciones:" />
+	<Localized name="FormV4_ChargingHours" value="Horario de Cobro: 8AM-6PM Mon-Sat" />
+	<Localized name="FormV4_InitMsg" value="Gracias Por Aparcar Con Nosotros" />
+	<Localized name="FormV4_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV4_BtnPayPlate" value="Presiona para pagar con Tarjeta" />
+	<Localized name="FormV4_DownloadApp" value="Descargar App" />
+	<Localized name="FormV4_EnterData" value="Introduzca la Misma Matrícula o Teléfono que Introdujo Cuando Llegó" />
+	<Localized name="FormV4_btnBack" value="&#60;&#60; VOLVER - PANTALLA PREVIA"/>
+	<Localized name="FormV4_BtnPayPlateClick" value="ESPERE POR FAVOR..." />
+
+	<!--FormV4_QRTicket-->
+	<Localized name="FormV4_QRTicket_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV4_QRTicket_BtnScanTicket" value="Escanea Ticket" />
+	<Localized name="FormV4_QRTicket_BtnScanTicketClick" value="ESPERE POR FAVOR..." />
+
+	<!--FormV4_3opt-->
+	<Localized name="FormV4_3opt_BtnShowQR" value="Escanea el QR Abajo" />
+	<Localized name="FormV4_3opt_BtnScanTicket" value="Escanea Ticket" />
+	<Localized name="FormV4_3opt_BtnPayPlate" value="Presiona para pagar con Tarjeta" />
+
+	<!--FormV4_Ticket_PH-->
+	<Localized name="FormV4_Ticket_PH_BtnPermitHolder" value="" />
+	<Localized name="FormV4_Ticket_PH_NotFound" value="TRANSIENT NO ENCONTRADO" />
+	<Localized name="FormV4_Ticket_PH_NotFoundMsg" value="PULSE EL BOTÓN DE AYUDA" />
+	<Localized name="FormV4_Ticket_PH_RetryMsg" value="Por favor reintente" />
+	<Localized name="FormV4_Ticket_PH_RetryPhone" value="Teléfono:" />
+	<Localized name="FormV4_Ticket_PH_RetryPlate" value="Matrícula:" />
+	<Localized name="FormV4_Ticket_PH_PaymMethod" value="RESERVA CADUCADA. ESCOJA OPCIÓN DE PAGO" />
+	<Localized name="FormV4_Ticket_PH_PangoPaymFail" value="ERROR EN PAGO DE PANGO" />
+	<Localized name="FormV4_Ticket_PH_PangoPaymFailMsg" value="POR FAVOR PAGUE CON TARJETA..." />
+
+	<!--FormV4ShowQRCode-->
+	<Localized name="FormV4ShowQRCode_ShowQR" value="Por favor enseñe el QR al lector de QR" />
+	<Localized name="FormV4ShowQRCode_InstructionsQR" value="Cuando la barrera se abra, por favor salga del garage" />
+	<Localized name="FormV4ShowQRCode_CodeOK" value="Código QR aceptado" />
+	<Localized name="FormV4ShowQRCode_InstructionsOK" value="Por favor, pase por la salida" />
+	<Localized name="FormV4ShowQRCode_CodeKO" value="Código QR NO aceptado" />
+	<Localized name="FormV4ShowQRCode_InstructionsKO" value="Introduzca la Misma Matrícula o Teléfono que Introdujo Cuando Llegó" />
+	<Localized name="FormV4ShowQRCode_TicketOK" value="Ticket aceptado" />
+	<Localized name="FormV4ShowQRCode_InstructionsTicket" value="Calculando importe, por favor espere" />
+
+	<!--FormV4ShowReceipt-->
+	<Localized name="FormV4ShowReceipt_Header" value="Pago Parking" />
+	<Localized name="FormV4ShowReceipt_InstructionsCC" value="Tap or Insert Card Below" />
+	<Localized name="FormV4ShowReceipt_PaymentOK" value="PAGO ACEPTADO - ¡GRACIAS!" />
+	<Localized name="FormV4ShowReceipt_PaymentFreeOK" value="MATRÍCULA ACEPTADA - ¡GRACIAS!" />
+	<Localized name="FormV4ShowReceipt_InstructionsOK" value="Por favor, pase por la salida" />
+	<Localized name="FormV4ShowReceipt_PriceDetail_FlatFee" value="TARIFA PLANA" />
+	<Localized name="FormV4ShowReceipt_LabelPlateDefault" value="Importe" />
+
+	<!--FormV4PangoPassOK-->
+	<Localized name="FormV4PangoPassOK_StatusOK" value="PANGO PASS ACEPTADO" />
+	<Localized name="FormV4PangoPassOK_InstructionsOK" value="Por favor, pase por la salida" />
+	<Localized name="FormV4PangoPassOK_StatusOK_Permit" value="RESERVA PANGO ACEPTADA" />
+
+	<!--FormV4ShowTicket-->
+	<Localized name="FormV4ShowTicket_Instructions" value="Por favor, escanea el recibo con el código de barras" />
+</Language>

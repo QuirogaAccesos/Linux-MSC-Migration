@@ -1,0 +1,8 @@
+﻿<Language name="en">
+  <!--<Localized name="Header" value="CENTENNIAL GARAGE  />-->
+	<Localized name="Header" value="Portsmouth International Airport - Pease
+			55 International Drive, Portsmouth, NH 03801
+			                (603) 433-6088
+			                   -----------------" />
+  <Localized name="Footer" value="          Scan the QRCode at exit" />
+</Language>

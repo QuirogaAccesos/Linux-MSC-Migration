@@ -1,0 +1,3423 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GlobalcomRetailProtocol</name>
+    </assembly>
+    <members>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.BigEndianBitConverter">
+            <summary>
+            Implementation of EndianBitConverter which converts to/from big-endian
+            byte arrays.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.BigEndianBitConverter.IsLittleEndian">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+            <remarks>
+            Different computer architectures store data using different byte orders. "Big-endian"
+            means the most significant byte is on the left end of a word. "Little-endian" means the 
+            most significant byte is on the right end of a word.
+            </remarks>
+            <returns>true if this converter is little-endian, false otherwise.</returns>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.BigEndianBitConverter.Endianness">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.BigEndianBitConverter.CopyBytesImpl(System.Int64,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified number of bytes from value to buffer, starting at index.
+            </summary>
+            <param name="value">The value to copy</param>
+            <param name="bytes">The number of bytes to copy</param>
+            <param name="buffer">The buffer to copy the bytes into</param>
+            <param name="index">The index to start at</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.BigEndianBitConverter.FromBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Returns a value built from the specified number of bytes from the given buffer,
+            starting at index.
+            </summary>
+            <param name="buffer">The data in byte array format</param>
+            <param name="startIndex">The first index to use</param>
+            <param name="bytesToConvert">The number of bytes to use</param>
+            <returns>The value built from the given bytes</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter">
+            <summary>
+            A class to allow the conversion of doubles to string representations of
+            their exact decimal values. The implementation aims for readability over
+            efficiency.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ToExactString(System.Double)">
+            <summary>
+            Converts the given double to a string representation of its
+            exact decimal value.
+            </summary>
+            <param name="d">The double to convert.</param>
+            <returns>A string representation of the double's exact decimal value.</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal">
+            <summary>
+            Private class used for manipulating sequences of decimal digits.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.digits">
+            <summary>Digits in the decimal expansion, one byte per digit</summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.decimalPoint">
+            <summary> 
+            How many digits are *after* the decimal point
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.#ctor(System.Int64)">
+            <summary> 
+            Constructs an arbitrary decimal expansion from the given long.
+            The long must not be negative.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.MultiplyBy(System.Int32)">
+            <summary>
+            Multiplies the current expansion by the given amount, which should
+            only be 2 or 5.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.Shift(System.Int32)">
+            <summary>
+            Shifts the decimal point; a negative value makes
+            the decimal expansion bigger (as fewer digits come after the
+            decimal place) and a positive value makes the decimal
+            expansion smaller.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.Normalize">
+            <summary>
+            Removes leading/trailing zeroes from the expansion.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.DoubleConverter.ArbitraryDecimal.ToString">
+            <summary>
+            Converts the value to a proper decimal string representation.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter">
+            <summary>
+            Equivalent of System.BitConverter, but with either endianness.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.IsLittleEndian">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+            <remarks>
+            Different computer architectures store data using different byte orders. "Big-endian"
+            means the most significant byte is on the left end of a word. "Little-endian" means the 
+            most significant byte is on the right end of a word.
+            </remarks>
+            <returns>true if this converter is little-endian, false otherwise.</returns>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Endianness">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Little">
+            <summary>
+            Returns a little-endian bit converter instance. The same instance is
+            always returned.
+            </summary>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Big">
+            <summary>
+            Returns a big-endian bit converter instance. The same instance is
+            always returned.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.DoubleToInt64Bits(System.Double)">
+            <summary>
+            Converts the specified double-precision floating point number to a 
+            64-bit signed integer. Note: the endianness of this converter does not
+            affect the returned value.
+            </summary>
+            <param name="value">The number to convert. </param>
+            <returns>A 64-bit signed integer whose value is equivalent to value.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int64BitsToDouble(System.Int64)">
+            <summary>
+            Converts the specified 64-bit signed integer to a double-precision 
+            floating point number. Note: the endianness of this converter does not
+            affect the returned value.
+            </summary>
+            <param name="value">The number to convert. </param>
+            <returns>A double-precision floating point number whose value is equivalent to value.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.SingleToInt32Bits(System.Single)">
+            <summary>
+            Converts the specified single-precision floating point number to a 
+            32-bit signed integer. Note: the endianness of this converter does not
+            affect the returned value.
+            </summary>
+            <param name="value">The number to convert. </param>
+            <returns>A 32-bit signed integer whose value is equivalent to value.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32BitsToSingle(System.Int32)">
+            <summary>
+            Converts the specified 32-bit signed integer to a single-precision floating point 
+            number. Note: the endianness of this converter does not
+            affect the returned value.
+            </summary>
+            <param name="value">The number to convert. </param>
+            <returns>A single-precision floating point number whose value is equivalent to value.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToBoolean(System.Byte[],System.Int32)">
+            <summary>
+            Returns a Boolean value converted from one byte at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>true if the byte at startIndex in value is nonzero; otherwise, false.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToChar(System.Byte[],System.Int32)">
+            <summary>
+            Returns a Unicode character converted from two bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A character formed by two bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToDouble(System.Byte[],System.Int32)">
+            <summary>
+            Returns a double-precision floating point number converted from eight bytes 
+            at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A double precision floating point number formed by eight bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToSingle(System.Byte[],System.Int32)">
+            <summary>
+            Returns a single-precision floating point number converted from four bytes 
+            at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A single precision floating point number formed by four bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToInt16(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 16-bit signed integer converted from two bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 16-bit signed integer formed by two bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToInt32(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 32-bit signed integer converted from four bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 32-bit signed integer formed by four bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToInt64(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 64-bit signed integer converted from eight bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 64-bit signed integer formed by eight bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToUInt16(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 16-bit unsigned integer converted from two bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 16-bit unsigned integer formed by two bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToUInt32(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 32-bit unsigned integer converted from four bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 32-bit unsigned integer formed by four bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToUInt64(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 64-bit unsigned integer converted from eight bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A 64-bit unsigned integer formed by eight bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CheckByteArgument(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Checks the given argument for validity.
+            </summary>
+            <param name="value">The byte array passed in</param>
+            <param name="startIndex">The start index passed in</param>
+            <param name="bytesRequired">The number of bytes required</param>
+            <exception cref="T:System.ArgumentNullException">value is a null reference</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            startIndex is less than zero or greater than the length of value minus bytesRequired.
+            </exception>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CheckedFromBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Checks the arguments for validity before calling FromBytes
+            (which can therefore assume the arguments are valid).
+            </summary>
+            <param name="value">The bytes to convert after checking</param>
+            <param name="startIndex">The index of the first byte to convert</param>
+            <param name="bytesToConvert">The number of bytes to convert</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.FromBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Convert the given number of bytes from the given array, from the given start
+            position, into a long, using the bytes as the least significant part of the long.
+            By the time this is called, the arguments have been checked for validity.
+            </summary>
+            <param name="value">The bytes to convert</param>
+            <param name="startIndex">The index of the first byte to convert</param>
+            <param name="bytesToConvert">The number of bytes to use in the conversion</param>
+            <returns>The converted number</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToString(System.Byte[])">
+            <summary>
+            Returns a String converted from the elements of a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <remarks>All the elements of value are converted.</remarks>
+            <returns>
+            A String of hexadecimal pairs separated by hyphens, where each pair 
+            represents the corresponding element in value; for example, "7F-2C-4A".
+            </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToString(System.Byte[],System.Int32)">
+            <summary>
+            Returns a String converted from the elements of a byte array starting at a specified array position.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <remarks>The elements from array position startIndex to the end of the array are converted.</remarks>
+            <returns>
+            A String of hexadecimal pairs separated by hyphens, where each pair 
+            represents the corresponding element in value; for example, "7F-2C-4A".
+            </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToString(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Returns a String converted from a specified number of bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <param name="length">The number of bytes to convert.</param>
+            <remarks>The length elements from array position startIndex are converted.</remarks>
+            <returns>
+            A String of hexadecimal pairs separated by hyphens, where each pair 
+            represents the corresponding element in value; for example, "7F-2C-4A".
+            </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.ToDecimal(System.Byte[],System.Int32)">
+            <summary>
+            Returns a decimal value converted from sixteen bytes 
+            at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="startIndex">The starting position within value.</param>
+            <returns>A decimal  formed by sixteen bytes beginning at startIndex.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Decimal)">
+            <summary>
+            Returns the specified decimal value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 16.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Decimal,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified decimal value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">A character to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Int64,System.Int32)">
+            <summary>
+            Returns an array with the given number of bytes formed
+            from the least significant bytes of the specified value.
+            This is used to implement the other GetBytes methods.
+            </summary>
+            <param name="value">The value to get bytes for</param>
+            <param name="bytes">The number of significant bytes to return</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Boolean)">
+            <summary>
+            Returns the specified Boolean value as an array of bytes.
+            </summary>
+            <param name="value">A Boolean value.</param>
+            <returns>An array of bytes with length 1.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Char)">
+            <summary>
+            Returns the specified Unicode character value as an array of bytes.
+            </summary>
+            <param name="value">A character to convert.</param>
+            <returns>An array of bytes with length 2.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Double)">
+            <summary>
+            Returns the specified double-precision floating point value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 8.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Int16)">
+            <summary>
+            Returns the specified 16-bit signed integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 2.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Int32)">
+            <summary>
+            Returns the specified 32-bit signed integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 4.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Int64)">
+            <summary>
+            Returns the specified 64-bit signed integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 8.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.Single)">
+            <summary>
+            Returns the specified single-precision floating point value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 4.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.UInt16)">
+            <summary>
+            Returns the specified 16-bit unsigned integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 2.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.UInt32)">
+            <summary>
+            Returns the specified 32-bit unsigned integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 4.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.GetBytes(System.UInt64)">
+            <summary>
+            Returns the specified 64-bit unsigned integer value as an array of bytes.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <returns>An array of bytes with length 8.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Int64,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the given number of bytes from the least-specific
+            end of the specified value into the specified byte array, beginning
+            at the specified index.
+            This is used to implement the other CopyBytes methods.
+            </summary>
+            <param name="value">The value to copy bytes for</param>
+            <param name="bytes">The number of significant bytes to copy</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytesImpl(System.Int64,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the given number of bytes from the least-specific
+            end of the specified value into the specified byte array, beginning
+            at the specified index.
+            This must be implemented in concrete derived classes, but the implementation
+            may assume that the value will fit into the buffer.
+            </summary>
+            <param name="value">The value to copy bytes for</param>
+            <param name="bytes">The number of significant bytes to copy</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Boolean,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified Boolean value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">A Boolean value.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Char,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified Unicode character value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">A character to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Double,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified double-precision floating point value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Int16,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 16-bit signed integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 32-bit signed integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Int64,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 64-bit signed integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.Single,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified single-precision floating point value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.UInt16,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 16-bit unsigned integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.UInt32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 32-bit unsigned integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.CopyBytes(System.UInt64,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified 64-bit unsigned integer value into the specified byte array,
+            beginning at the specified index.
+            </summary>
+            <param name="value">The number to convert.</param>
+            <param name="buffer">The byte array to copy the bytes into</param>
+            <param name="index">The first index into the array to copy the bytes into</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion">
+            <summary>
+            Union used solely for the equivalent of DoubleToInt64Bits and vice versa.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.i">
+            <summary>
+            Int32 version of the value.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.f">
+            <summary>
+            Single version of the value.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.#ctor(System.Int32)">
+            <summary>
+            Creates an instance representing the given integer.
+            </summary>
+            <param name="i">The integer value of the new instance.</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.#ctor(System.Single)">
+            <summary>
+            Creates an instance representing the given floating point number.
+            </summary>
+            <param name="f">The floating point value of the new instance.</param>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.AsInt32">
+            <summary>
+            Returns the value of the instance as an integer.
+            </summary>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.EndianBitConverter.Int32SingleUnion.AsSingle">
+            <summary>
+            Returns the value of the instance as a floating point number.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.Endianness">
+            <summary>
+            Endianness of a converter
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Endianness.LittleEndian">
+            <summary>
+            Little endian - least significant byte first
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Endianness.BigEndian">
+            <summary>
+            Big endian - most significant byte first
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EnumHelper">
+            <summary>
+            Helper class for Enumerations
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EnumHelper.GetEnumValue``1(System.String)">
+            <summary> Given a string find its matching enumeration </summary>
+            <typeparam name="T"></typeparam>
+            <param name="str"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EnumHelper.GetEnumValue``1(System.Int32)">
+            <summary> Given an int find its matching enumeration </summary>
+            <typeparam name="T"></typeparam>
+            <param name="intValue"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EnumHelper.GetEnumValue``1(System.Char)">
+            <summary> Give a character find its matching enumeration value </summary>
+            <typeparam name="T"></typeparam>
+            <param name="charValue"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.EnumHelper.GetEnumValue``1(System.Int64)">
+            <summary> Given a long find its matching enumeration value </summary>
+            <typeparam name="T"></typeparam>
+            <param name="longValue"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.LittleEndianBitConverter">
+            <summary>
+            Implementation of EndianBitConverter which converts to/from little-endian
+            byte arrays.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.LittleEndianBitConverter.IsLittleEndian">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+            <remarks>
+            Different computer architectures store data using different byte orders. "Big-endian"
+            means the most significant byte is on the left end of a word. "Little-endian" means the 
+            most significant byte is on the right end of a word.
+            </remarks>
+            <returns>true if this converter is little-endian, false otherwise.</returns>
+        </member>
+        <member name="P:CCI.Globalcom.GlobalcomRetailProtocol.LittleEndianBitConverter.Endianness">
+            <summary>
+            Indicates the byte order ("endianess") in which data is converted using this class.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.LittleEndianBitConverter.CopyBytesImpl(System.Int64,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Copies the specified number of bytes from value to buffer, starting at index.
+            </summary>
+            <param name="value">The value to copy</param>
+            <param name="bytes">The number of bytes to copy</param>
+            <param name="buffer">The buffer to copy the bytes into</param>
+            <param name="index">The index to start at</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.LittleEndianBitConverter.FromBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Returns a value built from the specified number of bytes from the given buffer,
+            starting at index.
+            </summary>
+            <param name="buffer">The data in byte array format</param>
+            <param name="startIndex">The first index to use</param>
+            <param name="bytesToConvert">The number of bytes to use</param>
+            <returns>The value built from the given bytes</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress">
+            <summary>
+            Mux Address - ie, Mux Logical Channel 
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress.AckNak">
+            <summary>
+            Logical Channel for Ack and Nak Packets
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress.RetailProtocol">
+            <summary>
+            Logical Channel for Retail Protocol packets
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress.Banking">
+            <summary>
+            Logical Channel for Banking Packets
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress.Control">
+            <summary>
+            Logical Channel for TLS Control/commands
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.EMuxAddress.Syslog">
+            <summary>
+            Logical Channel for debug log data
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ECmd">
+            <summary>
+            Mux Commands
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ECmd.Application">
+            <summary>
+            Application Message
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ECmd.Ack">
+            <summary>
+            Acknowledgement Message
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ECmd.Nak">
+            <summary>
+            Bad Acknowledgement Message
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ECmd.AckAndApplication">
+            <summary>
+            Acknowledgement and Application message
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket">
+            <summary>
+            Mux Packet Object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.MuxDirection">
+            <summary>
+            Enumerate the direction of the packet
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.MuxDirection.ToTerminal">
+            <summary>
+            Packet is flowing towards the terminal
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.MuxDirection.FromTerminal">
+            <summary>
+            Packet is flowing from teh terminal
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Soh">
+            <summary>
+            Starting header of Packet
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Address">
+            <summary>
+            Logical Channel of Packet
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Cmd">
+            <summary>
+            Packet command
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Sequence">
+            <summary>
+            Packet sequence number
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Length">
+            <summary>
+            Packet Length
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Data">
+            <summary>
+            Packet Data
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.Crc">
+            <summary>
+            Packet CRC
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.ValidCrc">
+            <summary>
+            CRC is valid?
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.MuxPacketDirection">
+            <summary>
+            Packet direction
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.stale">
+            <summary>
+            unreplied Mux packet?
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.#ctor">
+            <summary>
+            MUX Packet
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.CheckCrc">
+            <summary>
+            Check the CRC of the muxpacket        
+            </summary>
+            <returns> bool = CRC valid?</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket.SetCrc">
+            <summary>
+            Set the CRC of the muxpacket (for outbound)
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol">
+            <summary>
+            Mux Protocol Class
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.RetailProtocolMessages">
+            <summary>
+            Buffer of Retail protocol messages
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol._SerialPort">
+            <summary>
+            RS232 port the MUX is using
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SequenceCounter">
+            <summary>
+            Sequence counter for outbound MUX packets
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.BankingBytesIn">
+            <summary>
+            Buffer for Banking Data
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.BankingBytesInCounter">
+            <summary>
+            Banking Data buffer position counter
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.RetailProtocolBytesIn">
+            <summary>
+            Buffer for the retail protocol inbound data
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.RetailProtocolBytesInCounter">
+            <summary>
+            Buffer for the retail protocol inbound data position counter
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDebug">
+            <summary>
+            Delegates for the UI to hook for debug messages
+            </summary>
+            <param name="sender"></param>
+            <param name="dArgs"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDebugEvent">
+            <summary>
+            Event Delegates for the UI to hook for debug messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxLogDebug">
+            <summary>
+            Delegates to look for Exceptions in threads that were logged
+            </summary>
+            <param name="sender"></param>
+            <param name="dLogMessageEventArgs"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxLogDebugEvent">
+            <summary>
+            Event Delegates to look for Exceptions in threads that were logged
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SyslogDebug">
+            <summary>
+            Delegates for the UI to receive syslog messages
+            </summary>
+            <param name="sender"></param>
+            <param name="dsSyslogEventArgs"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SysLogDebugEvent">
+            <summary>
+            Event Delegates for the UI to receive syslog messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLog">
+            <summary>
+            Delegate for returning Banking data to UI
+            </summary>
+            <param name="sender"></param>
+            <param name="dMuxLog"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLogEvent">
+            <summary>
+            Event Delegate for returning Banking data to UI
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.bSimulateMuxProxyTimeout">
+            <summary>
+            flag to simulate a proxy timeout
+            this is only used to show what happens when MUX fails to pass data via proxy to the host (and back)
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxLogMessageEventArgs">
+            <summary>
+            Debug Event Args containing a message to log
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxLogMessageEventArgs.#ctor(System.String)">
+            <summary>
+            Debug Event Args containing a message to log
+            </summary>
+            <param name="logMessage"></param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLogMessageEventArgs">
+            <summary>
+            Banking Data Log
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLogMessageEventArgs.LogMessage">
+            <summary>
+            Message to Log
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLogMessageEventArgs.Outputflag">
+            <summary>
+            Output Message or input message?
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxBankingDataLogMessageEventArgs.#ctor(System.String,System.Boolean)">
+            <summary>
+            Banking Data log message
+            </summary>
+            <param name="logMessage">Log Message</param>
+            <param name="outputflag">Output Flag</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MUXRefreshUI">
+            <summary>
+            Refresh the UI during long runnning communication
+            </summary>
+            <param name="sender"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MUXRefreshUIEvent">
+            <summary>
+            Event to Refresh the UI
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxPacketEventArgs">
+            <summary>
+            Debug Event Args containing a MuxPacket object
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxPacketEventArgs.MuxPacket">
+            <summary>
+            Mux Packet
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxPacketEventArgs.#ctor(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Debug Event Args containing a MuxPacket object
+            </summary>
+            <param name="muxPacket">Muxpacket to Log</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SyslogEventArgs">
+            <summary>
+            Debug Event Args containing a Syslog Message
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SyslogEventArgs.SyslogMessage">
+            <summary>
+            Syslog Message
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SyslogEventArgs.#ctor(System.String)">
+            <summary>
+            Debug Event Args containing a Syslog Message
+            </summary>
+            <param name="syslogMessage"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SetTlsOverride(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Boolean})">
+            <summary>
+            Update TLS overrides from the UI
+            </summary>
+            <param name="cert">Cert Name to search in Cert store</param>
+            <param name="tlsName">TLS host Name</param>
+            <param name="tlsPort">TLS host Port</param>
+            <param name="simulateProxyTimeout">Simulate timeout flag</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.GetPendingOutboundMuxPacketCount">
+            <summary>
+            Returns the pending mux packet count
+            </summary>
+            <returns>number of mux packets pending</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.#ctor(System.String,System.Int32)">
+            <summary>
+            Mux Protocol Class
+            </summary>
+            <param name="comPort">RS232 Port</param>
+            <param name="baudRate">Speed of the RS232 Port</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.DebugLogWorker">
+            <summary>
+            Debug Worker Class
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDirector">
+            <summary>
+            MUX Director
+            This is the worker that Routes and processes inbound MUX packets
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDirector.#ctor(CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol)">
+            <summary>
+            MuxDirector worker class initializer
+            </summary>
+            <param name="mux"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDirector.Process">
+            <summary>
+            Worker Thread
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDirector.RequestStop">
+            <summary>
+            Method to request the close of this thread
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxDirector.AddNewMuxPacket(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Add a newly Received MuxPacket to the "queue"
+            </summary>
+            <param name="muxPacket"></param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxSendWorker">
+            <summary>
+            Send Worker Class
+            This is the worker that transmits MUX packets over RS232
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxControlWorker">
+            <summary>
+            Worker Class to manage the MUX Control Channel
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.BankingProtocolWorker">
+            <summary>
+            Worker Class to manage the Banking Protocol channel
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.RetailProtocolWorker">
+            <summary>
+            Worker class for the Retail Protocol Channel
+            This Class manages data inbound on the retail protocol channel
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.PullNextRpPacket(System.Byte)">
+            <summary>
+            This method returns the next retail protocol packet.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SerialDataReader(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+            <summary>
+            Receive Serial Data Method
+            
+            This will execute on the Receive Data Thread
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.DecodeMux">
+            <summary>
+            Decode the inbound serial data into a Mux Packet
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SendPacketToRetailProtocol(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Add the data to the Retail Protocol buffer
+            </summary>
+            <param name="muxPacket">muxpacket</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.ReceiveRetailProtocolPacket(System.Byte[])">
+            <summary>
+            This method receives retail protocol commands from the Kiosk
+            </summary>
+            <param name="retailProtocolBytes">Byte array of the retail protocol command</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SendPacketToBanking(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Puts the retail banking message on the byte array buffer for consumption
+            </summary>
+            <param name="muxPacket">Mux packet</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SendPacketToSyslog(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Puts the Syslog message on the byte array buffer for consumption
+            </summary>
+            <param name="muxPacket">Mux Packet</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxControl(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Add the control packet to the queue for the worker thread to manage
+            </summary>
+            <param name="muxPacket">Mux Control Packet</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.ClearPending(System.Byte)">
+            <summary>
+            Remove a pending packet from the Pending Packet List
+            </summary>
+            <param name="sequence">Sequence</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.MuxPacketSend(CCI.Globalcom.GlobalcomRetailProtocol.MuxPacket)">
+            <summary>
+            Place a mux packet on the send queue for the sendworker to transmit
+            </summary>
+            <param name="muxPacket">Mux Packet </param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.ResendMuxPacket(System.Int32)">
+            <summary>
+            Resend packet after NAK
+            </summary>
+            <param name="sequence">Sequence number of packet to resend</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SendNak(System.Byte)">
+            <summary>
+            Create the NAK packet for the given sequence and send it.
+            </summary>
+            <param name="seq">Sequence Number to NAK</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.MuxProtocol.SendAck(System.Byte)">
+            <summary>
+            Create the ACK packet for the given sequence and send it
+            </summary>
+            <param name="seq">Sequence Number to ACK</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPetroProductDetailTags">
+            <summary>
+            Enumeration of the product detail tags
+            (TLV of Product Details)
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.PetroSlots">
+            <summary>
+            Public Class for pre-auth slots for Petroleum
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPetroPromptTags">
+            <summary>
+            Enumeration for different Petroleum prompts
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.Prompting">
+            <summary>
+            Class used to store the required prompts and reply.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.GBCPrompt">
+            <summary>
+            Class that defines the meta data for each prompt
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.GBCPrompt.WexCode">
+            <summary>
+            Wex's Code
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.GBCPrompt.TypeMask">
+            <summary>
+            Mask for input to restrict the datatype to a specific number of characters and syntax
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.GBCPrompt.PromptText">
+            <summary>
+            The text to Prompt with
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.GBCPromptList">
+            <summary>
+            This class defines the prompting syntax requirements and text for each prompt.
+            Syntax reference: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.maskedtextbox.mask?view=netcore-3.1
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.TestHarnessCallbackDelegate">
+            <summary>
+            Test Harness Override
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol">
+            <summary>
+             The RetailProtocol class is the object wrapper for the Globalcom Retail Protocol
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.UseEthernet">
+            <summary>
+            USE Ethernet Flag
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.UseMux">
+            <summary>
+            USE Mux Flag
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.EcrStopMessage">
+            <summary>
+            USE ECR Mode - 0x00 means ECR is off.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.EcrResponseMessages">
+            <summary>
+            List of Message IDs for ECR Response Messages
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.EcrRequestMessages">
+            <summary>
+            List of Message IDs for ECR Request messages
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.EthernetListener">
+            <summary>
+            Ethernet Listener
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Comport">
+            <summary>
+            RS232 Communication port
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol._baudRate">
+            <summary>
+            RS232 Baud Rate
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.BytesIn">
+            <summary>
+            Buffer for inbounc RS232 data
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.BytesInCounter">
+            <summary>
+            Inbound RS232 buffer position
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Mux">
+            <summary>
+            Class for MUX protocol communication
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Busy">
+            <summary>
+            Busy flag
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.StopByte">
+            <summary>
+            Byte to end RS232 read on
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.ExpectedWaitTime">
+            <summary>
+            Default expected wait time for a command.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.OutputDevice">
+            <summary>
+            String representation of the COM port to be used
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Language">
+            <summary>
+            Default Language
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.EcrMessagesReceived">
+            <summary>
+            ECR Messages received buffer
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RpMessagesReceived">
+            <summary>
+            Retail Protocol messages received buffer
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Stx">
+            <summary>
+            ASCII STX
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Etx">
+            <summary>
+            ASCII ETX
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.InputDisplayHandler">
+            <summary>
+            Delegates for the worker threads to update the UI for input messages
+            </summary>
+            <param name="sender"></param>
+            <param name="dArgs"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.IoIn">
+            <summary>
+            Event for updating the UI for input messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.OutputDisplayHandler">
+            <summary>
+            Delegates for the worker threads ot update the UI for output messages
+            </summary>
+            <param name="sender"></param>
+            <param name="dArgs"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.IoOut">
+            <summary>
+            Event for updating the UI for output messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.DisplayArgs">
+            <summary>
+            DisplayArg class that adds the data payload
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.DisplayArgs.Data">
+            <summary>
+            Byte array for payload data
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.DisplayArgs.#ctor(System.Byte[])">
+            <summary>
+            Creator
+            </summary>
+            <param name="input">payload data</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RefreshUI">
+            <summary>
+            Refresh UI for long running communication waits
+            </summary>
+            <param name="sender"></param>
+        </member>
+        <member name="E:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RefreshUIEvent">
+            <summary>
+            Event for UI Refresh
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.TerminalServerSocket">
+            <summary>
+            Ethernet Socket for a terminal server (ETH->SER)
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol._testHarnessCallbackDelegate">
+            <summary>
+            USE Ethernet Flag
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.#ctor(CCI.Globalcom.GlobalcomRetailProtocol.TestHarnessCallbackDelegate,CCI.Globalcom.GlobalcomRetailProtocol.EDeviceFamily,CCI.Globalcom.GlobalcomRetailProtocol.ELanguage)">
+            <summary>
+            The Retail Protocol Object for testing.  Does not go out to a physical device.
+            </summary>
+            <param name="testharnessCallbackDelagate"> Enable Unit Testing</param>
+            <param name="eDeviceFamily"></param>
+            <param name="language"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.#ctor(System.String,System.Int32,System.Int32,System.Boolean,CCI.Globalcom.GlobalcomRetailProtocol.ELanguage)">
+            <summary>
+            The Retail Protocol Object
+            </summary>
+            <param name="outputDevice">COM port to use</param>
+            <param name="baudRate">Baud Rate to use</param>
+            <param name="portNumber">Ethernet Port # to listen on</param>
+            <param name="useMux">Flag to use the MUX protocol</param>
+            <param name="language">Default Language</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.#ctor(System.Net.IPAddress,System.Int32,CCI.Globalcom.GlobalcomRetailProtocol.ELanguage)">
+            <summary>
+            Retail Protocol Object
+            Overloaded for ETH communication by Terminal server (ETH->RS232 device)
+            </summary>
+            
+            <param name="terminalServerAddress">IP Address of Terminal Server</param>
+            <param name="terminalServerPort">TCP Port of Terminal Server</param>
+            <param name="language">Default Language</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.InTestMode">
+            <summary>
+            Check if the RetailProtocol class is in override test mode
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.StringToByteArray(System.String,System.Int32)">
+            <summary>
+            Convert a string to a fixed length byte array padded to the right with 0x00
+            </summary>
+            <param name="input">string to convert</param>
+            <param name="fixedLength">byte array length</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.BytesFromInt(System.Int32,System.Int32)">
+            <summary>
+            Convert an Int32 to a byte array padded to the right with 0x00
+            </summary>
+            <param name="input">Int32 to Convert</param>
+            <param name="fixedLength">Length of Byte Array</param>
+            <returns>byte[] </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NotifyOutcome">
+            <summary>
+            0x4B NOTIFY OUTCOME
+            The PU uses this command to request the outcome of the notify and the error code.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NotifyCommand(System.Byte,System.Int32)">
+            <summary>
+            0x4A NOTIFY COMMAND
+            The PU uses this command to request a notify of a preauthorization, necessary to the gasoline payment.
+            </summary>
+            <param name="preauthId">ID to Notify</param>
+            <param name="amountInPennies">Amount </param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PetroNotifyCommand(System.Byte,System.Int32,System.Collections.Generic.List{CCI.Globalcom.GlobalcomRetailProtocol.PetroProductDetails})">
+            <summary>
+            Petroleum Application version
+            0x4A NOTIFY COMMAND
+            The PU uses this command to request a notify of a preauthorization, necessary to the gasoline payment.
+            sometimes called "Capture"
+            This command for Petroleum includes the product details
+            </summary>
+            <param name="preauthId">ID to Notify</param>
+            <param name="amountInPennies">Amount </param>
+            <param name="petroProductDetails">list of product details to send</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PreAuthorizationOutcome">
+            <summary>
+            0x49 REQUEST OF PREAUTHORIZATION OUTCOME
+            The PU uses this command to request at the terminal the outcome of the preauthorization executed.
+            </summary>
+            <returns>RpResponsePreAuthOutcome</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PreAuthorization(System.Int32,CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies)">
+            <summary>
+            0x48 PREAUTHORIZATION COMMAND
+            This command is used to start a preauthorization operation. 
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PetroPreAuthorization(System.Int32,CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies,System.ComponentModel.BindingList{CCI.Globalcom.GlobalcomRetailProtocol.Prompting})">
+             <summary>
+             0x48 PREAUTHORIZATION COMMAND
+             This command is used to start a preauthorization operation.
+            
+             This method is specific for NBS payment application for Petro.
+             </summary>
+             <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_RequestInsertedDataFromKeyboardRequest">
+            <summary>
+            0x13 REQUEST INSERTED DATA FROM KEYBOARD
+            This command is used to request the key pressed from the user after received the status request with “keyboard data available”
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_DisplayAndKeyboardMessage(System.Byte[],System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+             0x12 DISPLAY AND KEYBOARD MESSAGE
+             This command is used to request the POS terminal to print a message and display it on the screen,and to manage the keyboard input.
+             BigEndianBitConverter.Big.ToInt16(response, 3)
+             </summary>
+             <param name="language">ISO 2 letter language abbriviation</param>
+             <param name="line0Message">Enumerated Message Number to display on Line 0</param>
+             <param name="line1Message">Enumerated Message Number to display on Line 1</param>
+             <param name="line2Message">Enumerated Message Number to display on Line 2</param>
+             <param name="line3Message">Enumerated Message Number to display on Line 3</param>
+             <param name="inputLine">Line for the input message to be echoed</param>
+             <param name="inputLength">Maximum size for the requested input.</param>
+             <param name="minInputLength">Minimum size for the requested input.</param>
+             <param name="persistence">Length of time in seconds to display the prompt and wait for the response.</param>
+             <param name="offset">Number of characters from the left of the screen to begin echoing the input.</param>
+             <param name="insertType">0=Numerical,1=Alphanumerical, >20 is the mask in ASCII </param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReaderPowerOff">
+            <summary>
+            0x39 READER POWER OFF
+            This command is used to power off the reader, if the reader is not powered off the reader answer after 500 milliseconds.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTimeDevice">
+            <summary>
+            0x65 GET TIME DEVICE
+            This command is used to view the date and the hour of the device.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTimeNFC">
+            <summary>
+            0x6C GET TIME DEVICE 2
+            This command is used to view the date and the hour of the contactless.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_AntiRemovalGetTimestampDevice">
+            <summary>
+            0x64 ANTIREMOVAL GET TIMESTAMP DEVICE
+            This command is used to view the date and the hour of the last violation happened on the slave.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTimeMasterDevice">
+            <summary>
+            0x63 GET TIME MASTER
+            This command is used to view the date and the hour of the master.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_SetTimeMasterDevice(System.DateTime)">
+            <summary>
+            0x62 SET TIME MASTER DEVICE
+            This command is used to set date and hour on master and slave.
+            </summary>
+            <param name="masterTime">DateTime to set</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_DeviceGetInfo">
+            <summary>
+            0x61 DEVICE GET INFO
+            This command is used to obtain information about the status of the slave.
+            </summary>
+            <returns>RpResponseDeviceInfo</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NFCGetInfo">
+            <summary>
+            0x6B DEVICE 2 GET INFO
+            This command is used to obtain information about the status of the contactless.
+            </summary>
+            <returns>RpResponseDeviceInfo</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_AntiRemovalEnable">
+            <summary>
+            0x60 ANTIREMOVAL ENABLE
+            This command is enable the anti-removal sensors on master and slave.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_AntiRemovalGetTimestampMaster">
+            <summary>
+            0x59 ANTIREMOVAL GET TIMESTAMP MASTER
+            This command is used to view the date and the hour of the last violation happened on the master.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NewDeviceParing(System.Byte[])">
+            <summary>
+            0x58 NEW DEVICE PAIRING
+            This command is used to pair two devices. 
+            The PU send to the UPT the unlock key, the UPT verify the key, 
+            then if the key is correct and the sensors are close, the UPT starts the pairing operations.
+            </summary>
+            <param name="unlockCode">Unlock key</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NewDeviceGetCode">
+            <summary>
+            0x57 NEW DEVICE GET CODE
+            This command is used to obtain a code that will be used into a program (Key Calc) 
+            to generate a 10 bytes key that will be used to pair a new device connected.
+            </summary>
+            <returns>RpResponseCommissioning</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_CommissioningLock">
+            <summary>
+            0x5A COMMISSIONING LOCK
+            This command is used to lock the board, changing its status from Active to Violated.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NewDeviceGetCodePairingAndAntiRemoval">
+            <summary>
+            0x66 ONE STEP GET CODE
+            This command is used to generate a code necessary for the start of the anti-removal unlock and pairing operation.
+            The generated code will be insert into another program (Key Calc) to generate a 
+            10 byte ascii key that will be used for the anti-removal unlock and pairing unlock command.
+            </summary>
+            <returns>RpResponseCommissioning</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_NewDeviceCodePairingAndAntiRemoval(System.Byte[])">
+             <summary>
+            0x67 ONE STEP UNLOCK CODE
+             This command is used to unlock the anti‐removals and if necessary, execute the pairing operation.
+             The PU send to the UPT the unlock key, the UPT verify the key, then if the key is correct and the anti‐removals are closed, the UPT starts the unlock operations.
+             </summary>
+             <param name="unlockCode">Unlock key</param>
+             <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_MasterGetInfo">
+            <summary>
+            0x56 MASTER GET INFO
+            This command is used to obtain information about the status of the master.
+            </summary>
+            <returns>RpResponseDeviceInfo</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_HRT1000DeviceGetInfo">
+            <summary>
+            0x00 - Extended command - 0x56 HRT1000 GET INFO
+            This command is used to obtain information about the status of the master.
+            </summary>
+            <returns>RpResponseHRT1000DeviceInfo</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_CommissioningUnlock(System.Byte[])">
+            <summary>
+            0x55 COMMISSIONING UNLOCK
+            This command is used to unlock the board, changing its status from Violated to active.
+            The PU send to the UPT the unlock key, the UPT verify the key, then if the key is correct and the sensors are close,
+             the UPT starts the unlock operations.
+            </summary>
+            <param name="unlockCode">Unlock key</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EXT_CommissioningUnlock(System.Byte[])">
+            <summary>
+            Extended 0x55 COMMISSIONING UNLOCK
+            This command is used to unlock the board, changing its status from Violated to active.
+            The PU send to the UPT the unlock key, the UPT verify the key, then if the key is correct and the sensors are close,
+             the UPT starts the unlock operations.
+            </summary>
+            <param name="unlockCode">Unlock key</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_CommissioningGetCode">
+            <summary>
+            0x54 COMMISSIONING GET CODE
+            This command is used to generate a code necessary for the start of the commissioning operation.
+            The generated code will be insert into another program (Key Calc) to generate a 10 byte ascii key that will be used for the commissioning unlock command.
+            </summary>
+            <returns>RpResponseCommissioning</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EXT_CommissioningGetCode">
+            <summary>
+            Extended 0x54 COMMISSIONING GET CODE
+            This command is used to generate a code necessary for the start of the commissioning operation.
+            The generated code will be insert into another program (Key Calc) to generate a 10 byte ascii key that will be used for the commissioning unlock command.
+            </summary>
+            <returns>RpResponseCommissioning</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadMdbConfiguration">
+            <summary>
+            0xB2 READ THE CONFIGURATION OF THE MDB PARAMETERS
+            This command is used to read the parameters of the MDB.
+            </summary>
+            <returns>rpResponseMDBParams </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadIPConfiguration">
+            <summary>
+            0xB1 READ IP CONFIGURATION
+            This command is used to read IP and port used to execute the retailer protocol with one socket in LAN connection (the UPT is client).
+            </summary>
+            <returns>RpResponseIPAddress</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadBankingParameters(CCI.Globalcom.GlobalcomRetailProtocol.EBankingParams)">
+            <summary>
+            0xB0 READ BANKING PARAMETERS
+            This command is used to read the banking parameters configured for the connection of the UPT to the banking host.
+            </summary>
+            <param name="tag">Enumeration of the config param to return</param>
+            <returns>RpResponseBankingParameters</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PrintBankingParameters">
+            <summary>
+            Filter through all the Bank Parameters and create a printable string.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetBankingParameters">
+            <summary>
+            Filter through all the Bank Parameters and create a printable xml string.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EraseKeysReq">
+            <summary>
+            0xC0 DELETE KEYS COMMAND REQUEST STEP
+            This command is used to delete the application keys, the random key and the RSA key.At the end
+            of the erase process, BV1000 goes in removal state.
+            The execution of the command is composed by two steps: the first generates a code that will be
+            sent back to the terminal to complete the erase process (second step).
+            </summary>
+            <returns>RpResponseEraseKeys</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Rp_EraseKeysConfirm(System.Byte[])">
+            <summary>
+            0xC0 DELETE KEYS COMMAND CONFIRM STEP
+            This command is used to delete the application keys, the random key and the RSA key.At the end
+            of the erase process, BV1000 goes in removal state.
+            The execution of the command is composed by two steps: the first generates a code that will be
+            sent back to the terminal to complete the erase process (second step).
+            </summary>
+            <param name="random"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTimeDateofEraseKeys">
+            <summary>
+            0xC1 GET DATE TIME LAST DELETE KEYS COMMAND
+            This command is used to view the date and the hour of the last execution of delete keys command.
+            </summary>
+            <returns>RpResponseDateTime</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ConfigurationOfTheMdbParameters(System.Byte,System.Int32,System.Int32,System.Int32,System.Byte)">
+            <summary>
+            0xAF CONFIGURATION OF THE MDB PARAMETERS
+            This command is used to configure the parameters of the MDB.
+            </summary>
+            <param name="cashless">Cashless number: 0x01 -> cashless 1 0x02 -> cashless 2</param>
+            <param name="foundInEurocent">Found in eurocent</param>
+            <param name="mDbMaxWaitTime">Max time of answer for the MDB commands</param>
+            <param name="vendMaxTime">Max time of answer between vend request and vend approved</param>
+            <param name="saleType">Sale type: 0x01 -> single sale 0x02 -> multiple sale</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ConfigurationForRetailProtocolOnEthernet(System.String,System.Int32,System.Boolean)">
+            <summary>
+            0xAE IP CONFIGURATION FOR RETAIL PROTOCOL ON ETHERNET
+            This command is used to configure IP and port to execute the retailer protocol with one socket in LAN connection (the UPT is client).
+            </summary>
+            <param name="kioskIpAddress">IP address PC (filled to right with 0x00)</param>
+            <param name="portNumber">PC Port (filled to right with 0x00)</param>
+            <param name="pPpEnabled">Enable the serial to be used as PPP channel</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_BankingParametersConfiguration(System.Boolean,System.Byte,System.Byte[])">
+            <summary>
+            0xAD BANKING PARAMETERS CONFIGURATION
+            This command is used to configure the banking parameters for the connection of the UPT to the banking host.
+            </summary>
+            <param name="sync">Sync (1=last conf. packet, write conf; 0=there are still packages)</param>
+            <param name="tagId">The Tag of the Parameter to Modify</param>
+            <param name="data">The value you wish to assign to the tag</param>
+            <returns>RpResponseBase</returns>        
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadSerialNumber">
+            <summary>
+            0x53 READ SERIAL NUMBER
+            This command is used to read the serial number of the UPT master and of all the UPT slaves.
+            </summary>
+            <returns>RpResponseSerialNumbers</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_TestEth(System.String)">
+            <summary>
+            0x03 TEST ETH
+            This command is used to check the ETH configuration and perform a ping to a selected ip address
+            </summary>
+            <param name="ipAddress">Address to ping</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_Notification(System.Int32)">
+            <summary>
+            0x4D Notification
+            This command is used  to delete a preauthorization slot. 
+            </summary>
+            <param name="slotIndex">SlotIndex</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ResultOfLastRefundOperation">
+            <summary>
+            0x0F RESULT OF LAST REFUND OPERATION
+            This command return the outcome of the refund.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_VoidLastTransaction">
+             <summary>
+            0x0C VOID TRANSACTION
+             This command execute the void operation of the last operation executed.
+             </summary>
+             <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_OutcomeOfVoid">
+            <summary>
+            0x16 OUTCOME VOID TRANSACTION
+            This command returns the outcome of the void operation.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_RefundLastOperation">
+            <summary>
+            0x0E REFUND LAST OPERATION
+            This command execute the refund of the last payment executed.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PreauthorizationStatusRequest">
+            <summary>
+            0x4C Preauthorization status
+            This command is used  to request the status of the 10 preauthorization slots. 
+            </summary>
+            <returns>RpResponseAuthStatus</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_TerminalResetRequest">
+            <summary>
+            0x27 TERMINAL RESET
+            The PU uses this command to request reset of the UPT.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GsmStatusRequest">
+            <summary>
+            0x21 GSM STATUS REQUEST
+            The PU uses this command to request the status of the GSM:
+             SIM presence;
+             level of the signal (from 1-31, or 99 if not present);
+             errors of the last transmission;
+             carrier present.
+            </summary>
+            <returns>RpResponseGSMStatus</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetLastReference">
+            <summary>
+            0x22 GET CARDEASEREFERENCE/STAN 
+            This command is used to read the cardeasereference/stan of the last saved transaction; the transaction can be an approved transaction or a transaction that has to be downloaded with a void.
+            </summary>
+            <returns>RpResponseGatewayReference</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_DeleteLastGatewayReference">
+            <summary>
+            0x23 DELETE CARDEASEREFERENCE/STAN 
+            This command is used to delete the cardeasereference/stan of a transaction that has to be downloaded with a void. The
+            cardeasereference is not deleted if the transaction to which it refers has been settled.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ActivationMaintenanceMenuRequest">
+            <summary>
+            0x20 ACTIVATION MAINTENANCE MENU
+            The PU uses this command to request at the UPT terminal to active the programming of the banking parameters or execute the diagnostic functions.
+            The parameters necessary are inserted through PINPAD in an autonomous way from the UPT terminal. 
+            The UPT goes into the busy state and return automatically at its normal state if it isn’t made any choice or received any serial command for 3 minutes.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_LocalTotalsRequest">
+            <summary>
+            0x18 LOCAL TOTALS REQUEST
+            This command is used to read the local totals.
+            The UPT return the transacted total for every enabled circuit (bancomat included), 16 byte of identifier and 4 byte of totals.
+            </summary>
+            <returns>RpResponseTotals</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetClientCert">
+            <summary>
+            0x11 Get Client TLS Certificate
+            This command is used to return the TLS Client Certificate loaded in the terminal
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetCaCert">
+            <summary>
+            0x10 CA Cert Request
+            Returns the CA Cert loaded on the terminal
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_LastOperationDataRequest">
+            <summary>
+            0x0B LAST OPERATION DATA REQUEST
+            The PU uses this command to request the data of the last transaction.
+            
+            We use the RpResponsePaymentOutcome object for the response
+            RpResponsePaymentOutcome.RFU is the Preauthorization Index for this method
+            </summary>
+            <returns>RpResponsePaymentOutcome</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_LastOperationDataRequest(System.Boolean)">
+            <summary>
+            0x0B LAST OPERATION DATA REQUEST MSF TOS detail
+            The PU uses this command to request the data of the last transaction.
+            
+            We use the RpResponsePaymentOutcome object for the response
+            RpResponsePaymentOutcome.RFU is the Preauthorization Index for this method
+            </summary>
+            <param name="ReadMSFTOSTransactionDetails">Read details from the top of the stack for store and forward transactions.</param>
+            <returns>RpResponsePaymentOutcome</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PaymentOutcomeRequest">
+            <summary>
+            0x0D PAYMENT OUTCOME REQUEST
+            The PU uses this command to request at the terminal the outcome of the payment executed.
+            </summary>
+            <returns>RpResponsePaymentOutcome</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_SetTerminalHRTLevel2(System.Byte[])">
+            <summary> Send the PRM file for Contactless to the HRT device </summary>
+            <returns>RpResponseBase with the result</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalConfig">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve and parse the termconfig.dat file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseTermConfig</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalAIDList">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve the AID List applist.pp file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseAIDList</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalCommonAIDList">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve the CommonAID List applist_common.pp file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseAIDList</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalDebitAIDList">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve the CommonAID List applist_debit.pp file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseAIDList</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalMagConfig">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve the mag_config file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseMagConfig</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalWhiteList">
+            <summary>
+            0x1E GET CONFIGURATION FILES 
+            This command uses 0x1E to retrieve the white_list.dat file on the terminal's filesystem
+            </summary>
+            <returns>RpResponseWhiteList</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalEMVConfig">
+            <summary>
+            0x1E GET CONFIGURATION FILES
+            This command uses 0x1E to retrieve the ConfigE1_pr file from the terminal's filesystem
+            </summary>
+            <returns>RpResponseTLVData</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalDynamicTlvConfig">
+            <summary>
+            0x1E Get Dynamic TLV Data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTerminalCAKeyList">
+            <summary>
+            0x1E GET CAKey List of files
+            </summary>
+            <returns>RpResponseCAKeyList</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetLoadedFS">
+            <summary>
+            0x1E GET Loaded FS
+            </summary>
+            <returns>RpResponseLoadedFS</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_PaymentCommand(System.Int32,System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies},System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.EMode},System.String)">
+            <summary>
+            0x05 PAYMENT START
+            This command is used to start a payment operation. 
+            </summary>
+            <param name="amountInPennies">Import to pay in Euro Cent</param>
+            <param name="currencyCode">Currency Code for the sale</param>
+            <param name="mode">0x30 = online, 0x31 = offline, 0x32 = online w/backup</param>
+            <param name="clientTransactionID">Invoice # passed from the POS to the gateway</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_StatusRequest(System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.ELanguage})">
+            <summary>
+            0x0A STATUS REQUEST
+            This command is used from the PU to know the status of the UPT terminal module used for the banking transactions.
+            </summary>
+            <param name="language">Language ID
+                0x01: Italian  //Reversed English to default in G041
+                0x00: English  
+                0x02: German
+                0x03: France
+                0x04: Spanish
+            </param>
+            <returns>RpResponseStatus</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_CardDataRequest(System.Int32)">
+            <summary>
+            0x08 CARD DATA REQUEST
+            This command is used by the PU to request the transmission of the data of the magnetic card about the tracks.
+            The tracks available are T1, T2, T3 for the not banking card and only T1 for banking card.
+            
+            The answer of the terminal has a variable size depending from the effective length of the available track. 
+            It goes from a minimum of 1 byte for the only outcome , when the requested track is not available, 
+            to a maximum of byte calculated as follow: 22 + N byte where N is equivalent at the length of the sent track.
+            </summary>
+            <param name="trackNumber">TrackNumber</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadTracksTypeRequest(System.Boolean)">
+            <summary>
+            0x17 READ TRACKS TYPE REQUEST
+            This command is used to know the tracks type of the tracks read by the UPT.
+            </summary>
+            <returns>RpResponseTrackType</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadCardDisable">
+            <summary>
+            0x07 CARD READ DISABLE
+            This command is used to disable the read of the card. So if a card is inserted into the card reader the UPT ignore its presence and doesn’t read it.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadCardEnable(System.Int32)">
+            <summary>
+            0x06 READ CARD ENABLE
+            This command is used to enable the read of the card.
+            </summary>
+            <param name="activeTime">
+            Time in seconds indicating the time for which the reader is active:
+                60 = default value 
+                255 = reader always active
+            </param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_ReadCardEnableWithNFC(System.Int32,System.Int32,System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies},System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.EMode},System.String)">
+            <summary>
+            0x06 ENABLE With NFC 
+            This command is used to enable the reader when the CL is connected.
+            </summary>
+            <param name="activeTime">Time in seconds the reader is active</param>
+            <param name="amountInPennies">Import to pay in Euro Cent</param>
+            <param name="currencyCode">Currency Code for the sale</param>
+            <param name="mode">0x30 = online, 0x31 = offline, 0x32 = online w/backup</param>
+            <param name="clientTransactionID">Invoice# passed from the POS system to the gateway</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EnableWithPayment(System.Byte,System.Int32,System.Int32,System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies},System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.EMode},System.String)">
+            <summary>
+            CMD 0x19
+            </summary>
+            <param name="authType">0x00 val for payment, 0x01 val for preauth)</param>
+            <param name="activeTime">Time in seconds the reader is active</param>
+            <param name="amountInPennies">Import to pay in Euro Cent</param>
+            <param name="currencyCode">Currency Code for the sale</param>
+            <param name="mode">0x30 = online, 0x31 = offline, 0x32 = online w/backup</param>
+            <param name="clientTransactionID">Invoice# passed from the POS system to the gateway</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetUpgradeResult">
+            <summary>
+            0x6A GET UPGRADE RESULT
+            This command is used to get the status of the last upgrade.
+            </summary>
+            <returns>RpResponseUpgradeResult</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_InstallPacket">
+            <summary>
+            0x69 INSTALL PACKET
+            This command is used to install a packet loaded with 0x68 command (some updates may not return the UPT to PU message).
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_MSFStatus">
+            <summary>
+            0x30 OFFLINE TRANSACTION STATUS
+            This command is used to get the number of offline transactions stored on the UPT.
+            </summary>
+            <returns>RpResponseMSFStatus</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_MSFSettle">
+            <summary>
+            0x31 SETTLEMENT OFFLINE TRANSACTION
+            This command is used to settle the first offline transaction on the UPT.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_MSFSettlementOutcome">
+            <summary>
+            0x32 SETTLEMENT OUTCOME REQUEST
+            The PU uses this command to request at the terminal the outcome of the settlement executed.
+            </summary>
+            <returns>RpResponseMSFOutcome</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_MSFDelete(System.Byte)">
+            <summary>
+            0x33 DELETE FIRST/ALL OFFLINE TRANSACTION
+            The PU uses this command to delete the first (or all) offline transaction.
+            </summary>
+            <param name="mode">Mode (0 = first transaction; 1 = all transactions)</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_Hash(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            0x04 CARD HASH
+            This command is used to get the unique hash of the magnetic card.
+            </summary>
+            <returns>RpResponseHash</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_UploadPacket(System.Int32,System.Byte[])">
+            <summary>
+            0x68 UPGRADE PACKET
+            This command is used to download an sd5 application or a sd5 file into the terminal.
+            </summary>
+            <param name="packetIndex">Progressive packet Number</param>
+            <param name="dataPacket">Data to upload</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_SetLogType(System.Int32)">
+            <summary>
+            0x70 LOG TYPE
+            This command is used to selectively enable LOG filtered by LOG Type.
+            With this command is possible to select the LOG Type to enable.
+            </summary>
+            <param name="logType">
+            LOG Type: 
+                Every bit identifies a LOG Type.If the bit is 1 the corresponding type is enabled otherwise the type is disabled.
+                he Bytes takes the value 0 the LOG system is disabled.
+            </param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_DeleteLog">
+            <summary>
+            0x71 LOG DELETE
+            This command is used to delete all saved LOG.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetLog(System.Boolean)">
+            <summary>
+            0x72 GET LOG
+            This command is used to get saved LOG.
+            </summary>
+            <returns>byte[] of Log</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EnableStatistics(System.Boolean)">
+            <summary>
+            0x73 STATISTICS ON/OFF
+            This command is used to enable statistical counters.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EraseStatistics">
+            <summary>
+            0x74 STATISTICS ERASE
+            This command is used to erase statistical counters file.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetStatistics">
+            <summary>
+            0x75 GET STATISTICS 
+            This command is used to get statistical counters by reading them from a file contained in device file system.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_SetTmsAddress(System.String)">
+            <summary>
+            0x76 TMS ADDRESS 
+            This command is used to provide to TMS the IP address or URL where upgrade packets are available.
+            </summary>
+            <param name="ipAddressOrUrl">IP Address or URL of the TMS system used by this terminal</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetTmsStatus">
+            <summary>
+            0x77 TMS GET STATUS
+            This command is used to read TMS status.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_TmsInstallAndReboot(System.Boolean)">
+            <summary>
+            0x78 TMS INSTALL AND REBOOT
+            This command is used to install upgrade and allows to select if terminal must be restarted.
+            </summary>
+            <param name="rebootTerminal">Flag to reboot the terminal if desired</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetKeyInformation">
+            <summary>
+            0x6D GET Key Fingerprints
+            This command is used to get the fingerprints of all the keys loaded on the terminal.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_FirmwareVersionRequest">
+            <summary>
+            0x02 FIRMWARE VERSION REQUEST
+            This command is used to know the firmware version of the UPT master and the firmware versions of all the UPT slaves.
+            Whenever is not possible to know the firmware version of a device, the field will be filled with spaces.
+            The answer message contains a list of the firmware versions of all the UPTs.
+            </summary>
+            <returns>RpResponseFirmwareVersion</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_InfoErase(System.Boolean)">
+            <summary>
+            0x01 INFO ERASE
+            This command is used to erase the information of the status message defined as “outcome”.
+            </summary>
+            <param name="close">This byte take the value 1 to indicate to the UPT that no more request will arrive from the last card, 
+            this means that the operations on the card are ended, so the UPT must send the closing message to the user.
+            This byte take the value 0 in all the other cases.</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_JournalKeyWrites(System.Boolean)">
+            <summary>
+            0x80 Journal File System Writes of KeyFiles
+            When enabled this function causes all writes of the key files to be journaled to prevent file system corruption that can happen from sudden loss of power during writes.
+            Benefit = key files are backed up and compared to hashes of prior versions
+            Side effect = Approx +1 second to transaction times.
+            </summary>
+            <param name="enableJournal">True to enable </param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_BatchClosure">
+            <summary>
+            0x82 Batch Closure
+            This command instructs the UPT to execute the Batch CLosuer towards the host. Upon successful execution,
+            the UPT totals are zeroed and the Block 1 returned in the Status command (0x0A) is set to 0x17="Batch Closure outcome available"
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_BatchClosureOutcome(System.Byte)">
+            <summary>
+            0x83 Retrieve Batch Closure Outcome
+            Upon completion of the Batch closure, when Block 1 returned in the Status command (0x0A) is 0x17="Batch Closure outcome available",
+            this command is intended to retrieve from teh UPS the result and the Totals of the Batch Closure.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_BatchRetrieveTotals(System.Byte)">
+            <summary>
+            0x84 Retrieve Totals
+            This command is intended to retrieve from the UPT the Totals of the Batches.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetReceiptText">
+            <summary>
+            0x1D Get Receipt Text
+            The PU uses this command to return the TXT of the receipt to be printed by the kiosk
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_Ext_GetFirmwareVersion(CCI.Globalcom.GlobalcomRetailProtocol.ExtFirmwareVersionType)">
+            <summary>
+            Get Exteneded Firmware Information
+            </summary>
+            <returns>RpResponseExtFirmwareVersion</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_Ext_GetDeviceFamily">
+            <summary>
+            Get Device Family
+            </summary>
+            <returns>RpResponseDeviceFamily</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_GetReceiptXML">
+            <summary>
+            0x1C Get Receipt XML
+            The PU uses this command to return the XML of the receipt to be printed by the kiosk
+            </summary>
+            <returns>String of XML</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_SetLED(CCI.Globalcom.GlobalcomRetailProtocol.ELEDColor,CCI.Globalcom.GlobalcomRetailProtocol.ELEDStatus)">
+            <summary>
+            0x79 LED MANAGE
+            This command is used to set the status and the color of the led.
+            </summary>
+            <param name="ledColor">LED Color</param>
+            <param name="ledStatus">LED state</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrPaymentCommand(System.Int32,System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies},System.Nullable{CCI.Globalcom.GlobalcomRetailProtocol.EMode})">
+            <summary>
+            0xE0 ECR PAYMENT START
+            This command is used to start a payment operation.
+            </summary>
+            <param name="amountInPennies">Import to pay in Euro Cent</param>
+            <param name="currencyCode">Currency Code for the sale</param>
+            <param name="mode">0x30 = online, 0x31 = offline, 0x32 = online w/backup</param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrPreAuthorization(System.Int32,CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies)">
+            <summary>
+            0xE2 ECR PREAUTHORIZATION COMMAND
+            This command is used to start a preauthorization operation. 
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrNotifyCommand(System.Byte,System.Int32)">
+            <summary>
+            0xE4 NOTIFY COMMAND
+            This command is used to request a notification of a previous preauthorization. 
+            </summary>
+            <param name="preauthId">ID to Notify</param>
+            <param name="amountInPennies">Amount </param>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrRefundLastOperation">
+            <summary>
+            0xE6 ECR REFUND LAST OPERATION
+            This command execute the refund of the last payment executed.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrMSFSettle">
+            <summary>
+            0xE8 ECR SETTLEMENT OFFLINE TRANSACTION
+            This command is used to settle the first offline transaction on the UPT.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.RP_EcrVoidLastTransaction">
+            <summary>
+            0xEB ECR VOID TRANSACTION
+            This command execute the void operation of the last operation executed.
+            </summary>
+            <returns>RpResponseBase</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.ByteArrayCombine(System.Byte[],System.Byte[],System.Int32)">
+            <summary>
+            Utility Method to concat two byte arrays as efficiently as possible
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <param name="sizeOfSecondArray">Size of the 2nd array to concat</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.BytesOut(System.Byte[],System.String)">
+             <summary>
+             Generic BytesOut method
+             
+             This method determines which communication path is in use, and directs the data
+            
+             </summary>
+             <param name="output">Data to Transmit</param>
+             <param name="requestName">Human Readable Request Name</param>
+             <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_EthStartListener(System.Int32)">
+            <summary>
+            Start the Ethernet Socket Server to communicate with the BV1000
+            </summary>
+            <param name="portNumber">Ethernet Port # for the BV1000 to connect to</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_EthEndListener">
+            <summary>
+            Shutdown the Ethernet Socket Server
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_TsSocketBytesOut(System.Byte[],System.String)">
+            <summary>
+            Send Bytes out the Ethernet Socket of the terminal server
+            </summary>
+            <param name="command">Bytes to Transmit</param>
+            <param name="requestName">Human Readable Request Name</param>
+            <returns>bytes in response</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_EthBytesOut(System.Byte[],System.String)">
+            <summary>
+            Send Bytes out the Ethernet Socket
+            </summary>
+            <param name="command">Bytes to Transmit</param>
+            <param name="requestName">Human Readable Request Name</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_SerialResetPort">
+            <summary>
+            Create the com port object. This method is called when the Outputdevice (COM port) changes.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_MuxBytesOut(System.Byte[],System.String)">
+            <summary>
+            Transmit Data via MUX
+            </summary>
+            <param name="output">Output Data of the retailer protocol Command</param>
+            <param name="requestName">Human Readable Description of the command.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_SerialBytesOut(System.Byte[],System.String)">
+            <summary>
+            Method to send retail protocol commands (data) to the RS232 port
+            
+            Note:   This method is not used for MUX. 
+                    Mux communication happens in the MUX class.
+            
+            </summary>
+            <param name="output">buffer for outbound data</param>
+            <param name="requestName">Retail Protocol Request Name</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_SerialClose">
+            <summary>
+            Close the serial port
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_SerialIsComOpen">
+            <summary>
+            Return the status of the COM port
+            </summary>
+            <returns>Boolean indicating if the COM port is open</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.C_SerialDataReader(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+            <summary>
+            Serial Port Receive Data Handlers
+            
+            This executes on the SerialPort class's DataReceived event thread
+            </summary>
+            <param name="sender">sender </param>
+            <param name="e">Event Arguments</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.Decode">
+            <summary>
+            Decode the data in the receive serial buffer into retail protocol packets
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol.IsByteBankingConfigurationParmValue(CCI.Globalcom.GlobalcomRetailProtocol.EBankingParams)">
+            <summary> Checks to see if the banking parameter value is a single byte </summary>
+            <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList">
+            <summary> Collection of Parameter Lists </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.Tag">
+            <summary> Tag of this object </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.ExtenderByte">
+            <summary> If this Tag supports the Extended Length Byte </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.ParameterBlock">
+            <summary> Collection of Parameter Blocks </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.#ctor(System.String)">
+            <summary> Consructor </summary>
+            <param name="sTag"> Tag of this object</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.IsType(System.String)">
+            <summary> Compare this object to the tag passed in for equivelency </summary>
+            <param name="sTag"></param>
+            <returns> if the types match</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.Add(CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection)">
+            <summary> Add a Parameter Block </summary>
+            <param name="col"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.LongTag">
+            <summary> Get an xml friendly description of the tag without the brackets </summary>
+            <returns> string description of this object</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.GetXML">
+            <summary> Get the XML representation of this object </summary>
+            <returns> XML string of this object</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.GetLength">
+            <summary> Length of this objects data in binary </summary>
+            <returns> length </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ParameterList.Encode(System.Byte[]@,System.Int32)">
+            <summary> Get the binary encoded data </summary>
+            <param name="info"></param>
+            <param name="pos"></param>
+            <returns>position in info plus 1 that was last written to</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection">
+            <summary> Collection of Parameters </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.Tag">
+            <summary> Tag of this Collection of Nodes </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.ExtenderByte">
+            <summary> Indicator if this Tag uses the length extender </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.TLVList">
+            <summary> Collection of TLV tag/value pairs </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.#ctor(System.String,System.Boolean)">
+            <summary> Consructor </summary>
+            <param name="sTag"></param>
+            <param name="bExtenderByte"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.Add(CCI.Globalcom.GlobalcomRetailProtocol.Node)">
+            <summary> Add a Node to the TLV list </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.LongTag">
+            <summary> Simple description of this object </summary>
+            <returns> string representation of this object</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.Add(System.String,System.String,System.Boolean)">
+            <summary>
+             Add a Tag to the collection for this outer node
+            </summary>
+            <param name="tag"></param>
+            <param name="value"></param>
+            <param name="extender"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.GetXML">
+            <summary>
+             Get XML format of the outer node and all its tags.
+            </summary>
+            <returns>xml formatted string</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.GetLength">
+            <summary> Get the Length of this data encoded as binary </summary>
+            <returns> Length of the object as binary data</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.NodeCollection.Encode(System.Byte[]@,System.Int32)">
+            <summary> Get the binary encoded data </summary>
+            <param name="info"></param>
+            <param name="infoLength"></param>
+            <returns> Position in the info that can next be written to</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.Node">
+            <summary> Tag and Value </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Node.Tag">
+            <summary> Tag of this object </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Node.Value">
+            <summary> Value of this object </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Node.ExtenderByte">
+            <summary> Denotes if an extender length byte is used. </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Node.#ctor(System.Boolean)">
+            <summary> Consturctor </summary>
+            <param name="bExtenderByte"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Node.LongTag">
+            <summary> string representation of this object </summary>
+            <returns> string of this object </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Node.GetXML">
+            <summary>
+             Get XML format of the node
+            </summary>
+            <returns>xml formatted string</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Node.GetLength">
+            <summary> Get the Length of this object if binary encoded </summary>
+            <returns> length or binary encoded data</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Node.Encode(System.Byte[]@,System.Int32)">
+            <summary> Get the binary encoded data </summary>
+            <param name="info"></param>
+            <param name="infoLength"></param>
+            <returns> postion in the info of the next spot to write to</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile">
+            <summary> Object to hold the contents of the Parameter File </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile._listOfParameters">
+            <summary> List of Parameters in the file. </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.#ctor">
+            <summary> Constructor</summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.Decode(System.Byte[],System.Int32)">
+            <summary> Given a byte array parse the TLV </summary>
+            <param name="info"></param>
+            <param name="infoLength"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.GetLength">
+            <summary> Get the Binary Length of this Object </summary>
+            <returns> Length of binary data</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.Encode(System.Byte[]@,System.Int32)">
+            <summary> Get the binary encoded data </summary>
+            <param name="info"></param>
+            <param name="infoLength"></param>
+            <returns> the next position in the info that can be written to.</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.LongTag">
+            <summary> Xml tag without the brackets </summary>
+            <returns> string representing this objects name </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.GetXml">
+            <summary>  Get EMVCo formatted XML </summary>
+            <returns> xml string</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.getTag(System.Int32,System.Byte[],System.String@,System.Int32@,System.Boolean@)">
+            <summary> Parse the Tag and Length portion of the TLV </summary>
+            <param name="gIndex">index of where to start</param>
+            <param name="infoBytes">bytes array with the data</param>
+            <param name="tagName"> out parameter the resulting tag</param>
+            <param name="tagLength">out parameter the length of the value for this tag</param>
+            <returns> next index position after reading the tag info</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.checkTLVFirstByte(System.Byte)">
+            <summary>
+            Function to determine if the first TAG byte of BER-TLV Data indicates a 2nd tag byte follows
+            </summary>
+            <param name="stestByte"></param>
+            <returns>bool </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.Level2PrmFile.IsBitSet(System.Byte,System.Int32)">
+            <summary>
+            Method to check if a bit is set in a byte
+            </summary>
+            <param name="b">Byte</param>
+            <param name="pos">Position</param>
+            <returns></returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper">
+            <summary>
+            Class to help with the Receipt XML Object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.#ctor">
+            <summary>
+            Empty Object Constructor
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.Load(System.String,System.String@)">
+            <summary>
+            Load the XML string into the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.IsBitSet(System.Byte,System.Int32)">
+            <summary>
+            private Method to check if a bit is set in a byte
+            </summary>
+            <param name="b">Byte</param>
+            <param name="pos">Position</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.ReceiptXMLHelper.PrintTVR(System.Byte[])">
+            <summary>
+            private Method to turn the TVR bits into readable text
+            </summary>
+            <param name="data">Byte[]</param>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters">
+            <summary>
+            Response Class for configuration parameters request
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.Parameters">
+            <summary> Dictionary to hold all the responses </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.#ctor">
+            <summary> Constructor </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.Add(CCI.Globalcom.GlobalcomRetailProtocol.EBankingParams,CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBase)">
+            <summary>
+              Populate the Dictionary with results.
+            </summary>
+            <param name="parm"> Banking parameter</param>
+            <param name="rpResponse">Result from the terminal</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.IsByteBankingConfigurationParmValue(CCI.Globalcom.GlobalcomRetailProtocol.EBankingParams)">
+            <summary> Checks to see if the banking parameter value is a single byte </summary>
+            <param name="tag"></param>
+            <returns> if its a byte</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.PrintDetailsAsXml">
+            <summary> return all the parameters as an xml string </summary>
+            <returns>string of all the parameters in xml</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBankingParameters.PrintDetails">
+            <summary> return all the parameters as a string </summary>
+            <returns>string of all the parameters</returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseCommissioning">
+            <summary>
+            Response Class for commissioning requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseCommissioningExt">
+            <summary>
+            Response Class for Extended commissioning requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceFamily">
+            <summary>
+            Response Class for Extended Device Family Requests (Not supported by BV1000)
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceFamily.PrintDetails">
+            <summary>
+            Friendly String of the Device Family Information
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ExtFirmwareVersionType">
+            <summary> Type of Versions that are returnable </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseExtFirmwareVersion">
+            <summary>
+            Response Class for Firmware Version Requests
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseExtFirmwareVersion.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseExtFirmwareVersion.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted xml string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHRT1000DeviceInfo">
+            <summary>
+            Response Class for HRT1000 Device Info Requests
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHRT1000DeviceInfo.PrintMasterDetails">
+            <summary>
+            Return a print friendly string related to a Master Device
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo">
+            <summary>
+            Response Class for Device Info Requests
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.#ctor(System.Byte[])">
+            <summary> Constructor for getting Device Info</summary>
+            <param name="response"> info response from the reader</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.PrintMasterDetails">
+            <summary>
+            Return a print friendly string related to a Master Device
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.PrintPinPadDetails">
+            <summary>
+            Return a print friendly string related to a Pin Pad Device
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.PrintNFCDetails">
+            <summary>
+            Return a print friendly string related to a NFC Device
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.TypeOfDevice">
+            <summary> This Response class can be used by the following BV1000 types </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.PrintDetails(CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.TypeOfDevice)">
+            <summary>
+            Return a print friendly string related to a Master Device
+            </summary>
+            <param name="eType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.PrintDetailsAsXml(CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDeviceInfo.TypeOfDevice)">
+            <summary>
+            Get a string with the details in a well formatted xml format
+            </summary>
+            <param name="eType"> what type of device your expecting to see the details for</param>
+            <returns></returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseFirmwareVersion">
+            <summary>
+            Response Class for Firmware Version Requests
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseFirmwareVersion.ToDictionary">
+            <summary>
+            Return a name value pair dictionary
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseFirmwareVersion.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseFirmwareVersion.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted XML string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetCACert">
+            <summary>
+            Response Class for get CA Cert
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetCACert.PrintDetails(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetCACert.PrintDetailsAsXml(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetClientCert">
+            <summary>
+            Response Class for Get Client Cert
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetClientCert.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetClientCert.PrintDetailsAsXml(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetKeyInfo">
+            <summary>
+            Response Class for Get Loaded Keys
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetKeyInfo.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetKeyInfo.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetLoadedFS">
+            <summary>
+            Response class for parsing the Last Loaded FS
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetLoadedFS.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGetLoadedFS.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHRTLevel2">
+            <summary> Resposne class to handle Level 2 Parameter file </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHRTLevel2.PrintDetails(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHRTLevel2.PrintDetailsAsXml(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMsfStatus">
+            <summary>
+            Response Class for Mag Store and Forward Status Response
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMsfStatus.#ctor(System.Byte[])">
+            <summary> Constructor </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMsfStatus.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMsfStatus.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of xml content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseSerialNumbers">
+            <summary>
+            Response class for Serial Number requests
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseSerialNumbers.#ctor(System.Byte[])">
+            <summary> Constructor </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseSerialNumbers.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseSerialNumbers.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTermConfig">
+            <summary>
+            Response Class for Terminal Config (RP_GetTerminalConfig)
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTermConfig.PrintDetails">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTermConfig.PrintDetailsAsXml">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTestEth">
+            <summary>
+            Response Class for test ethernet (Ping)
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTestEth.#ctor(System.Byte[])">
+            <summary> Result of the Ping Test </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTestEth.PrintDetails(System.String)">
+            <summary>
+            Returns a well formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTestEth.PrintDetailsAsXml(System.String)">
+            <summary>
+            Returns an xml formatted string of the content of the object
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ERetailProtocolCommands">
+            <summary>
+            Retail Protocol Commands
+            
+            (This is currently used only for reference)
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EExtRetailProtocolCommands">
+            <summary>
+            Extended Retail Protocol Commands
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EDeviceFamily">
+            <summary>
+            Device Family Type
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPreAuthStatus">
+            <summary>
+            Enum of Pre Auth status responses (see RP 0x4C)
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ETls">
+            <summary>
+            Enum for TCP communication Methods
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ETmsStatus">
+            <summary>
+            Enumeration of TMS Status Conditions
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EMode">
+            <summary>
+            Enumeration for modes of Payment command
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ELanguage">
+            <summary>
+            Enumeration of Lanaguage Selection
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EBankingParams">
+            <summary>
+            Enumerations of the banking parameter configuration tags
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EBankHostSelection">
+            <summary>
+            Enumeration of the bank host selection options (tag 0x2E of banking params).
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ECertSlot">
+            <summary>
+            Enumeration of the Certificate Slot indexes
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EBaudRate">
+            <summary>
+            Enumeration of the Baud rates
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPort">
+            <summary>
+            Enumeration of the terminal ports
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPortComOnly">
+            <summary>
+            Enum of ports when ETH isn't available.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EAppBinding">
+            <summary>
+            Enumeration of the Terminal Applications
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ECurrencies">
+            <summary>
+            Enumeration of Currency Codes from ISO 4217
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EKeyRequestType">
+            <summary>
+            Enumeration of the insertion type
+            for keypad entry requests
+            <remarks> This is a bitmask</remarks>
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EStatusB0">
+            <summary>
+            Enumeration of Status byte 0
+            <remarks> This is a bitmask</remarks>
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EStatusB1">
+            <summary>
+            Enumeration of Status byte 1
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EStatusB2">
+            <summary>
+            Enumeration of Status byte 2
+            <remarks>This is a bitmask</remarks>
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EStatusB3">
+            <summary>
+            Enumeration of Status Byte 3
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EStatusB4">
+            <summary>
+            Enumeration of Status Byte 4
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EBvStatus">
+            <summary>
+            Enumeration of BV Status Byte
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EUpgradeStatus">
+            <summary>
+            Enumeration of Upgrade Status Messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ESensorStatus">
+            <summary>
+            Enumeration of Sensor Status
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EParingStatus">
+            <summary>
+            Enumeration of Paring Status
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ECashlessNumber">
+            <summary>
+            Enumeration of MDB Cashless number 
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ESaleType">
+            <summary>
+            Enumeration of MDB Sale Type
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPPP">
+            <summary>
+            Enumeration of PPP status
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ESelection">
+            <summary>
+            Enumeration of Selection
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EConnectionType">
+            <summary>
+            Enumeration of Connection Type
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EProtocol">
+            <summary>
+            Enumeration of Protocol connecting to the gateway/processor
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ESpeed">
+            <summary>
+            Enumeration of the baud rate for the gateway/processor
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EPersonalize">
+            <summary>
+            Enumeration of the personalize
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ELanType">
+            <summary>
+            Enumeration of LAN type
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ETypeBT">
+            <summary>
+            Enumeration of TypeBT
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EDllLineData">
+            <summary>
+            Enumeration of DLL Line Data
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EOutcome">
+            <summary>
+            Enumeration of the Outcome generated by each request
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ELEDColor">
+            <summary>
+            Enumeration of the colors available for the LED
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.ELEDStatus">
+            <summary>
+            Enumeration of the available status options for the LED
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.EConfigFiles">
+            <summary>
+            Enumeration of the configuration files on the BV1000 Filesystem
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBase">
+            <summary>
+            Base Class for parsing Retail Protocol Responses
+            Many Specific messages use Response classes inherited from this base Class.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBase.#ctor(System.Byte[])">
+            <summary>
+            Response Object Creator
+            </summary>
+            <param name="response">Byte Array generated from the Terminal after a request</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseBase.IsBitSet(System.Byte,System.Int32)">
+            <summary>
+            Method to check if a bit is set in a byte
+            </summary>
+            <param name="b">Byte</param>
+            <param name="pos">Position</param>
+            <returns></returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTrackType">
+            <summary>
+            Response Class for Track Type requests
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTrackType.PromptTags">
+            <summary>
+            List of Tags the submitted card requires for authorization.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseStatus">
+            <summary>
+            Response Class for Status Requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseNotifyOutcome">
+            <summary>
+            Response Class for Notify Outcome
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGatewayReference">
+            <summary>
+            Class to parse the Gateway Reference from a response
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseEraseKeys">
+            <summary>
+            Response class to key erase command.
+            This class parses the random number returned.
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseAuthStatus">
+            <summary>
+            Response class for Authorization Status (slot) requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseReceipt">
+            <summary>
+            Response class for the print receipt
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseStatistics">
+            <summary>
+            Response class for the Statistics
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseAIDList">
+            <summary>
+            Response class for parsing files for AID lists
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMagConfig">
+            <summary>
+            Response class for parsing the mag config file mag_config.txt from the terminal's filesystem
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMagConfig.SchemeList">
+            <summary>
+            Data structure to hold schema/data
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseWhiteList">
+            <summary>
+            Response class for parsing the mag config file mag_config.txt from the terminal's filesystem
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseCAKeyList">
+            <summary>
+            Class for parsing the list of CA files
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTLVData.checkTLVFirstByte(System.String)">
+            <summary>
+            Function to determine if the first TAG byte of BER-TLV Data indicates a 2nd tag byte follows
+            </summary>
+            <param name="stestByte"></param>
+            <returns>bool </returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDynamicTLVData.checkTLVFirstByte(System.String)">
+            <summary>
+            Function to determine if the first TAG byte of BER-TLV Data indicates a 2nd tag byte follows
+            </summary>
+            <param name="stestByte"></param>
+            <returns>bool </returns>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGPIO">
+            <summary>
+            Response class for GPIO Status
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseUpgradeResult">
+            <summary>
+            Response class for Upgrade Result Messages
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.Circuit">
+            <summary>
+            Class describing a circuit
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTotals">
+            <summary>
+            Response Class for Total requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseTotalAmount">
+            <summary>
+            Response class for total amount requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseGSMStatus">
+            <summary>
+            Response class for GSM Status requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponsePreAuthOutcome">
+            <summary>
+            Response Class for Pre-Auth Requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDateTime">
+            <summary>
+            Response Class for DateTime requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseDateTime2">
+            <summary>
+            Response Class for DateTime requests 2nd format
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMsfOutcome">
+            <summary>
+            Response Class for the Settlement Response for Mag Store and Forward Settlement Requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseHash">
+            <summary>
+            Response class for Hashing of public magnetic track data
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseIPAddress">
+            <summary>
+            Response Class for IP Address Requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpResponseMdbParams">
+            <summary>
+            Response Class for MDB Parameter Requests
+            </summary>
+        </member>
+        <member name="T:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand">
+            <summary>
+            Class for the Command object. This object is used to initiate requests to the terminal.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand.#ctor(CCI.Globalcom.GlobalcomRetailProtocol.RetailProtocol)">
+            <summary>
+            Create the command class
+            </summary>
+            <param name="rp">Retail Protocol object</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand.CompileCommand">
+            <summary>
+            Builds the byte array required for the terminal to execute the specific request
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand.VerifyChecksum">
+            <summary>
+            Optionally verify outbound checksum
+            </summary>
+            <returns>Bool - TRUE=Valid</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand.Execute">
+            <summary>
+            Executes the request to the terminal
+            </summary>
+            <returns>Byte array of the response from the terminal</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.RpCommand.ExecuteUntilEmpty(System.String)">
+            <summary>
+            Executes the request to the terminal. 
+            This method is specific for messages that continue across multiple requests until the terminal has exchanged all the data.
+            </summary>
+            <param name="requestName">The name of the request for logging and exception management</param>
+            <returns>Byte array of the response from the terminal</returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.StopListener">
+            <summary>
+            Stop all the listeners
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.ServerThreadStart">
+            <summary>
+            Start the Server
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.SendData(System.Byte[],System.String)">
+            <summary>
+            Send data to the ETH port and wait for a response
+            </summary>
+            <param name="dataToSend">Byte data request</param>
+            <param name="requestName">Retail Protocol Method we are sending</param>
+            <returns> Number of Bytes sent </returns>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener._clientSocket">
+            <summary>
+            Variables that are accessed by other classes indirectly.
+            </summary>
+        </member>
+        <member name="F:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener._lastReceiveDateTime">
+            <summary>
+            Working Variables.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.#ctor(CCI.Globalcom.GlobalcomRetailProtocol.TcpServer,System.Net.Sockets.Socket)">
+            <summary>
+            Client Socket Listener Constructor.
+            </summary>
+            <param name="tcpServer"></param>
+            <param name="clientSocketParam"></param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.Finalize">
+            <summary>
+            Client SocketListener Destructor.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.StartSocketListener">
+            <summary>
+            Method that starts SocketListener Thread.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.SocketListenerThreadStart">
+            <summary>
+            Thread method that does the communication to the client. This 
+            thread tries to receive from client and if client sends any data
+            then parses it and again wait for the client data to come in a
+            loop. The recieve is an indefinite time receive.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.StopSocketListener">
+            <summary>
+            Method that stops Client SocketListening Thread.
+            </summary>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.IsMarkedForDeletion">
+            <summary>
+            Method that returns the state of this object i.e. whether this
+            object is marked for deletion or not.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.ParseReceiveBuffer(System.Byte[],System.Int32)">
+            <summary>
+            This method appends data that is sent by a client using TCP/IP to the buffer.
+            </summary>
+            <param name="byteBuffer">Data </param>
+            <param name="size">Data Size</param>
+        </member>
+        <member name="M:CCI.Globalcom.GlobalcomRetailProtocol.TcpServer.TCPSocketListener.SendData(System.Byte[])">
+            <summary>
+            Sends the byte array to the client socket
+            </summary>
+            <param name="data">data to send</param>
+            <returns>Number of Sent bytes</returns>
+        </member>
+    </members>
+</doc>

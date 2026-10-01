@@ -1,0 +1,246 @@
+﻿using AA.Pango.ServiceLayer.Controllers;
+using AA.Pango.TestWinApp.Utils;
+using log4net;
+using System;
+using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
+
+namespace AA.Pango.App
+{
+    public partial class FormV2PullTicket : Form
+    {
+        protected ILog _log = LogManager.GetLogger("FormV2PullTicket");
+        CultureInfo deC = new CultureInfo("en-US");
+        private int pullTicketFormTimeout = int.Parse(ConfigurationManager.AppSettings["PullTicketFormTimeout"] ?? "5000");
+
+        public TerminalController EntryController { get; set; }
+        private Thread Worker { get; set; }
+
+        public FormV2PullTicket()
+        {
+            InitializeComponent();
+        }
+
+        private void Init()
+        {
+            InitSettings();
+            SetVersion();
+        }
+
+        private void SetVersion()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string driverVersion = fvi.FileVersion;
+
+            var version = "Versión: " + driverVersion;
+
+            statusStrip1.Items["tlblVersion"].Text = version;
+        }
+
+        private void InitSettings()
+        {
+            _log.Debug("init settings...");
+
+            this.txtInputCode.Focus();
+
+            LanguageLocalizationParser.LoadLocalizations();
+
+            bool showTestInput = bool.Parse(ConfigurationManager.AppSettings["ShowTestInput"] ?? "false");
+            int terminalId = int.Parse(ConfigurationManager.AppSettings["TerminalId"]);
+            var eventNotificationTypeToSend = ConfigurationManager.AppSettings["EventNotificationTypeToSend"] ?? "Entry";
+
+
+            var descTerminalType = eventNotificationTypeToSend == "Entry" ?
+                LanguageLocalizationParser.GetCurrentLanguageTags["EntryTerminalDescription"] :
+                LanguageLocalizationParser.GetCurrentLanguageTags["ExitTerminalDescription"];
+
+            #region Style Edits
+
+            var backgroundColor = LanguageLocalizationParser.GetCurrentLanguageTags["BackgroundColor"] ?? "Cyan";
+            var statusFontSize = float.Parse(LanguageLocalizationParser.GetCurrentLanguageTags["FontSize"] ?? "16");
+            var fontFamily = LanguageLocalizationParser.GetCurrentLanguageTags["FontFamily"] ?? "Arial";
+            var fontColor = LanguageLocalizationParser.GetCurrentLanguageTags["FontColor"] ?? "Black";
+
+            Color color = System.Drawing.ColorTranslator.FromHtml(backgroundColor);
+            this.BackColor = color;
+
+            #endregion Style Edits
+
+            this.tlblTerminalId.Text = "Terminal: " + terminalId + ". " + descTerminalType;
+            this.tlblDate.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            this.lblCurrentDate.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+
+            this.tlblStatusTerminal.Text = "";
+            var readerComPort = ConfigurationManager.AppSettings["ReaderComPort"];
+            var readerBauds = int.Parse(ConfigurationManager.AppSettings["ReaderBauds"] ?? "9600");
+
+        }
+
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Init();
+            InitWorker();
+            CloseOnTimeout();
+        }
+
+        private void CloseOnTimeout()
+        {
+            new Thread(new ThreadStart(() =>
+            {
+
+
+                Thread.Sleep(pullTicketFormTimeout);
+
+                if (this.InvokeRequired)
+                {
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        this.Close();
+                        this.Dispose();
+                    }));
+                }
+                else
+                {
+                    this.Close();
+                    this.Dispose();
+                }
+
+
+
+            })).Start();
+        }
+
+        private void InitWorker()
+        {
+            _log.Debug("Starting Worker...");
+
+            Worker = new Thread(new ThreadStart((() =>
+            {
+                while (true)
+                {
+                    if (this.IsDisposed)
+                    {
+                        _log.Debug("exiting thread...");
+                        break;
+                    }
+
+                    try
+                    {
+                        if (!statusStrip1.IsDisposed)
+                        {
+                            if (statusStrip1.InvokeRequired)
+                            {
+                                statusStrip1.Invoke((MethodInvoker)(() =>
+                                {
+                                    statusStrip1.Items["tlblDate"].Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                                }));
+                            }
+                            else
+                            {
+                                statusStrip1.Items["tlblDate"].Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                            }
+                        }
+
+                        if (!lblCurrentDate.IsDisposed)
+                        {
+                            if (lblCurrentDate.InvokeRequired)
+                            {
+                                lblCurrentDate.Invoke((MethodInvoker)(() =>
+                                {
+                                    lblCurrentDate.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy HH:mm:ss", deC);
+                                }));
+                            }
+                            else
+                            {
+                                lblCurrentDate.Text = DateTime.Now.ToString("dddd, MMMM dd, yyyy HH:mm:ss", deC);
+                            }
+                        }
+
+                        Thread.Sleep(500);
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Error("Unexpected error in Worker thread", e);
+                    }
+
+                }
+            })));
+            Worker.SetApartmentState(ApartmentState.STA);
+            Worker.Start();
+        }
+
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            bool showTestInput = bool.Parse(ConfigurationManager.AppSettings["ShowTestInput"] ?? "false");
+            if (e.KeyChar == 13)
+            {
+                this.EntryController.ReadInputValue = true;
+                if (showTestInput)
+                {
+                    this.EntryController.InputValue = this.txtInputCode.Text;
+                }
+                else
+                {
+                    _log.Debug(this.EntryController.InputValue + " ready for querying");
+                }
+            }
+            else
+            {
+                if (this.EntryController.InputValue == null)
+                {
+                    this.EntryController.InputValue = "";
+                }
+
+                this.EntryController.InputValue += e.KeyChar;
+            }
+        }
+
+
+        private void btnGoBack_Click(object sender, EventArgs e)
+        {
+            this.CloseForm();
+        }
+
+        private void CloseForm()
+        {
+
+            try
+            {
+                if (this.IsDisposed)
+                {
+                    return;
+                }
+
+                if (this.InvokeRequired)
+                {
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        this.Close();
+                        this.Dispose();
+                    }));
+                }
+                else
+                {
+                    this.Close();
+                    this.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                _log.Warn(e);
+            }
+
+        }
+    }
+}

@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\AA.Pango.App\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AD9D41EA-780B-4CF1-9691-C39A47A2E55F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AA.Pango.ServiceLayer</RootNamespace>
+    <AssemblyName>AA.Pango.ServiceLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="LiteDB, Version=5.0.11.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.5.0.11\lib\net45\LiteDB.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.7.2.1\lib\net461\Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.15.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.15.0\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zxing, Version=0.16.8.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.8\lib\net48\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.8.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.8\lib\net48\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiDtos\BasicRequest.cs" />
+    <Compile Include="ApiDtos\ChangeScreenRequest.cs" />
+    <Compile Include="ApiDtos\ChargePangoPassData.cs" />
+    <Compile Include="ApiDtos\ChargePermitExpiredData.cs" />
+    <Compile Include="ApiDtos\ChargePlatePhoneData.cs" />
+    <Compile Include="ApiDtos\ChargePlateResponse.cs" />
+    <Compile Include="ApiDtos\ChargePlateResultRequest.cs" />
+    <Compile Include="ApiDtos\CheckCCTransientResponse.cs" />
+    <Compile Include="ApiDtos\CheckCCTransientRequest.cs" />
+    <Compile Include="ApiDtos\ChargePhoneData.cs" />
+    <Compile Include="ApiDtos\CheckPermitPlateData.cs" />
+    <Compile Include="ApiDtos\CheckPlateRequest.cs" />
+    <Compile Include="ApiDtos\ChargePlateRequest.cs" />
+    <Compile Include="ApiDtos\TapForReceiptData.cs" />
+    <Compile Include="ApiDtos\TapForTicketData.cs" />
+    <Compile Include="ApiDtos\DeleteTicketInfo.cs" />
+    <Compile Include="ApiDtos\ExternalPaymentRequest.cs" />
+    <Compile Include="ApiDtos\PostChargePlateRequest.cs" />
+    <Compile Include="ApiDtos\PostForceBarrierResponse.cs" />
+    <Compile Include="ApiDtos\PostForceWhitelistUploadResponse.cs" />
+    <Compile Include="ApiDtos\TransientPlateOrPhoneData.cs" />
+    <Compile Include="ApplicationService.cs" />
+    <Compile Include="ApiDtos\CheckQRCode.cs" />
+    <Compile Include="Commands\InputCommands.cs" />
+    <Compile Include="Controllers\TerminalController.cs" />
+    <Compile Include="ApiDtos\NotificationData.cs" />
+    <Compile Include="Helpers\TerminalIndicator.cs" />
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="PangoService.cs" />
+    <Compile Include="ParkingService.cs" />
+    <Compile Include="ChangeScreenService.cs" />
+    <Compile Include="PaymentService.cs" />
+    <Compile Include="TemplateService.cs" />
+    <Compile Include="TerminalService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TicketService.cs" />
+    <Compile Include="ApiDtos\WhiteListData.cs" />
+    <Compile Include="Helpers\CheckCode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AA.Pango.Model\AA.Pango.Model.csproj">
+      <Project>{667b3b9e-8101-4ace-859f-cccda41d1686}</Project>
+      <Name>AA.Pango.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AA.PangoApp.Payments.GlobalCom\AA.PangoApp.Payments.GlobalCom.csproj">
+      <Project>{361b514d-d831-4d07-a825-2a9525d96fd1}</Project>
+      <Name>AA.PangoApp.Payments.GlobalCom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AA.PangoApp.Payments.Interface\AA.PangoApp.Payments.Interface.csproj">
+      <Project>{331d6129-0916-4f02-b70f-6b2279f8f156}</Project>
+      <Name>AA.PangoApp.Payments.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServiceFacades\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\AA.Pango.App\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\AA.Pango.App\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\AA.Pango.App\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>
