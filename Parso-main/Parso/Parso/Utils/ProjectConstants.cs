@@ -14,6 +14,13 @@ namespace Parso.Utils
         public int PICOB_REPONSE_TIMEOUT_MS { get; set; } = 1500;
         public int PICOB_BAUD_RATE { get; set; } = 115200;
         public bool PICOB_AUTO_SET_TIME_ENABLED = false; 
+        public bool PICOB_PERSISTENT_CONNECTION { get; set; } = false;
+        public bool PICOB_DTR_ENABLE { get; set; } = true;
+        public bool PICOB_RTS_ENABLE { get; set; } = true;
+        public int PICOB_MIN_COMMAND_INTERVAL_MS { get; set; } = 800;
+        public int PICOB_POLL_INTERVAL_MS { get; set; } = 1000;
+        public int PICOB_DISCONNECT_AFTER_FAILURES { get; set; } = 3;
+        public string[] PICOB_FIRE_AND_FORGET_COMMANDS { get; set; } = { "H" };
 
         //Card payment settings
         public int CARD_PAYMENT_CARD_READER_TYPE { get; set; } = 0;
@@ -30,6 +37,7 @@ namespace Parso.Utils
         public string CARD_PAYMENT_RP_CARD_INSERTED_MESSAGE { get; set; } = "CARDINSERTED";
 
         //Other settings
+        public string LISTEN_ADDRESS { get; set; } = "0.0.0.0";
         public bool ENABLE_PAYMENT_TEST { get; set; } = false;
         public bool ENABLE_PICOB_TEST { get; set; } = false;
         public bool ENABLE_PRINTER_TEST { get; set; } = false;
