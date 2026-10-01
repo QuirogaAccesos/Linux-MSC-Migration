@@ -19,6 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Pango (Visual Studio 2022, classic .NET Framework 4.8, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed). On Windows: `nuget restore AA.Pango.App.sln`, then `msbuild AA.Pango.App.sln /p:Configuration=Debug`. Build one project with `msbuild AA.Pango.App.Exit\AA.Pango.App.Exit.csproj`.
 - Parso (SDK-style, net8.0): `dotnet build Parso-main/Parso/Parso.sln`, run with `dotnet run --project Parso-main/Parso/Parso`. The executable's assembly name is `TREA`, not Parso.
+- `tools/parso_client.py` (repo root, Python 3 standard library only) sends one request to Parso and prints the reply: `python3 tools/parso_client.py '{"2":"C"}'`, with `--host`, `--port`, `--timeout`, and `--listen [seconds]` to keep reading broadcast frames such as `CARDINSERTED`. It has only been checked against a stub server.
 - Neither project has tests or lint config. In Pango, `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name.
 - The `.gitignore` in `PangoAppQR-develop/` is inherited from an unrelated `AA.PMS` project and does not cover this solution's `bin/`, `obj/` or `packages/`.
 
@@ -147,7 +148,7 @@ The first project depends on the second by `ProjectReference`, and on four prebu
 - `Picob:AutoSetTimeEnabled` is `TRUE` in the committed `appsettings.json`. At startup `Program.cs` sends `{"2":{"Z":"HH:mm:ss"}}` through a second `CommandProcessor` (so a second `PicobHelper`); the current Picob firmware has no clock command, and `Z` is the heater query there. Turn it off for these kiosks.
 - Boolean settings are the strings `"TRUE"` / `"FALSE"`.
 - `PrintingTemplatesAbsoluteLocation` is an absolute path and the committed value is a Windows path from the original developer's machine; it must be changed per machine. `PrintingConfigFileName` is read but unused, because `PrinterHelper` hard-codes `PrintingConfig.xml`.
-- `TestingMode:*` switches replace each device with a simulator in `Classes/Helpers/Testing/` (simulated Picob state lives in the `PicobResponse` / `PicobResponseParso` singletons, and `CustomProcessor` picks which of the two). Use these for any run without hardware. The simulated `H` in `A1Tester` and `A` / `K` in `ParsoTester` call `Environment.Exit(0)`, so a client that sends `A` kills the simulated service.
+- `TestingMode:*` switches replace each device with a simulator in `Classes/Helpers/Testing/` (simulated Picob state lives in the `PicobResponse` / `PicobResponseParso` singletons, and `CustomProcessor` picks which of the two). Use these for any run without hardware. The simulated `H` in `A1Tester` and `A` / `K` in `ParsoTester` call `Environment.Exit(0)`, so a client that sends `A` kills the simulated service. Neither simulator follows the engineer's table yet (planned task B6): `A1Tester`, the default (`CustomProcessor=FALSE`), has no `C` or `A` and answers 400 `ERROR: UNRECOGNIZED COMMAND`; `ParsoTester` answers `C` with `{"C":[1,2799,755]}` (detection plus two analog values, never toggling) instead of `{"C": 0|1}`; neither knows `STATUS`. Use them to check framing and the printer and payment simulators, not Picob behavior.
 
 ## Wire protocol
 
