@@ -4,23 +4,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Ground rules for this repo
 
-- The repo root holds a single folder, `PangoAppQR-develop/`, which is a copy of an existing solution. The user will hand it back to its original repos, so it has to stay indistinguishable from hand-written work.
-- Never create notes, docs, markdown, scratch files or tooling inside `PangoAppQR-develop/`. Anything generated for reference (this file included) lives in the repo root, next to that folder.
+- The repo root holds two independent projects that were copied in from other repos: `PangoAppQR-develop/` (a .NET Framework 4.8 Windows solution) and `Parso-main/` (a .NET 8 hardware gateway). The user will hand both back to their original repos, so they have to stay indistinguishable from hand-written work.
+- Never create notes, docs, markdown, scratch files or tooling inside either project folder. Anything generated for reference (this file included) lives in the repo root, next to them.
 - Keep code changes in the style of the surrounding code. Match its comment density and language (comments are a mix of Spanish and English), and add no explanatory headers, banners or generated-looking comments.
-- `MSCGitHub.lnk` inside the project is a Windows shortcut to an external `MSCGitHub` checkout. That second repo is not part of this one.
-- Goal of this repo ("Linux-MSC-Migration"): port the Windows-only kiosk software to run on Linux. The sections below list what blocks that.
+- `PangoAppQR-develop/MSCGitHub.lnk` is a Windows shortcut to an external `MSCGitHub` checkout. That checkout is not part of this repo.
+- Goal of this repo ("Linux-MSC-Migration"): get the kiosk software running on Linux. Pango is the Windows-only side with the blockers; Parso already targets Linux (see the end of each project's section).
+- The projects do not reference each other. No Pango code mentions Parso or its TCP port, so the link between them (Parso appears to expose the same hardware roles that Pango drives directly over COM ports) is an inference, not something wired up in code.
 
 ## Build, run, test
 
-No `dotnet`, `mono` or `msbuild` is installed in the cloud environment, so nothing can be compiled or run there. The solution is Visual Studio 2022 and targets classic .NET Framework 4.8 (old-style csproj, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed).
+`dotnet`, `mono` and `msbuild` are not installed in the cloud environment, so nothing can be compiled or run there.
 
-- Solution: `PangoAppQR-develop/AA.Pango.App.sln`. On Windows: `nuget restore AA.Pango.App.sln`, then `msbuild AA.Pango.App.sln /p:Configuration=Debug`.
-- Build a single project with `msbuild AA.Pango.App.Exit\AA.Pango.App.Exit.csproj`.
-- There are no tests and no lint config anywhere in the repo. `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name (see below).
+- Pango (Visual Studio 2022, classic .NET Framework 4.8, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed). On Windows: `nuget restore AA.Pango.App.sln`, then `msbuild AA.Pango.App.sln /p:Configuration=Debug`. Build one project with `msbuild AA.Pango.App.Exit\AA.Pango.App.Exit.csproj`.
+- Parso (SDK-style, net8.0): `dotnet build Parso-main/Parso/Parso.sln`, run with `dotnet run --project Parso-main/Parso/Parso`. The executable's assembly name is `TREA`, not Parso.
+- Neither project has tests or lint config. In Pango, `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name.
+- The `.gitignore` in `PangoAppQR-develop/` is inherited from an unrelated `AA.PMS` project and does not cover this solution's `bin/`, `obj/` or `packages/`.
+
+---
+
+# PangoAppQR-develop
+
+## Build specifics
+
 - Entry and Exit both build to `AA.Pango.App.exe`. Do not build them into the same output folder.
 - `AA.PangoApp.Payments.AMP` references `AMPSerialAdapter.dll` from `..\..\..\AMP\LibAMP1.2.0\`, a path outside the repo. A copy of the DLL is in `libs/`. `AA.Pango.App.Exit` references the AMP project's output as a loose DLL at `..\AA.PangoApp.Payments.AMP\bin\Debug\...` (not a `ProjectReference`), so build AMP first, in Debug.
 - Both apps read `App.config` from the exe folder and load `styles.dat`, `en.dat`, `es.dat`, `languagesSupported.xml` by relative file name, so the working directory must be the exe folder.
-- `.gitignore` is inherited from an unrelated `AA.PMS` project and does not cover this solution's `bin/`, `obj/` or `packages/`.
 
 ## Solution layout
 
@@ -80,10 +88,10 @@ A kiosk (one per lane) runs either the Entry or the Exit WinForms app. The UI is
 
 Behavior is driven by `App.config` / `Web.config` appSettings. Entry and Exit have separate configs with different key sets (Exit adds all `PaymentProcessor*`, `Receipt*`, timeout and interval keys). The connection string name is `LiteDB`. `MAX_EXPIRED_DAYS` is mandatory (bare `int.Parse` at `TicketService` class init). `PangoToken`, the Graph client secret and the RestApi `encryptAppSecurityKey` are stored in plain text in the committed config files; never copy those values into other files.
 
-Known config traps:
+Known traps:
 - `PaymentProcessor-GlobalCom-PurchaseMaxTimeout` in `App.config` is ignored; the code reads `PaymentProcessor-GlobalCom-MaxPurchaseTimeout` and falls back to 120.
 - `PaymentProcessor-AMP-PurchaseMaxTimeout` and `PaymentProcessor-AMP-UseOptimizedDeviceCommands` are defined but never read.
-- Several unreferenced files are on disk but not compiled: `AA.Pango.App/V3/FormV3.Designer_0.cs`, `FormV3_CheckPlate*`, `FormV3_Ticketless*`, and Exit's `V2/FormV2.Designer - Copy*.cs`. Do not edit them thinking they are live; check the csproj `Compile Include` list.
+- Several files are on disk but not compiled: `AA.Pango.App/V3/FormV3.Designer_0.cs`, `FormV3_CheckPlate*`, `FormV3_Ticketless*`, and Exit's `V2/FormV2.Designer - Copy*.cs`. Check the csproj `Compile Include` list before editing a form.
 - `InputSimulator` (`WindowsInput`) is referenced by the UI library but no code uses it. `OnScreenKeyboard.cs` there is dead COM interop.
 
 ## Windows dependencies to resolve for the Linux port
@@ -94,11 +102,73 @@ Known config traps:
 - Only P/Invoke in the solution: `kernel32!AttachConsole` in both `Program.cs`.
 - `AA.Pango.RestApi` depends on IIS, System.Web, MVC 5, Swashbuckle.Core and WebActivatorEx. It has no authentication, and Swagger is enabled. It exposes barrier open, forced reboot and hard-reset endpoints.
 - Windows paths in configs: the LiteDB file, `logs\`, `C:\AccesosAutomaticos\...`, logo paths. The AMP adapter DLL writes `\AMPLog\amppinpadsemi.log` with literal backslashes, which may yield a badly named file on Linux.
-- `Picob` input parsing splits on `Environment.NewLine`, so it breaks on Linux if the device sends `\r\n`. The barcode reader uses `Encoding.Default`.
+- Picob input parsing splits on `Environment.NewLine`, so it breaks on Linux if the device sends `\r\n`. The barcode reader uses `Encoding.Default`.
 - LiteDB shared mode uses an OS-level mutex whose behavior under Mono / .NET on Linux has to be verified.
 - Newtonsoft.Json is 13.0.1 in most projects and 13.0.3 in AMP; ZXing.Net is 0.16.8 vs 0.16.9 across `packages.config` files (binding redirect concern).
 - Tuple syntax (`var (a, b)`) needs a Roslyn-based compiler (C# 7+), not Mono's `mcs`.
 
 ## Release history
 
-Version notes for each app live in `AA.Pango.App/readme.txt` (Entry, latest 4.9.1.1) and `AA.Pango.App.Exit/readme.txt` (Exit, latest 4.9.4.2). Note that these are inside the project folder and part of the code that goes back to the original repos.
+Version notes live in `AA.Pango.App/readme.txt` (Entry, latest 4.9.1.1) and `AA.Pango.App.Exit/readme.txt` (Exit, latest 4.9.4.2). Both files are inside the project folder and go back to the original repo with the code.
+
+---
+
+# Parso-main
+
+A .NET 8 console service that puts the kiosk hardware (barrier controller, card terminal, receipt printer) behind a TCP/JSON socket. The solution is `Parso-main/Parso/Parso.sln` with two projects:
+
+| Folder | Role |
+|---|---|
+| `Parso/Parso` | The service. Builds to `TREA`. All of the code worth knowing is here (about a dozen files) |
+| `Parso/RetailProtocolCore` | Source of the Globalcom Retail Protocol library (namespace `CCI.Globalcom.GlobalcomRetailProtocol`, vendor disclaimer included). `RetailProtocol.cs` is 5,000+ lines. Treat it as vendor code and avoid edits unless a Linux fix requires one |
+
+The first project depends on the second by `ProjectReference`, and on four prebuilt net8.0 DLLs by `HintPath` under `Parso/Controllers/` (see below).
+
+## Startup and configuration
+
+`Program.cs` does everything in one method: Serilog to `logs/log-.txt` under the base directory (console fallback), loads `appsettings.json` (required), copies every value once into the `ProjectConstants` singleton, optionally sets the Picob clock, then starts `ServerListener`. Changes to `appsettings.json` need a restart even though the file is loaded with `reloadOnChange`.
+
+- Serial ports have per-OS keys: `AppSettings:Picob:Windows` / `:Linux` and `AppSettings:CardReader:Windows` / `:Linux`. The code picks one with `RuntimeInformation.IsOSPlatform`, and anything that is not Windows counts as Linux.
+- Values are read with bare `int.Parse`, so a missing key aborts startup with the logged error.
+- Boolean settings are the strings `"TRUE"` / `"FALSE"`.
+- `PrintingTemplatesAbsoluteLocation` is an absolute path and the committed value is a Windows path from the original developer's machine; it must be changed per machine. `PrintingConfigFileName` is read but unused, because `PrinterHelper` hard-codes `PrintingConfig.xml`.
+- `TestingMode:*` switches replace each device with a simulator in `Classes/Helpers/Testing/` (simulated Picob state lives in the `PicobResponse` / `PicobResponseParso` singletons, and `CustomProcessor` picks which of the two). Use these for any run without hardware. The simulated `H` command calls `Environment.Exit(0)`.
+
+## Wire protocol
+
+`ServerListener` listens on TCP **1994** (hard-coded, all interfaces, no authentication). Each frame is a 4-byte big-endian length followed by the payload, with a 10 MB cap. The payload is text decoded with `Encoding.Default`. Every message is a JSON object with exactly one numeric top-level key that selects the device:
+
+| Key | Device | Handler | Payload |
+|---|---|---|---|
+| `"1"` | Printer | `PrinterHelper` | `{"1":{"<templateId>":{"<variableId>":"value",...}}}` |
+| `"2"` | Picob controller | `PicobHelper` | the value is passed to `PicobController.SendToPicobAndReceive`; opens the COM port, sends, waits `ResponseTimeoutMs`, closes (once per command) |
+| `"3"` | Card payment | `PaymentHelper` | RP reader: `{"3":{"amountInPennies":n,"clientTransactionID":"...","testEth":false}}`; BAC reader: `{"3":<amount>}`; cancel: `{"3":{"cancelPayment":1}}` |
+
+Replies use the `Response` object (`Success`, `HTTPStatus`, `OperationResult`, `Message`, `DeviceResponse`) serialized as JSON, with an HTTP-style status code in the body (400 bad request, 500 failure) over a socket that has no HTTP. Payment commands (key `3`, not cancel) run on a `Task` so the session can still receive the cancel; everything else runs synchronously on the session thread. Because `Task.Run` replies are sent whenever they finish, replies can arrive out of order.
+
+`CommandProcessor` is created once and shared by every client session, and its helpers keep per-request state in instance fields (`PicobHelper`, `PaymentHelper`), so two clients sending commands at the same time can corrupt each other's requests.
+
+## Card payment
+
+`PaymentHelper` branches on `CardReader:CardReaderType`: `0` is the BAC/Credomatic ECR processor (`BAC-ECR.dll`, takes amount, COM port and baud), `1` is the Globalcom Retail Protocol reader (`Controllers/CardPayment/RPPaymentController.cs`).
+
+The RP flow is a flag-driven loop: read key info, firmware and device info, erase old info, `RP_ReadCardEnable(timeout)`, then a `System.Threading.Timer` polls `RP_StatusRequest` every `ScanTimerMs`. When the status reports card data, it optionally broadcasts `RPCardInsertedMessage` to every connected client (framed like any other message), sends `RP_PaymentCommand`, polls until the state is no longer `BUSY`, requests the outcome, and returns the receipt XML. Status text strings from the parser (`"Card data available"`, `"Card reader timeout/error"`, `"Status outcome bad"`) drive the flags, so a parser change breaks the flow silently. Only one payment can be active (a second request gets a `BUSY` reply), and cancel sets a flag that the loop checks. `CurrencyCode`, `EMode` and `Language` come from config as integers and are validated against the library enums.
+
+## Printing
+
+`PrinterHelper` resolves a one-character template id through `PrintingTemplates/PrintingConfig.xml` to a text file, maps request variable ids to placeholder tokens (`#Total#`, `#NombreB#`, ...) and calls `TREAPrinting.CrossPlatformPrinterController.Print(file, vars, "Consolas", 8, 58)`. Only template `A` (`PrintingTest.txt`) is registered; `PermitReceipt.txt` and `ReservationReceipt.txt` are copied to the output folder but not registered. From the library's strings (no source), it renders with QuestPDF and ImageSharp and hands the result to SumatraPDF on Windows, and appears to use a `-o raw` print path on Linux. Lato fonts and a 16 MB `SumatraPDF.exe` are committed, in two places (`Parso/Tools` and `Controllers/Printer/Tools`).
+
+## Prebuilt binaries without source
+
+`Parso/Controllers/` holds four net8.0 DLLs referenced by `HintPath`: `PicobController` (uses `System.IO.Ports` with Linux natives, built for Picob V2 "AL1 and SBK"), `TREAPrinting` (v1.2.0), `RetailProtocolIntegration` (the parser: `RetailProtocolParser`, `ScanResponseDto`) and `BAC-ECR`. Their behavior can only be inferred from `strings` and the shipped `.xml` / `.deps.json`. The Picob command letters (`R G B` LEDs, `F` fan, `Z` heater, `H` reset, `T` temperature, `U` / `J` doors, `D M I K O` power for card terminal, modem, printer, PC, ...) are documented only by the simulators in `Classes/Helpers/Testing/`. This is a different command set from the single-byte barrier commands that the Pango solution sends.
+
+## Gotchas
+
+- `RetailProtocolCore/TLSServer.cs` hard-codes a certificate file name and its password for `AuthenticateAsServer`. The `.pfx` is not in the repo. Do not copy the password anywhere.
+- `RetailProtocol` skips certificate validation when it connects to a terminal server over TLS (`RemoteCertificateValidationCallback` returns `true`), marked as a TODO in the source.
+- `Encoding.Default` is UTF-8 on .NET 8 on every OS, so non-ASCII text sent by an ANSI client (as .NET Framework `Default` would produce) arrives garbled.
+- `Console.WriteLine` leftovers in `RPPaymentController.ScanCallback` print on every scan.
+
+## Linux status
+
+Parso already targets net8.0 and has per-OS port keys, so what remains is mostly outside the C# in this repo: `SumatraPDF.exe` and the hard-coded `Consolas` font on the print path, the absolute Windows template path in `appsettings.json`, serial behavior of `System.IO.Ports` on real devices (`/dev/ttyUSB*` permissions, `DataReceived`), and the unverified Linux branch inside `TREAPrinting.dll`.
