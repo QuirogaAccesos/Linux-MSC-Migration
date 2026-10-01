@@ -44,6 +44,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 - Owner is Claude unless marked User (needs hardware, a Windows build or a decision).
 - Nothing compiles or runs in the cloud environment. After each code task the user builds (`dotnet build Parso-main/Parso/Parso.sln` for Parso, `msbuild` on Windows for Pango) and reports errors. Claude re-reads its own diff before committing.
 - One task per commit, titled with the task id.
+- One branch and one pull request per task, created from the latest `main` and named `claude/<task id>-<task title>`: lowercase, hyphens, the words of the task's bold title without the size, for example `claude/b1-config-plumbing`, `claude/b3-picobsession`, `claude/e1-parsoclient-project`. Work that is not a task (docs, rule changes) gets its own small branch. Do not start a task on a branch whose pull request is open.
 - New Parso settings are optional with defaults. Existing keys are read with a bare `int.Parse` and a missing one aborts startup; new ones must not.
 - Each task adds the config keys it introduces to the config files it needs, with values that keep Windows behavior unchanged.
 - Code follows the surrounding style and comment density. No notes or files inside the project folders.
@@ -155,11 +156,12 @@ Append one dated line per result or decision that later tasks depend on (A1 to A
 - 2026-10-01: T1 done (`tools/parso_client.py`, run with `python3 tools/parso_client.py '{"2":"C"}'`, `--listen [seconds]` keeps reading frames). Checked only against a stub server, not against Parso. Parso's `DeviceResponse` is a string holding the device's JSON, and the card-inserted broadcast is the bare text `CARDINSERTED` (the `RPCardInsertedMessage` setting), not JSON.
 - 2026-10-01: The Picob simulators in Parso do not follow the engineer's table (`A1Tester` lacks `C` and `A`; `ParsoTester` answers `C` with an array; `A`, `K` and `H` call `Environment.Exit`). B6 should precede B5, and the T1 client is only useful for Picob checks against the simulators once B6 is done.
 - 2026-10-01: B6 done. In test mode both testers answer `A` with `{"A":1}`, `H` with a success `Response` without `DeviceResponse`, `STATUS` with `{"connected":true,"ageMs":100,"C":n}`, and `C` with `{"C":n}`, flipping `n` on every `C` (so only a developer should send `C`; Pango reads presence through `STATUS`). `A1Tester` state gained a `C` field in `PicobResponse`. `K` in `ParsoTester` no longer exits either. Not simulated: the disconnected reply (`PICOB NOT CONNECTED`) and a changing `ageMs`. `dotnet build` succeeds with no new warnings, and `STATUS`, `C` and `A` were checked with `tools/parso_client.py` against `A1Tester` on Windows (`CustomProcessor=FALSE`). `ParsoTester`, `H` and a repeated `C` were not run. In Windows PowerShell 5.1 the request needs escaped quotes: `py tools/parso_client.py '{\"2\":\"STATUS\"}'`.
+- 2026-10-01: Branching rule agreed: one small branch and pull request per task, named after the task (section 4). T1 and B6 were done before this rule on the session branch and stay as they are.
 
 ## 9. Picking this up in a new chat
 
 - Read `CLAUDE.md` first, then this file. Take the first unticked task whose dependencies (section 6) are all ticked.
 - The two root zips are source archives for `PicobController` and `TREAPrinting`. Extract them into the scratchpad, never into the repo.
 - Nothing builds in the cloud environment. Finish each task by telling the user which build to run (section 4) and wait for the result before starting a dependent task.
-- Work on the branch the session names, one task per commit, task id first in the message, no model name in commit messages.
+- Create one branch per task from the latest `main`, named as in section 4 (`claude/b1-config-plumbing`), with one task per commit, task id first in the message and no model name in commit messages.
 - Questions for the hardware engineer are written in Spanish. The Picob answers so far are in `CLAUDE.md`.
