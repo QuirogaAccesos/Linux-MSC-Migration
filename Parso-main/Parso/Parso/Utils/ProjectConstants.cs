@@ -46,5 +46,7 @@ namespace Parso.Utils
         public string PRINTING_CONFIG_FILE_NAME { get; set; } = "";
         public int PRINTING_PAPER_SIZE_MM { get; set; } = 58;
         public string PRINTING_PRINTER_NAME { get; set; } = "";
+        public int PRINTING_QR_PIXELS_PER_MODULE { get; set; } = 6;
+        public string PRINTING_QR_ECC_LEVEL { get; set; } = "L";
     }
 }
