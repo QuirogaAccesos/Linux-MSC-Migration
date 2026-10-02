@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Parso.Classes;
+using Parso.Classes.Helpers;
 using Parso.Utils;
 using Serilog;
 using System.Runtime.InteropServices;
@@ -109,7 +110,17 @@ internal class Program
         Log.Information($"Picob COM Port: {_projectConstants.PICOB_COM_PORT}");
         Log.Information($"Picob persistent connection: {_projectConstants.PICOB_PERSISTENT_CONNECTION}. Listen address: {_projectConstants.LISTEN_ADDRESS}");
 
-        if (_projectConstants.PICOB_AUTO_SET_TIME_ENABLED)
+        if (_projectConstants.PICOB_PERSISTENT_CONNECTION && !_projectConstants.ENABLE_PICOB_TEST)
+        {
+            Log.Information($"Starting persistent Picob session");
+            PicobSession.Instance.Start();
+        }
+
+        if (_projectConstants.PICOB_AUTO_SET_TIME_ENABLED && _projectConstants.PICOB_PERSISTENT_CONNECTION)
+        {
+            Log.Information($"Automatic Picob time set skipped: the persistent connection does not use it");
+        }
+        else if (_projectConstants.PICOB_AUTO_SET_TIME_ENABLED)
         {
             CommandProcessor processor = new CommandProcessor();
 
