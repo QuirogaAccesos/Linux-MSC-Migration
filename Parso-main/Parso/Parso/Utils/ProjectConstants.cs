@@ -44,5 +44,7 @@ namespace Parso.Utils
         public bool CUSTOM_PROCESSOR { get; set; } = true;
         public string PRINTING_TEMPLATE_FOLDER_LOCATION { get; set; } = "";
         public string PRINTING_CONFIG_FILE_NAME { get; set; } = "";
+        public int PRINTING_PAPER_SIZE_MM { get; set; } = 58;
+        public string PRINTING_PRINTER_NAME { get; set; } = "";
     }
 }
