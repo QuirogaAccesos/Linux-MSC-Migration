@@ -19,8 +19,4 @@
 		<id>A</id> <!--Debe ser una sola letranumbe, o sea solo puede haber un total de 26 formatos de impresión existentes-->
 		<templateFileName>PrintingTest.txt</templateFileName>
 	</template>
-	<template>
-		<id>P</id>
-		<templateFileName>PermitReceipt.txt</templateFileName>
-	</template>
 </root>
