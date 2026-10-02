@@ -15,10 +15,21 @@ namespace Parso.Classes.Helpers
         private IPrinterController _treaPrinterController = new CrossPlatformPrinterController();
         private ProjectConstants _projectConstants = ProjectConstants.Instance;
 
+        // The request state lives in fields and the kiosk and the RestApi can print at the same time
+        private static readonly object _printLock = new object();
+
         private string? templateFileName;
         private Dictionary<string, string> matchedVariablesDictionary = new Dictionary<string, string>();
 
         public string printCommand(string command)
+        {
+            lock (_printLock)
+            {
+                return printTemplate(command);
+            }
+        }
+
+        private string printTemplate(string command)
         {
             try
             {
@@ -37,7 +48,8 @@ namespace Parso.Classes.Helpers
                     var printingVariables = _getPrintingVariables();
                     matchedVariablesDictionary = _getMatchedVariables(variablesData, printingVariables);
 
-                    _treaPrinterController.Print(templateFileName, matchedVariablesDictionary, "Consolas", 8, 58);
+                    _treaPrinterController.Print(templateFileName, matchedVariablesDictionary, "Consolas", 8,
+                        PaperSize: _projectConstants.PRINTING_PAPER_SIZE_MM, printerName: _projectConstants.PRINTING_PRINTER_NAME);
 
                     string result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: PRINTING COMMAND SENT SUCCESSFULLY"), Newtonsoft.Json.Formatting.None);
                     return result;

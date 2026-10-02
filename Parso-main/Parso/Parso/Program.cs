@@ -95,8 +95,12 @@ internal class Program
             _projectConstants.ENABLE_PICOB_TEST = config["AppSettings:TestingMode:EnablePicobTest"] == "TRUE";
             _projectConstants.ENABLE_PRINTER_TEST = config["AppSettings:TestingMode:EnablePrinterTest"] == "TRUE";
             _projectConstants.CUSTOM_PROCESSOR = config["AppSettings:CustomProcessor"] == "TRUE";
-            _projectConstants.PRINTING_TEMPLATE_FOLDER_LOCATION = config[$"AppSettings:PrintingTemplatesAbsoluteLocation"];
+            // A relative folder is resolved against the app folder
+            string templateFolder = config[$"AppSettings:PrintingTemplatesAbsoluteLocation"] ?? "";
+            _projectConstants.PRINTING_TEMPLATE_FOLDER_LOCATION = templateFolder == "" || Path.IsPathRooted(templateFolder) ? templateFolder : Path.Combine(basePath, templateFolder);
             _projectConstants.PRINTING_CONFIG_FILE_NAME = config[$"AppSettings:PrintingConfigFileName"];
+            _projectConstants.PRINTING_PAPER_SIZE_MM = ReadInt(config, "AppSettings:Printing:PaperSizeMm", 58);
+            _projectConstants.PRINTING_PRINTER_NAME = config["AppSettings:Printing:PrinterName"]?.Trim() ?? "";
             string? listenAddress = config["AppSettings:ListenAddress"];
             _projectConstants.LISTEN_ADDRESS = string.IsNullOrWhiteSpace(listenAddress) ? "0.0.0.0" : listenAddress.Trim();
         }
@@ -108,6 +112,7 @@ internal class Program
 
         Log.Information($"DetectedOS: {os}");
         Log.Information($"Picob COM Port: {_projectConstants.PICOB_COM_PORT}");
+        Log.Information($"Printing templates folder: {_projectConstants.PRINTING_TEMPLATE_FOLDER_LOCATION}. Paper: {_projectConstants.PRINTING_PAPER_SIZE_MM} mm. Printer: '{_projectConstants.PRINTING_PRINTER_NAME}'");
         Log.Information($"Picob persistent connection: {_projectConstants.PICOB_PERSISTENT_CONNECTION}. Listen address: {_projectConstants.LISTEN_ADDRESS}");
 
         if (_projectConstants.PICOB_PERSISTENT_CONNECTION && !_projectConstants.ENABLE_PICOB_TEST)
