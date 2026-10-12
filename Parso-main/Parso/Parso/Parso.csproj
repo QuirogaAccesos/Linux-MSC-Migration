@@ -39,6 +39,12 @@
     <Content Include="PrintingTemplates\PrintingTest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="PrintingTemplates\EntryTicket.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PrintingTemplates\ExitReceipt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tools\SumatraPDF.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

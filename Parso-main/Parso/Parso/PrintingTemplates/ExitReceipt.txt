@@ -1,0 +1,11 @@
+#Header#
+--------------------------------
+#Title#
+#ReceiptNumber#
+#AuthNumber#
+--------------------------------
+
+#Amounts#
+#Date#
+@@QR@@
+#Footer#
