@@ -2,10 +2,13 @@
 using Newtonsoft.Json.Linq;
 using Parso.Utils;
 using Parso.Utils.Objects;
+using QRCoder;
 using Serilog;
+using System.Text;
 using System.Xml;
 using TREAPrinting;
 using TREAPrinting.Printer.Controllers;
+using TREAPrinting.Printer.Modelos.TREAPrinting;
 
 namespace Parso.Classes.Helpers
 {
@@ -17,6 +20,10 @@ namespace Parso.Classes.Helpers
 
         // The request state lives in fields and the kiosk and the RestApi can print at the same time
         private static readonly object _printLock = new object();
+
+        private const string QrMarker = "@@QR@@";
+        private const string TextFont = "Consolas";
+        private const int TextSize = 8;
 
         private string? templateFileName;
         private Dictionary<string, string> matchedVariablesDictionary = new Dictionary<string, string>();
@@ -48,8 +55,19 @@ namespace Parso.Classes.Helpers
                     var printingVariables = _getPrintingVariables();
                     matchedVariablesDictionary = _getMatchedVariables(variablesData, printingVariables);
 
-                    _treaPrinterController.Print(templateFileName, matchedVariablesDictionary, "Consolas", 8,
-                        PaperSize: _projectConstants.PRINTING_PAPER_SIZE_MM, printerName: _projectConstants.PRINTING_PRINTER_NAME);
+                    // The reserved variable QR is printed as an image where the template has the marker
+                    string? qrText = variablesData["QR"]?.ToString();
+                    string templateText = string.IsNullOrEmpty(qrText) ? "" : _getTemplateText(templateFileName, matchedVariablesDictionary);
+
+                    if (templateText.Contains(QrMarker))
+                    {
+                        _printWithQr(templateText, qrText!);
+                    }
+                    else
+                    {
+                        _treaPrinterController.Print(templateFileName, matchedVariablesDictionary, TextFont, TextSize,
+                            PaperSize: _projectConstants.PRINTING_PAPER_SIZE_MM, printerName: _projectConstants.PRINTING_PRINTER_NAME);
+                    }
 
                     string result = JsonConvert.SerializeObject(new Response(true, 200, true, $"SUCCESS: PRINTING COMMAND SENT SUCCESSFULLY"), Newtonsoft.Json.Formatting.None);
                     return result;
@@ -61,6 +79,50 @@ namespace Parso.Classes.Helpers
                 Log.Error(ex.Message);
                 return JsonConvert.SerializeObject(new Response(false, 500, false, $"FATAL ERROR: EXCEPTION ENCOUNTERED - {ex.Message}"), Newtonsoft.Json.Formatting.None);
             }
+        }
+
+        private string _getTemplateText(string templateFile, Dictionary<string, string> variables)
+        {
+            var text = new StringBuilder();
+            foreach (var line in File.ReadLines(templateFile)) { text.AppendLine(line); }
+            foreach (var variable in variables) { text.Replace(variable.Key, variable.Value); }
+            return text.ToString();
+        }
+
+        private void _printWithQr(string templateText, string qrText)
+        {
+            int markerIndex = templateText.IndexOf(QrMarker);
+            string textBefore = templateText.Substring(0, markerIndex).TrimEnd('\r', '\n');
+            string textAfter = templateText.Substring(markerIndex + QrMarker.Length).Replace(QrMarker, "").TrimStart('\r', '\n');
+
+            // Left aligned text keeps the padding spaces of the template, the QR is centered
+            var elements = new List<PrintElement>();
+            if (!string.IsNullOrWhiteSpace(textBefore))
+            {
+                elements.Add(new PrintElement { Text = textBefore, FontFamily = TextFont, FontSize = TextSize, Alignment = "left" });
+            }
+            elements.Add(new PrintElement { ImageData = _getQrImage(qrText), Alignment = "center" });
+            if (!string.IsNullOrWhiteSpace(textAfter))
+            {
+                elements.Add(new PrintElement { Text = textAfter, FontFamily = TextFont, FontSize = TextSize, Alignment = "left" });
+            }
+
+            _treaPrinterController.PrintDynamic(elements, _projectConstants.PRINTING_PAPER_SIZE_MM, _projectConstants.PRINTING_PRINTER_NAME);
+        }
+
+        private byte[] _getQrImage(string qrText)
+        {
+            QRCodeGenerator.ECCLevel eccLevel = _projectConstants.PRINTING_QR_ECC_LEVEL switch
+            {
+                "M" => QRCodeGenerator.ECCLevel.M,
+                "Q" => QRCodeGenerator.ECCLevel.Q,
+                "H" => QRCodeGenerator.ECCLevel.H,
+                _ => QRCodeGenerator.ECCLevel.L
+            };
+
+            using var qrGenerator = new QRCodeGenerator();
+            using QRCodeData qrData = qrGenerator.CreateQrCode(qrText, eccLevel);
+            return new PngByteQRCode(qrData).GetGraphic(_projectConstants.PRINTING_QR_PIXELS_PER_MODULE);
         }
 
         private string? _getTemplateTextFileAddressFromId(string templateId)

@@ -101,6 +101,19 @@ internal class Program
             _projectConstants.PRINTING_CONFIG_FILE_NAME = config[$"AppSettings:PrintingConfigFileName"];
             _projectConstants.PRINTING_PAPER_SIZE_MM = ReadInt(config, "AppSettings:Printing:PaperSizeMm", 58);
             _projectConstants.PRINTING_PRINTER_NAME = config["AppSettings:Printing:PrinterName"]?.Trim() ?? "";
+            _projectConstants.PRINTING_QR_PIXELS_PER_MODULE = ReadInt(config, "AppSettings:Printing:QrPixelsPerModule", 6);
+            if (_projectConstants.PRINTING_QR_PIXELS_PER_MODULE < 1)
+            {
+                Log.Warning($"Printing:QrPixelsPerModule {_projectConstants.PRINTING_QR_PIXELS_PER_MODULE} is not valid. Using 6.");
+                _projectConstants.PRINTING_QR_PIXELS_PER_MODULE = 6;
+            }
+            string qrEccLevel = (config["AppSettings:Printing:QrEccLevel"] ?? "L").Trim().ToUpperInvariant();
+            if (qrEccLevel is not ("L" or "M" or "Q" or "H"))
+            {
+                Log.Warning($"Printing:QrEccLevel '{qrEccLevel}' is not valid, it must be L, M, Q or H. Using L.");
+                qrEccLevel = "L";
+            }
+            _projectConstants.PRINTING_QR_ECC_LEVEL = qrEccLevel;
             string? listenAddress = config["AppSettings:ListenAddress"];
             _projectConstants.LISTEN_ADDRESS = string.IsNullOrWhiteSpace(listenAddress) ? "0.0.0.0" : listenAddress.Trim();
         }
