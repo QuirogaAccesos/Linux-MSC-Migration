@@ -15,8 +15,48 @@
 		<id>NOM</id>
 		<textId>#NombreB#</textId>
 	</variable>
+	<variable>
+		<id>Header</id>
+		<textId>#Header#</textId>
+	</variable>
+	<variable>
+		<id>TicketId</id>
+		<textId>#TicketId#</textId>
+	</variable>
+	<variable>
+		<id>Date</id>
+		<textId>#Date#</textId>
+	</variable>
+	<variable>
+		<id>Footer</id>
+		<textId>#Footer#</textId>
+	</variable>
+	<variable>
+		<id>Title</id>
+		<textId>#Title#</textId>
+	</variable>
+	<variable>
+		<id>ReceiptNumber</id>
+		<textId>#ReceiptNumber#</textId>
+	</variable>
+	<variable>
+		<id>AuthNumber</id>
+		<textId>#AuthNumber#</textId>
+	</variable>
+	<variable>
+		<id>Amounts</id>
+		<textId>#Amounts#</textId>
+	</variable>
 	<template>
 		<id>A</id> <!--Debe ser una sola letranumbe, o sea solo puede haber un total de 26 formatos de impresión existentes-->
 		<templateFileName>PrintingTest.txt</templateFileName>
+	</template>
+	<template>
+		<id>B</id>
+		<templateFileName>EntryTicket.txt</templateFileName>
+	</template>
+	<template>
+		<id>C</id>
+		<templateFileName>ExitReceipt.txt</templateFileName>
 	</template>
 </root>
