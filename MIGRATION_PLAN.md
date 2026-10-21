@@ -1,6 +1,6 @@
 # Migration plan: Pango on Linux, Parso as the hardware gateway
 
-Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Only T1, B6, B1, B2, B3, B4, B5, C1, C2, C3 and E1 are implemented so far; the ticked boxes in section 5 show progress.
+Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Only T1, B6, B1, B2, B3, B4, B5, C1, C2, C3, D1 and E1 are implemented so far; the ticked boxes in section 5 show progress.
 
 ## 1. Decisions
 
@@ -39,6 +39,43 @@ Existing keys `"1"`, `"2"` and `"3"` keep their behavior. With `Picob:Persistent
 
 Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Framework) must encode and decode UTF-8 explicitly because its `Encoding.Default` is not UTF-8.
 
+### Card payment replies (A2, D1)
+
+Request: `{"3":{"amountInPennies":n,"clientTransactionID":"..","testEth":false}}`. While the reader waits for a card Parso broadcasts the bare text `CARDINSERTED` to every client when the card is detected (before the reply). The reply is one `Response` frame. Its `DeviceResponse` is a string with Parso's own JSON: `ExceptionEncountered`, `Success`, `LastOperation` (the Globalcom receipt XML when the terminal gave an outcome, otherwise the last command outcome), `LastTransactionStatus`, `Log` (only filled when `CardReader:IncludeRPlog` is `TRUE`) and `Timeout`. Cases captured against the staging gateway:
+
+| Case | Top level (`Success` / `HTTPStatus` / `OperationResult` / `Message`) | `DeviceResponse` | Pango status |
+|---|---|---|---|
+| Approved | true / 200 / true / `TRANSACTION SUCCESSFUL AND COMPLETE` | `Success` true, `LastTransactionStatus` `Status outcome good`, XML `Error` `0000` | Approved |
+| Host decline (5.00) | true / 200 / false / `TRANSACTION SUCCESSFUL BUT INCOMPLETE` | `Success` false, `Status outcome bad`, XML `Error` `-001`, gateway `AcquirerResponseCode` `05` | Denied |
+| Host unreachable (48.03) | same as a decline | XML `Error` `-001`, gateway `PaymentProviderError` `host_connection_error` | Denied |
+| No internet at the terminal | same as a decline | XML `Error` `-002`, no `Gateway` element (the log says `DECLINED OFFLINE`) | Denied, and the `-002` handling |
+| Magstripe error | same as a decline | XML `Error` `-007` | Denied |
+| Timeout (no card) | true / 500 / false / `ERROR: TIMEOUT` | `Timeout` true, `LastTransactionStatus` `Insert card`, `LastOperation` is not XML | Error |
+| Reader port missing | true / 200 / false / `...BUT INCOMPLETE` | `ExceptionEncountered` true, `LastTransactionStatus` null, the exception text in `Log` | Error |
+| Reader port unusable (before the D1 fix) | false / 500 / false / `FATAL ERROR: ... Object reference not set ...` | none (`DeviceResponse` is null); after the fix it is like the missing port | Error |
+| Cancel request | true / 200 / true / `CANCELLATION REQUEST SENT` | none | not a payment result |
+| Cancelled payment (after D1) | true / 200 / false / `CANCELLED: PAYMENT CANCELLED BY REQUEST` | none | Error |
+
+Mapping to Pango's `GeneratePaymentResponse` (what `LinuxControllerPaymentManager` in E5 fills):
+
+- `TransactionApproved`: top-level `OperationResult` is true and `DeviceResponse.Success` is true (the XML `Error` is `0000`).
+- `TransactionStatus`: Approved when approved; Denied (1) when the XML is present and `LastTransactionStatus` is `Status outcome bad`, which is what Pango's own driver does with the same terminal status; Error for everything else (timeout, exception, port problems, no XML). Pango shows the denied screen for 1 and the failed screen with `UIErrorMessage` for the rest.
+- `TransactionNumber`: the client transaction number E5 generates (`yyMMddHHmmss`, as the GlobalCom driver does) and sends as `clientTransactionID`; the terminal does not return it.
+- `TransactionId`: only when approved, the first `Gateway/Response/TransactionDetails/CardEaseReference` of the XML, which is the `Ref:` line of the terminal's result text. Pango turns it into the ticket id and its first 9 characters into the visible receipt number; when it is empty Pango makes a new GUID.
+- `Data["Err code"]`: the XML `TransactionData/Error`. Pango's `-002` handling reads it.
+- `XmlData`: `LastOperation` when it is XML.
+- `ErrorMessage`: contains `TIMEOUT` for the timeout (Pango discards a timed-out attempt after `PaymentRetryTimeout` by that word); for a denial `Error Code: <Error>` plus the gateway error text when there is one; for exceptions the `Log` text.
+- `UIErrorMessage`: `Timeout reading card` for the timeout and empty otherwise, as in the GlobalCom driver.
+- `CurrentReaderStatus`: `WaitingForCard` when the request is sent, `CardInserted` on the `CARDINSERTED` broadcast, `Idle` when the reply arrives.
+
+Rules for E5: decide from the top-level fields, `Success`, `LastTransactionStatus` and the XML, never from the `Log` text (it says `DECLINED ONLINE` even for an unreachable host, and it is empty when `IncludeRPlog` is `FALSE`). Parse the XML with an XML parser; it has no namespace prefix on its elements. A reply can take about 3 to 4 seconds longer than the terminal's last log line.
+
+Parso changes made in D1 (both change replies that other clients could rely on, and were agreed):
+
+- If the very first reader command fails, the error handler in `RPPaymentController` read a `_response` that was still null, so the real cause was lost and the client got `FATAL ERROR ... Object reference not set`. It now uses a null check, so the reply is the same as for a missing port: `ExceptionEncountered` true with the message in `Log`.
+- After `{"3":{"cancelPayment":1}}` the cancelled payment used to get no reply (it returned an empty string and empty replies are not sent). It now gets `Response(true, 200, false, "CANCELLED: PAYMENT CANCELLED BY REQUEST")`, without a `DeviceResponse`. The cancel request itself still replies `CANCELLATION REQUEST SENT`. Pango's GlobalCom driver has no cancel; E5 maps this reply to Error.
+- The `-002` recovery in Pango (reset the reader with command `0x27`, open the barrier, mail) cannot reset the reader in Linux Controller mode because Parso owns the port; it is listed under "Later".
+
 ## 4. Conventions for the tasks
 
 - Sizes: S is a few dozen lines in one or two files, M is a new class or a change spread over one file.
@@ -48,7 +85,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 - One branch and one pull request per task, created from the latest `main` and named `claude/<task id>-<task title>`: lowercase, hyphens, the words of the task's bold title without the size, for example `claude/b1-config-plumbing`, `claude/b3-picobsession`, `claude/e1-linux-controller-client-project`. Work that is not a task (docs, rule changes) gets its own small branch. Do not start a task on a branch whose pull request is open.
 - New Parso settings are optional with defaults. Existing keys are read with a bare `int.Parse` and a missing one aborts startup; new ones must not.
 - Each task adds the config keys it introduces to the config files it needs, with values that keep Windows behavior unchanged.
-- Code follows the surrounding style and comment density. No notes or files inside the project folders.
+- Code follows the surrounding style and comment density (for Pango see "Code style" in `CLAUDE.md`: few comments, C# 7.3, log4net with string concatenation). Explanations that the original code would not carry go in this file or `CLAUDE.md`. No notes or files inside the project folders.
 - Progress: tick the task's checkbox below in the same commit that completes it, and add a dated line to the decision log (section 8) for any result or decision that later tasks rely on.
 
 ## 5. Tasks
@@ -60,7 +97,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 ### Phase A: prerequisites (User)
 
 - [x] **A1. Confirm the shipped DLLs match the zip sources.** Open `Parso/Controllers/Picob/PicobController.dll` and `Controllers/Printer/TREAPrinting.dll` in ILSpy or dotPeek. Check for `OpenPicobPort(string, int, bool, bool, string)`, `SendToPicob(string)`, `IPrinterController.PrintDynamic(List<PrintElement>, int, string, int)` and `Print(..., printerName)`. If any is missing or differs, build the DLLs from `PicobIntegration-main.zip` / `TREAPrinting-master.zip` (net8.0) and replace them. Blocks B3 and C2. Result 2026-10-01 (signatures read from the DLL metadata, not decompiled): `PicobController.dll` matches the zip; `TREAPrinting.dll` is older (see the decision log). Nothing was replaced.
-- [ ] **A2. Capture real card-payment replies.** Full `Response` JSON from Parso for an RP payment that is approved, declined, times out and is cancelled. Blocks D1.
+- [x] **A2. Capture real card-payment replies.** Full `Response` JSON from Parso for an RP payment that is approved, declined, times out and is cancelled. Blocks D1. Result 2026-10-21: captured with the Globalcom reader against the staging gateway; see the decision log and D1.
 - [ ] **A3. Mono spike.** On the Linux kiosk image, build and run Entry under Mono (with a Roslyn `csc`) using `UseFakePos=true` and `ReaderSource=Output`. Expect fatal log lines for the missing Picob and a terminal that stays in `StandBy`. Report whether forms render (`RoundedButton`, fonts), the wedge input reaches the app, LiteDB opens and logs are written. Blocks phases F and G, not phases B to E.
 
 ### Phase B: Parso Picob (persistent port, poller, cache)
@@ -80,7 +117,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 
 ### Phase D: Parso payment
 
-- [ ] **D1. Reply mapping (S to M).** Using the A2 samples, list what Pango needs to fill `GeneratePaymentResponse` (approved flag, `TransactionStatus` Approved/Denied/Error, client transaction number, the `Ref` value that Pango uses as the ticket id, `Err code`, receipt XML, UI error text). Extend Parso's reply additively where something is missing. Depends on: A2.
+- [x] **D1. Reply mapping (S to M).** Using the A2 samples, list what Pango needs to fill `GeneratePaymentResponse` (approved flag, `TransactionStatus` Approved/Denied/Error, client transaction number, the `Ref` value that Pango uses as the ticket id, `Err code`, receipt XML, UI error text). Extend Parso's reply additively where something is missing. Depends on: A2.
 
 ### Phase E: Pango as a Parso client
 
@@ -169,6 +206,8 @@ Append one dated line per result or decision that later tasks depend on (A1 to A
 - 2026-10-21: Naming rule for Pango: nothing inside `PangoAppQR-develop/` may mention Parso, and new names there do not use Pango either. On that side Parso is the Linux Controller (`AA.LinuxController`, `LinuxController*` classes and settings, `HardwareMode=LinuxController`) and the machine is the LG1/N42. The plan and these docs keep using Parso and Pango for the two projects.
 - 2026-10-21: E1 done. New project `AA.LinuxController` (namespace and assembly) with `LinuxControllerClient` and `LinuxControllerResponse`; later Linux Controller classes (`LinuxControllerPicob`, `LinuxControllerPaymentManager`) go in the same namespace, so the E5 type name is `AA.LinuxController.LinuxControllerPaymentManager, AA.LinuxController`. No type may be named `LinuxController`: from inside `AA.Pango.*` code that name resolves to the `AA.LinuxController` namespace first (CS0118). `LinuxControllerClient.Send(json, timeoutInMs)` returns the `LinuxControllerResponse` or `null` on any failure (Parso unreachable, timeout, connection closed, bad frame) and never throws; callers build the JSON themselves and parse `DeviceResponse`, which is a string holding the device JSON. After a failure the connection is closed, so a reply that arrives late is never taken for the next request's reply. Connecting is lazy with a fixed 3 s timeout, and a connection that Parso closed (restart) is detected with `Socket.Poll` before writing and reopened, so a request is never written twice. A failed connect is logged once until the next success, because E4 will call `STATUS` twice a second. Frames that are not a JSON object (the `CARDINSERTED` broadcast) are raised on `MessageReceived` (`EventHandler<string>`) while a request waits; Parso broadcasts to every client, so the Picob and printer instances also see them and ignore them. Each instance is locked to one request at a time, so cancelling a payment in E5 needs a second instance (Parso's cancel flag is shared across sessions). `LinuxControllerHost` (`127.0.0.1`) and `LinuxControllerPort` (`1994`) are in both kiosk `App.config` files under `<!--DATOS DE CONEXION AL LINUX CONTROLLER-->`; `Web.config` gets them in E8. `AA.Pango.ServiceLayer` references the project but uses nothing from it yet, so its DLL may be missing from the app output folders until E2 or E3 uses it. Built on Windows (Build Tools 2022, MSBuild 17.14): `AA.LinuxController` and `AA.Pango.ServiceLayer` alone, then the whole solution, with no errors and no warnings from the new project. Nothing was run.
 - 2026-10-01: A1 done by reading the DLL metadata. `PicobController.dll` has the signatures B3 needs (`OpenPicobPort(string serialPort, int baudRate, bool dtr, bool rts, string newline)`, `SendToPicob(string)` that does not wait for a reply, `SendToPicobAndReceive(string, int maxTimeout)`, `ClosePort()`, `IsPortOpen()`), and the `.xml` beside it is stale. `TREAPrinting.dll` is older than `TREAPrinting-master.zip`: `PrintDynamic(List<PrintElement>, int paperSize, string printerName = "")` without `marginLeftDots`, `PrintElement` without `Dither`, `Print(...)` unchanged with `printerName` as its 12th parameter. C2 works with the shipped DLL. Decision: keep the shipped DLL for now and consider rebuilding it from the zip after the current phases (the zip's ESC/POS output rules, such as the 80% image width, may differ from the DLL). Behavior was not compared.
+- 2026-10-21: A2 done. Replies captured with the Globalcom reader (firmware `R15.2I.0Z`) against the NMI/CardEase staging gateway (`test.cardeasexml.com`). In staging every amount is approved, even with an expired card, except the special amounts: 5.00 and 6.00 are declined and 48.03 to 48.06 simulate host errors (NMI article `Special Amounts on Staging`; the terminal's clock is UTC-4, which explains a 2 h difference with the PC). Cases captured: approved (0.30), host decline (5.00), host unreachable (48.03), no internet at the terminal, magstripe error `-007`, timeout (no card for 30 s), cancel, reader port missing, reader port unusable. Card numbers, names, authorization codes and the terminal's gateway key are not recorded here. The cases and how to tell them apart are in the D1 mapping.
+- 2026-10-21: D1 done. The reply mapping is in section 3 (`Card payment replies`). Parso now answers a cancelled payment with `CANCELLED: PAYMENT CANCELLED BY REQUEST` and no longer hides a reader failure behind a null reference error. E5 maps from the top-level fields, `Success`, `LastTransactionStatus` and the XML, never from the `Log` text. Built on Windows and tested with the reader: a cancel sent while waiting answered the payment with the `CANCELLED` reply, and a reader port held by another program now comes back as `ExceptionEncountered` true with `RS232 Port on your PC is in use by another application` in `Log` instead of the null reference error. A cancel that arrives after the card was detected (after `CARDINSERTED`) can race with the payment command already sent to the terminal and does not stop a transaction the terminal is running, so E5 must not offer cancel once the card is in.
 
 ## 9. Picking this up in a new chat
 

@@ -160,7 +160,7 @@ namespace Parso.Controllers.RPPaymentController
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
-                return new RPResponse(_response.ParsedInfo, ex.Message);
+                return new RPResponse(_response?.ParsedInfo ?? "", ex.Message);
             }
             finally
             {
