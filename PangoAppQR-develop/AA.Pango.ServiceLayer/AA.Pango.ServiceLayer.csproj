@@ -129,6 +129,10 @@
       <Project>{667b3b9e-8101-4ace-859f-cccda41d1686}</Project>
       <Name>AA.Pango.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AA.Pango.ParsoClient\AA.Pango.ParsoClient.csproj">
+      <Project>{bb259e2d-bb43-4665-8e62-5909b6bd6219}</Project>
+      <Name>AA.Pango.ParsoClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AA.PangoApp.Payments.GlobalCom\AA.PangoApp.Payments.GlobalCom.csproj">
       <Project>{361b514d-d831-4d07-a825-2a9525d96fd1}</Project>
       <Name>AA.PangoApp.Payments.GlobalCom</Name>

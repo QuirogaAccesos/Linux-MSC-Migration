@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Keep code changes in the style of the surrounding code. Match its comment density and language (comments are a mix of Spanish and English), and add no explanatory headers, banners or generated-looking comments.
 - `PangoAppQR-develop/MSCGitHub.lnk` is a Windows shortcut to an external `MSCGitHub` checkout. That checkout is not part of this repo.
 - Goal of this repo ("Linux-MSC-Migration"): get the kiosk software running on Linux. Pango is the Windows-only side with the blockers; Parso already targets Linux. The agreed direction and the task list are in `MIGRATION_PLAN.md` (repo root): Pango stays a WinForms app run under Mono for now, and on Linux all hardware (Picob, card reader, printer) goes through Parso over TCP. The QR scanner stays a keyboard wedge, and AMP card terminals are out of scope until they are added to Parso later.
-- The projects do not reference each other yet. No Pango code mentions Parso or its TCP port; `MIGRATION_PLAN.md` adds that link.
+- The link between the projects is being added by `MIGRATION_PLAN.md` phase E. So far Pango has the `AA.Pango.ParsoClient` project (task E1) and the `ParsoHost` / `ParsoPort` keys, but no Pango code calls Parso yet.
 - Working on the plan: take the first unticked task in `MIGRATION_PLAN.md` whose dependencies are done, tick it in the same commit, and log decisions there (section 8). One task per commit, task id first in the message, no model name in commit messages. One branch and one pull request per task, created from the latest `main` and named `claude/<task id>-<task title>` in lowercase with hyphens, the same words as the task's bold title in the plan (`claude/b1-config-plumbing`, `claude/b6-test-mode-simulator`). Work that is not a task (docs, rule changes) gets its own small branch too. Do not stack a new task on a branch whose pull request is open. The user builds and reports errors, so stop after each task until the build result is in. Documents meant for the hardware engineer are written in Spanish.
 - `PicobIntegration-main.zip` and `TREAPrinting-master.zip` in the repo root are source archives of the Picob and printing libraries that Parso references as prebuilt DLLs. They are not part of either project. Extract them outside the repo (for example in the scratchpad) to read them. The DLLs in `Parso/Controllers/` may not have been built from exactly this source.
 
@@ -45,7 +45,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Solution layout
 
-Ten projects; the dependency direction is `App / App.Exit -> UI.Utils, ServiceLayer -> Model, Payments.*`.
+Eleven projects; the dependency direction is `App / App.Exit -> UI.Utils, ServiceLayer -> Model, Payments.*, ParsoClient`.
 
 | Folder | Role |
 |---|---|
@@ -57,6 +57,7 @@ Ten projects; the dependency direction is `App / App.Exit -> UI.Utils, ServiceLa
 | `AA.Pango.RestApi` | ASP.NET Web API 2 / MVC 5 site, hosted in IIS. Local command endpoint for the kiosks |
 | `AA.PangoApp.Payments.Interface` | `IPaymentManager`, `PaymentManagerAbstract`, DTOs, `Notifications/MailSender` |
 | `AA.PangoApp.Payments.GlobalCom` / `.AMP` | Two card-terminal drivers over serial |
+| `AA.Pango.ParsoClient` | Added for the migration (task E1), root namespace `AA.Pango.Parso`. `ParsoClient`: TCP client for Parso (length-prefixed UTF-8 frames, lazy reconnect, `Send` returns `ParsoResponse` or `null`, non-JSON frames raised on `MessageReceived`) |
 | `AA.Pango.TestApp` | Unused console stub |
 | `libs/` | Proprietary binaries `GlobalcomRetailProtocol.dll` and `AMPSerialAdapter.dll` (managed AnyCPU assemblies built for .NET Framework, no P/Invoke) |
 
