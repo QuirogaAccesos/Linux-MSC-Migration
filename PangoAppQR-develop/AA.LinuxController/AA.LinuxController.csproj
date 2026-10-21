@@ -49,7 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HardwareSettings.cs" />
     <Compile Include="LinuxControllerClient.cs" />
+    <Compile Include="LinuxControllerPicob.cs" />
+    <Compile Include="LinuxControllerPicobStatus.cs" />
     <Compile Include="LinuxControllerResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
