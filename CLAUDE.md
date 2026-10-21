@@ -17,7 +17,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `dotnet`, `mono` and `msbuild` are not installed in the cloud environment, so nothing can be compiled or run there.
 
-- Pango (Visual Studio 2022, classic .NET Framework 4.8, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed). On Windows: `nuget restore AA.Pango.App.sln`, then `msbuild AA.Pango.App.sln /p:Configuration=Debug`. Build one project with `msbuild AA.Pango.App.Exit\AA.Pango.App.Exit.csproj`.
+- Pango (Visual Studio 2022, classic .NET Framework 4.8, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed). The user's Windows machine has Build Tools for Visual Studio 2022 (MSBuild 17.14, workloads `ManagedDesktopBuildTools` and `WebBuildTools`, .NET Framework 4.8 targeting pack), no Visual Studio IDE, no `nuget.exe` and no `git` on the Developer Command Prompt path. Commands that worked there (2026-10-21), from `PangoAppQR-develop` in "Developer Command Prompt for VS 2022":
+  - restore: `msbuild AA.Pango.App.sln -t:Restore -p:RestorePackagesConfig=true` (NU1902 / NU1904 vulnerability warnings for jQuery, LiteDB and log4net are expected);
+  - one-time, outside the repo: `mkdir "C:\Users\TREA\Documents\GitHub\AMP\LibAMP1.2.0" & copy libs\AMPSerialAdapter.dll "C:\Users\TREA\Documents\GitHub\AMP\LibAMP1.2.0\" & copy libs\AMPSerialAdapter.dll.config "C:\Users\TREA\Documents\GitHub\AMP\LibAMP1.2.0\"` (see Build specifics);
+  - build: `msbuild AA.PangoApp.Payments.AMP\AA.PangoApp.Payments.AMP.csproj /p:Configuration=Debug /v:m`, then `msbuild AA.Pango.App.sln /p:Configuration=Debug /v:m`. `/v:m` keeps the output short enough to paste; the RestApi alone prints about a hundred CS1591 warnings, and ServiceLayer, GlobalCom and AMP print a few pre-existing CS0162 / CS0168 / CS0649 / CS1998 ones and one MSB3247 (zxing 0.16.8 vs 0.16.9).
+  - Give the user one command per line, or several joined with `&` on a single line: pasting several lines into that prompt has twice glued the next command onto the end of the previous one.
 - Parso (SDK-style, net8.0): `dotnet build Parso-main/Parso/Parso.sln`, run with `dotnet run --project Parso-main/Parso/Parso`. The executable's assembly name is `TREA`, not Parso.
 - `tools/parso_client.py` (repo root, Python 3 standard library only) sends one request to Parso and prints the reply: `python3 tools/parso_client.py '{"2":"C"}'`, with `--host`, `--port`, `--timeout`, and `--listen [seconds]` to keep reading broadcast frames such as `CARDINSERTED`. It has only been checked against a stub server.
 - Neither project has tests or lint config. In Pango, `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name.
@@ -40,7 +44,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build specifics
 
 - Entry and Exit both build to `AA.Pango.App.exe`. Do not build them into the same output folder.
-- `AA.PangoApp.Payments.AMP` references `AMPSerialAdapter.dll` from `..\..\..\AMP\LibAMP1.2.0\`, a path outside the repo. A copy of the DLL is in `libs/`. `AA.Pango.App.Exit` references the AMP project's output as a loose DLL at `..\AA.PangoApp.Payments.AMP\bin\Debug\...` (not a `ProjectReference`), so build AMP first, in Debug.
+- `AA.PangoApp.Payments.AMP` references `AMPSerialAdapter.dll` from `..\..\..\AMP\LibAMP1.2.0\`, a path outside the repo (on the user's machine `C:\Users\TREA\Documents\GitHub\AMP\LibAMP1.2.0\`). A copy of the DLL is in `libs/`; copying it there is enough. Its Newtonsoft.Json `HintPath` points to `13.0.3` while its `packages.config` lists `13.0.1`, so restore never fetches the file the csproj names; on the user's machine MSBuild falls back to the `Newtonsoft.Json.dll` in `C:\Program Files\IIS\Microsoft Web Deploy V3\`, and a machine without it would fail. Left as is. `AA.Pango.App.Exit` references the AMP project's output as a loose DLL at `..\AA.PangoApp.Payments.AMP\bin\Debug\...` (not a `ProjectReference`), so build AMP first, in Debug.
 - Both apps read `App.config` from the exe folder and load `styles.dat`, `en.dat`, `es.dat`, `languagesSupported.xml` by relative file name, so the working directory must be the exe folder.
 
 ## Code style (match it in new Pango code)
