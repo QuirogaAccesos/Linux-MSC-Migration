@@ -1,6 +1,6 @@
 # Migration plan: Pango on Linux, Parso as the hardware gateway
 
-Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Only T1, B6, B1, B2, B3, B4, B5, C1, C2 and C3 are implemented so far; the ticked boxes in section 5 show progress.
+Companion to `CLAUDE.md`. That file records facts about the code; this one records the decisions and the task list. Only T1, B6, B1, B2, B3, B4, B5, C1, C2, C3 and D1 are implemented so far; the ticked boxes in section 5 show progress.
 
 ## 1. Decisions
 
@@ -52,8 +52,9 @@ Request: `{"3":{"amountInPennies":n,"clientTransactionID":"..","testEth":false}}
 | Magstripe error | same as a decline | XML `Error` `-007` | Denied |
 | Timeout (no card) | true / 500 / false / `ERROR: TIMEOUT` | `Timeout` true, `LastTransactionStatus` `Insert card`, `LastOperation` is not XML | Error |
 | Reader port missing | true / 200 / false / `...BUT INCOMPLETE` | `ExceptionEncountered` true, `LastTransactionStatus` null, the exception text in `Log` | Error |
-| Reader port unusable | false / 500 / false / `FATAL ERROR: ... Object reference not set ...` | none (`DeviceResponse` is null) | Error |
-| Cancel request | true / 200 / true / `CANCELLATION REQUEST SENT` | none | see below |
+| Reader port unusable (before the D1 fix) | false / 500 / false / `FATAL ERROR: ... Object reference not set ...` | none (`DeviceResponse` is null); after the fix it is like the missing port | Error |
+| Cancel request | true / 200 / true / `CANCELLATION REQUEST SENT` | none | not a payment result |
+| Cancelled payment (after D1) | true / 200 / false / `CANCELLED: PAYMENT CANCELLED BY REQUEST` | none | Error |
 
 Mapping to Pango's `GeneratePaymentResponse` (what `ParsoPaymentManager` in E5 fills):
 
@@ -69,10 +70,10 @@ Mapping to Pango's `GeneratePaymentResponse` (what `ParsoPaymentManager` in E5 f
 
 Rules for E5: decide from the top-level fields, `Success`, `LastTransactionStatus` and the XML, never from the `Log` text (it says `DECLINED ONLINE` even for an unreachable host, and it is empty when `IncludeRPlog` is `FALSE`). Parse the XML with an XML parser; it has no namespace prefix on its elements. A reply can take about 3 to 4 seconds longer than the terminal's last log line.
 
-Findings about Parso that D1 still has to settle (both change replies other clients may rely on):
+Parso changes made in D1 (both change replies that other clients could rely on, and were agreed):
 
-- If the very first reader command fails, the error handler in `RPPaymentController` reads a `_response` that is still null, so the real cause is lost and the client gets `FATAL ERROR ... Object reference not set`. The fix is a null check, which would give the same reply as a missing port (`ExceptionEncountered` true with the message in `Log`).
-- After `{"3":{"cancelPayment":1}}` the cancelled payment never gets a reply: it returns an empty string and empty replies are not sent. A client waiting for it only ends by its own timeout. An additive fix is a reply to the cancelled request, for example `Response(true, 200, false, "CANCELLED: PAYMENT CANCELLED BY REQUEST")`. Pango's GlobalCom driver has no cancel, so E5 can also keep treating a missing reply as an error after a cancel.
+- If the very first reader command fails, the error handler in `RPPaymentController` read a `_response` that was still null, so the real cause was lost and the client got `FATAL ERROR ... Object reference not set`. It now uses a null check, so the reply is the same as for a missing port: `ExceptionEncountered` true with the message in `Log`.
+- After `{"3":{"cancelPayment":1}}` the cancelled payment used to get no reply (it returned an empty string and empty replies are not sent). It now gets `Response(true, 200, false, "CANCELLED: PAYMENT CANCELLED BY REQUEST")`, without a `DeviceResponse`. The cancel request itself still replies `CANCELLATION REQUEST SENT`. Pango's GlobalCom driver has no cancel; E5 maps this reply to Error.
 - The `-002` recovery in Pango (reset the reader with command `0x27`, open the barrier, mail) cannot reset the reader in Parso mode because Parso owns the port; it is listed under "Later".
 
 ## 4. Conventions for the tasks
@@ -116,7 +117,7 @@ Findings about Parso that D1 still has to settle (both change replies other clie
 
 ### Phase D: Parso payment
 
-- [ ] **D1. Reply mapping (S to M).** Using the A2 samples, list what Pango needs to fill `GeneratePaymentResponse` (approved flag, `TransactionStatus` Approved/Denied/Error, client transaction number, the `Ref` value that Pango uses as the ticket id, `Err code`, receipt XML, UI error text). Extend Parso's reply additively where something is missing. Depends on: A2.
+- [x] **D1. Reply mapping (S to M).** Using the A2 samples, list what Pango needs to fill `GeneratePaymentResponse` (approved flag, `TransactionStatus` Approved/Denied/Error, client transaction number, the `Ref` value that Pango uses as the ticket id, `Err code`, receipt XML, UI error text). Extend Parso's reply additively where something is missing. Depends on: A2.
 
 ### Phase E: Pango as a Parso client
 
@@ -203,6 +204,7 @@ Append one dated line per result or decision that later tasks depend on (A1 to A
 - 2026-10-02: C2 done. `PrinterHelper` prints with `PrintDynamic` when the request has the reserved variable `QR` and the rendered template contains `@@QR@@`: text before the marker, the QR, text after (newlines next to the marker are trimmed so the gaps come from the element spacing), left-aligned text in `Consolas` 8 like the `Print` path, QR centered. The QR is a PNG from QRCoder 1.6.0 (`PngByteQRCode`), size from `Printing:QrPixelsPerModule` (default 6, below 1 becomes 6) and level from `Printing:QrEccLevel` (default `L`, anything but L, M, Q or H becomes `L`). With 6 pixels per module a text up to about 134 characters at level `L` stays within the 80% image width of 58 mm paper (307 dots); longer texts are scaled down by the Linux path, which can hurt scanning. A `QR` variable without a marker, or a marker without `QR`, uses the old `Print` call. Needs the NuGet restore to fetch QRCoder. No template has the marker yet (C3 adds them). Built on Windows and tested by the user with a real thermal printer using a temporary marker in `PrintingTest.txt`: with the `QR` variable the QR printed, and without it the ticket printed as before. The shipped `TREAPrinting.dll` was enough; it did not need updating.
 - 2026-10-02: C3 done. Templates `B` (`EntryTicket.txt`) and `C` (`ExitReceipt.txt`) are registered in `PrintingConfig.xml` and copied by `Parso.csproj`. They were written from Pango's code, not from a printed sample (none was available): `B` follows `PangoService.PrintTicketQR` (header lines from `ticketEntry.dat`, `Ticket ID`, `Date`, QR, footer) and `C` follows `TerminalController.PrintInvoice` (header, rule, title, receipt and auth numbers, rule, amounts, date, QR, footer; the old blank lines that reserved space for the QR are gone because the QR is now placed by the marker). Pango sends the pieces it already builds: `Header` and `Footer` are the joined lines, `ReceiptNumber` and `AuthNumber` include their config labels (`Receipt #: `), and `Amounts` is the amount, fee and total lines that have a label, one per line. Indents and rules were narrowed to 32 columns (Pango uses 45), so the receipt `Footer4` rule and long header lines from the configs still wrap; E6 and E7 may trim them. Every variable of the template must be sent, empty if unused, or its `#Name#` text prints. Built on Windows and tested by the user with a real thermal printer: templates `B` and `C` printed with their QR codes.
 - 2026-10-01: A1 done by reading the DLL metadata. `PicobController.dll` has the signatures B3 needs (`OpenPicobPort(string serialPort, int baudRate, bool dtr, bool rts, string newline)`, `SendToPicob(string)` that does not wait for a reply, `SendToPicobAndReceive(string, int maxTimeout)`, `ClosePort()`, `IsPortOpen()`), and the `.xml` beside it is stale. `TREAPrinting.dll` is older than `TREAPrinting-master.zip`: `PrintDynamic(List<PrintElement>, int paperSize, string printerName = "")` without `marginLeftDots`, `PrintElement` without `Dither`, `Print(...)` unchanged with `printerName` as its 12th parameter. C2 works with the shipped DLL. Decision: keep the shipped DLL for now and consider rebuilding it from the zip after the current phases (the zip's ESC/POS output rules, such as the 80% image width, may differ from the DLL). Behavior was not compared.
+- 2026-10-21: D1 done. The reply mapping is in section 3 (`Card payment replies`). Parso now answers a cancelled payment with `CANCELLED: PAYMENT CANCELLED BY REQUEST` and no longer hides a reader failure behind a null reference error. E5 maps from the top-level fields, `Success`, `LastTransactionStatus` and the XML, never from the `Log` text. Not built or run yet.
 
 ## 9. Picking this up in a new chat
 
