@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AA.Pango.App.UI.Utils", "AA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AA.PangoApp.Payments.AMP", "AA.PangoApp.Payments.AMP\AA.PangoApp.Payments.AMP.csproj", "{227AD925-63EB-4BFC-8958-EC6E4095BFAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AA.LinuxController", "AA.LinuxController\AA.LinuxController.csproj", "{BB259E2D-BB43-4665-8E62-5909B6BD6219}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,14 @@ Global
 		{227AD925-63EB-4BFC-8958-EC6E4095BFAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{227AD925-63EB-4BFC-8958-EC6E4095BFAC}.Release|x86.ActiveCfg = Release|Any CPU
 		{227AD925-63EB-4BFC-8958-EC6E4095BFAC}.Release|x86.Build.0 = Release|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB259E2D-BB43-4665-8E62-5909B6BD6219}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
