@@ -39,6 +39,42 @@ Existing keys `"1"`, `"2"` and `"3"` keep their behavior. With `Picob:Persistent
 
 Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Framework) must encode and decode UTF-8 explicitly because its `Encoding.Default` is not UTF-8.
 
+### Card payment replies (A2, D1)
+
+Request: `{"3":{"amountInPennies":n,"clientTransactionID":"..","testEth":false}}`. While the reader waits for a card Parso broadcasts the bare text `CARDINSERTED` to every client when the card is detected (before the reply). The reply is one `Response` frame. Its `DeviceResponse` is a string with Parso's own JSON: `ExceptionEncountered`, `Success`, `LastOperation` (the Globalcom receipt XML when the terminal gave an outcome, otherwise the last command outcome), `LastTransactionStatus`, `Log` (only filled when `CardReader:IncludeRPlog` is `TRUE`) and `Timeout`. Cases captured against the staging gateway:
+
+| Case | Top level (`Success` / `HTTPStatus` / `OperationResult` / `Message`) | `DeviceResponse` | Pango status |
+|---|---|---|---|
+| Approved | true / 200 / true / `TRANSACTION SUCCESSFUL AND COMPLETE` | `Success` true, `LastTransactionStatus` `Status outcome good`, XML `Error` `0000` | Approved |
+| Host decline (5.00) | true / 200 / false / `TRANSACTION SUCCESSFUL BUT INCOMPLETE` | `Success` false, `Status outcome bad`, XML `Error` `-001`, gateway `AcquirerResponseCode` `05` | Denied |
+| Host unreachable (48.03) | same as a decline | XML `Error` `-001`, gateway `PaymentProviderError` `host_connection_error` | Denied |
+| No internet at the terminal | same as a decline | XML `Error` `-002`, no `Gateway` element (the log says `DECLINED OFFLINE`) | Denied, and the `-002` handling |
+| Magstripe error | same as a decline | XML `Error` `-007` | Denied |
+| Timeout (no card) | true / 500 / false / `ERROR: TIMEOUT` | `Timeout` true, `LastTransactionStatus` `Insert card`, `LastOperation` is not XML | Error |
+| Reader port missing | true / 200 / false / `...BUT INCOMPLETE` | `ExceptionEncountered` true, `LastTransactionStatus` null, the exception text in `Log` | Error |
+| Reader port unusable | false / 500 / false / `FATAL ERROR: ... Object reference not set ...` | none (`DeviceResponse` is null) | Error |
+| Cancel request | true / 200 / true / `CANCELLATION REQUEST SENT` | none | see below |
+
+Mapping to Pango's `GeneratePaymentResponse` (what `ParsoPaymentManager` in E5 fills):
+
+- `TransactionApproved`: top-level `OperationResult` is true and `DeviceResponse.Success` is true (the XML `Error` is `0000`).
+- `TransactionStatus`: Approved when approved; Denied (1) when the XML is present and `LastTransactionStatus` is `Status outcome bad`, which is what Pango's own driver does with the same terminal status; Error for everything else (timeout, exception, port problems, no XML). Pango shows the denied screen for 1 and the failed screen with `UIErrorMessage` for the rest.
+- `TransactionNumber`: the client transaction number E5 generates (`yyMMddHHmmss`, as the GlobalCom driver does) and sends as `clientTransactionID`; the terminal does not return it.
+- `TransactionId`: only when approved, the first `Gateway/Response/TransactionDetails/CardEaseReference` of the XML, which is the `Ref:` line of the terminal's result text. Pango turns it into the ticket id and its first 9 characters into the visible receipt number; when it is empty Pango makes a new GUID.
+- `Data["Err code"]`: the XML `TransactionData/Error`. Pango's `-002` handling reads it.
+- `XmlData`: `LastOperation` when it is XML.
+- `ErrorMessage`: contains `TIMEOUT` for the timeout (Pango discards a timed-out attempt after `PaymentRetryTimeout` by that word); for a denial `Error Code: <Error>` plus the gateway error text when there is one; for exceptions the `Log` text.
+- `UIErrorMessage`: `Timeout reading card` for the timeout and empty otherwise, as in the GlobalCom driver.
+- `CurrentReaderStatus`: `WaitingForCard` when the request is sent, `CardInserted` on the `CARDINSERTED` broadcast, `Idle` when the reply arrives.
+
+Rules for E5: decide from the top-level fields, `Success`, `LastTransactionStatus` and the XML, never from the `Log` text (it says `DECLINED ONLINE` even for an unreachable host, and it is empty when `IncludeRPlog` is `FALSE`). Parse the XML with an XML parser; it has no namespace prefix on its elements. A reply can take about 3 to 4 seconds longer than the terminal's last log line.
+
+Findings about Parso that D1 still has to settle (both change replies other clients may rely on):
+
+- If the very first reader command fails, the error handler in `RPPaymentController` reads a `_response` that is still null, so the real cause is lost and the client gets `FATAL ERROR ... Object reference not set`. The fix is a null check, which would give the same reply as a missing port (`ExceptionEncountered` true with the message in `Log`).
+- After `{"3":{"cancelPayment":1}}` the cancelled payment never gets a reply: it returns an empty string and empty replies are not sent. A client waiting for it only ends by its own timeout. An additive fix is a reply to the cancelled request, for example `Response(true, 200, false, "CANCELLED: PAYMENT CANCELLED BY REQUEST")`. Pango's GlobalCom driver has no cancel, so E5 can also keep treating a missing reply as an error after a cancel.
+- The `-002` recovery in Pango (reset the reader with command `0x27`, open the barrier, mail) cannot reset the reader in Parso mode because Parso owns the port; it is listed under "Later".
+
 ## 4. Conventions for the tasks
 
 - Sizes: S is a few dozen lines in one or two files, M is a new class or a change spread over one file.
