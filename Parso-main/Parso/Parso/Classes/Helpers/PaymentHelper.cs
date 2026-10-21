@@ -59,7 +59,7 @@ namespace Parso.Classes.Helpers
                         break;
                 }
 
-                if (!_response.respond) { return ""; }
+                if (!_response.respond) { return JsonConvert.SerializeObject(new Response(true, 200, false, $"CANCELLED: PAYMENT CANCELLED BY REQUEST"), Formatting.None); }
 
                 if (_response.timeout) { return JsonConvert.SerializeObject(new Response(true, 500, false, $"ERROR: TIMEOUT", JsonConvert.SerializeObject(_response.data, Formatting.None)), Formatting.None); }
 
