@@ -1274,42 +1274,54 @@ namespace AA.Pango.ServiceLayer.Controllers
 
                 if (outputResponse != null && outputResponse.Count > 0)
                 {
-                    #region UPDATE TERMINAL STATE
-
-                    //skip processing if we have these READ-ONLY states
-                    if (TerminalState == TerminalState.PaymentInProgress)
-                    {
-                        return;
-                    }
-
                     //IS STANDING BY?
                     if (outputResponse.Keys.Contains("1") && outputResponse["1"].Value == "0" &&
                         outputResponse.Keys.Contains("2") && outputResponse["2"].Value == "0")
                     {
-                        IsVehiclePresent = false;
-
-                        if (TerminalState == TerminalState.VehiclePresent)
-                        {
-                            VehiclePresenceNotDetected();
-                        }
+                        UpdateVehiclePresence(false);
                     }
                     else if ((outputResponse.Keys.Contains("1") && outputResponse["1"].Value == "1") ||
                     (outputResponse.Keys.Contains("2") && outputResponse["2"].Value == "1")) //IS VEHICLE DETECTED?
                     {
-                        IsVehiclePresent = true;
-
-                        if (TerminalState == TerminalState.StandBy)
-                        {
-                            VehiclePresenceDetected();
-                        }
+                        UpdateVehiclePresence(true);
                     }
-
-                    #endregion UPDATE TERMINAL STATE
                 }
             } catch (Exception ex)
             {
                 _log.Error("Error on picob_OnSerialDataReceived -- outputDeviceResponse: " + outputDeviceResponse, ex);
             }
+        }
+
+        private void UpdateVehiclePresence(bool vehiclePresent)
+        {
+            #region UPDATE TERMINAL STATE
+
+            //skip processing if we have these READ-ONLY states
+            if (TerminalState == TerminalState.PaymentInProgress)
+            {
+                return;
+            }
+
+            if (!vehiclePresent)
+            {
+                IsVehiclePresent = false;
+
+                if (TerminalState == TerminalState.VehiclePresent)
+                {
+                    VehiclePresenceNotDetected();
+                }
+            }
+            else
+            {
+                IsVehiclePresent = true;
+
+                if (TerminalState == TerminalState.StandBy)
+                {
+                    VehiclePresenceDetected();
+                }
+            }
+
+            #endregion UPDATE TERMINAL STATE
         }
 
         private void OnSerialErrorReceived(object sender, SerialErrorReceivedEventArgs e)
@@ -1773,6 +1785,57 @@ namespace AA.Pango.ServiceLayer.Controllers
             nanoCommandsThread.Start();
             */
             #endregion Process incoming information from nano device thread
+
+            #region Process vehicle presence from Linux Controller
+
+            if (HardwareSettings.UseLinuxController)
+            {
+                Thread picobStatusThread = new Thread(() =>
+                {
+                    var interval = int.Parse(ConfigurationManager.AppSettings["PicobStatusInterval"] ?? "500");
+                    string lastError = null;
+
+                    while (true)
+                    {
+                        try
+                        {
+                            var status = _linuxControllerPicob.GetStatus();
+                            string error = null;
+
+                            if (status == null)
+                                error = "LINUX CONTROLLER NOT AVAILABLE";
+                            else if (!status.Connected)
+                                error = "PICOB NOT CONNECTED TO LINUX CONTROLLER";
+                            else if (!status.C.HasValue)
+                                error = "NO PICOB STATUS FROM LINUX CONTROLLER";
+                            else
+                                UpdateVehiclePresence(status.C == 1);
+
+                            if (error != lastError)
+                            {
+                                if (error != null)
+                                    _log.Error(error + ", VEHICLE PRESENCE NOT UPDATED");
+                                else
+                                    _log.Info("Picob status from Linux Controller OK");
+                                lastError = error;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _log.Error("Error processing picob status", e);
+                        }
+                        finally
+                        {
+                            Thread.Sleep(interval);
+                        }
+                    }
+                });
+
+                picobStatusThread.IsBackground = true;
+                picobStatusThread.Start();
+            }
+
+            #endregion Process vehicle presence from Linux Controller
 
             if (PaymentServiceEnabled)
             {
