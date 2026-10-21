@@ -1,4 +1,5 @@
-﻿using AA.Pango.Model;
+﻿using AA.LinuxController;
+using AA.Pango.Model;
 using AA.Pango.ServiceLayer.ApiDto;
 using AA.Pango.ServiceLayer.ApiDtos;
 using AA.Pango.ServiceLayer.Commands;
@@ -82,6 +83,7 @@ namespace AA.Pango.ServiceLayer.Controllers
         private static TerminalController _instance = null;
         private static SerialPort _readerSerialPort = null;
         private SerialPort _picobSerialPort = null;
+        private LinuxControllerPicob _linuxControllerPicob = null;
         private static Terminal _terminal = null;
         private static volatile PaymentManagerAbstract _paymentProcessorService = null;
         private static decimal? _taxAmount = null;
@@ -181,7 +183,10 @@ namespace AA.Pango.ServiceLayer.Controllers
         private TerminalController(int terminalNumber, string readerComPort, int bauds = 9600)
         {
             InitReader(readerComPort, bauds);
-            InitPicob(ConfigurationManager.AppSettings["PicovComPort"], int.Parse(ConfigurationManager.AppSettings["PicovBauds"] ?? "9600"));
+            if (HardwareSettings.UseLinuxController)
+                _linuxControllerPicob = new LinuxControllerPicob();
+            else
+                InitPicob(ConfigurationManager.AppSettings["PicovComPort"], int.Parse(ConfigurationManager.AppSettings["PicovBauds"] ?? "9600"));
             _terminal = TerminalService.GetTerminal(terminalNumber.ToString());
         }
 
@@ -1049,11 +1054,7 @@ namespace AA.Pango.ServiceLayer.Controllers
                 else
                 {
                     _log.Debug("Ticket not found.");
-                    if (_picobSerialPort?.IsOpen == true)
-                    {
-                        _log.Debug($"ENTRA AL PUERTO - OPEN {info}.");
-                        _picobSerialPort.Write(InputCommands.SendTicketDeniedOnlineSignal, 0, InputCommands.OpenBarrier.Length);
-                    }
+                    SendTicketDeniedOnlineSignal(info);
                     TerminalState = TerminalState.TicketNotFound;
 
                     new Thread(new ThreadStart(() =>
@@ -1141,11 +1142,7 @@ namespace AA.Pango.ServiceLayer.Controllers
                     {
                         _log.Debug($"Online access denied for QR code {info}.");
 
-                        if (_picobSerialPort?.IsOpen == true)
-                        {
-                            _log.Debug($"ENTRA AL PUERTO - OPEN {info}.");
-                            _picobSerialPort.Write(InputCommands.SendTicketDeniedOnlineSignal, 0, InputCommands.OpenBarrier.Length);
-                        }
+                        SendTicketDeniedOnlineSignal(info);
 
                         TerminalState = TerminalState.TicketDenied;
 
@@ -1185,11 +1182,7 @@ namespace AA.Pango.ServiceLayer.Controllers
                     else
                     {
                         _log.Debug("date out of range, access denied.");
-                        if (_picobSerialPort?.IsOpen == true)
-                        {
-                            _log.Debug($"ENTRA AL PUERTO - OPEN {info}.");
-                            _picobSerialPort.Write(InputCommands.SendTicketDeniedOnlineSignal, 0, InputCommands.OpenBarrier.Length);
-                        }
+                        SendTicketDeniedOnlineSignal(info);
 
                         TerminalState = TerminalState.TicketDenied;
 
@@ -2048,7 +2041,9 @@ namespace AA.Pango.ServiceLayer.Controllers
 
         public void OpenBarrier()
         {
-            if (_picobSerialPort.IsOpen)
+            if (HardwareSettings.UseLinuxController)
+                OpenLinuxControllerBarrier();
+            else if (_picobSerialPort.IsOpen)
                 OpenPicob();
             else
             {
@@ -2078,6 +2073,42 @@ namespace AA.Pango.ServiceLayer.Controllers
                     _log.Error("Error processing picob serial port reconnection", e);
                     Utils.sendMail("PICOB CONNECTION ERROR", "PICOB CONNECTION ERROR, Picob serial port is closed and the reconnection has failed.");
                 }
+            }
+        }
+
+        private void OpenLinuxControllerBarrier()
+        {
+            if (_linuxControllerPicob.OpenBarrier())
+            {
+                _log.Debug("Open Barrier Command sent to Linux Controller");
+                return;
+            }
+
+            try
+            {
+                _log.Error("LINUX CONTROLLER COULD NOT OPEN THE BARRIER!!");
+                Utils.sendMail("PICOB CONNECTION ERROR", "PICOB CONNECTION ERROR, the Linux Controller could not open the barrier.");
+                if (ConfigurationManager.AppSettings["PicobErrorReboot"].Equals("1"))
+                {
+                    _log.Info("LANZANDO REINICIO");
+                    Process.Start(ConfigurationManager.AppSettings["RestarProcess"]);
+                }
+            }
+            catch (Exception e)
+            {
+                _log.Error("Error processing Linux Controller barrier failure", e);
+            }
+        }
+
+        private void SendTicketDeniedOnlineSignal(string info)
+        {
+            if (HardwareSettings.UseLinuxController)
+                return;
+
+            if (_picobSerialPort?.IsOpen == true)
+            {
+                _log.Debug($"ENTRA AL PUERTO - OPEN {info}.");
+                _picobSerialPort.Write(InputCommands.SendTicketDeniedOnlineSignal, 0, InputCommands.OpenBarrier.Length);
             }
         }
 
