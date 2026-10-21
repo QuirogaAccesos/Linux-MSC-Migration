@@ -43,6 +43,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `AA.PangoApp.Payments.AMP` references `AMPSerialAdapter.dll` from `..\..\..\AMP\LibAMP1.2.0\`, a path outside the repo. A copy of the DLL is in `libs/`. `AA.Pango.App.Exit` references the AMP project's output as a loose DLL at `..\AA.PangoApp.Payments.AMP\bin\Debug\...` (not a `ProjectReference`), so build AMP first, in Debug.
 - Both apps read `App.config` from the exe folder and load `styles.dat`, `en.dat`, `es.dat`, `languagesSupported.xml` by relative file name, so the working directory must be the exe folder.
 
+## Code style (match it in new Pango code)
+
+Surveyed 2026-10-21 over the hand-written `.cs` files (Designer files excluded). New code in Pango should be indistinguishable from this, so it is written plainer than usual:
+
+- Comments are rare. Most comment lines in the solution are commented-out code; real prose comments are a few per file, and DTOs, small services, `HardResetService` and the payment DTOs have none. Short inline notes are typical: `//IS VEHICLE DETECTED?`, `//115200`, `//A`, often without a space after `//`, uppercase or lowercase, English or Spanish (recent additions such as the AMP approval rule and `PaymentProcessor-AMP-BufferLength` are Spanish, written without accents). A longer comment appears only where the reason is not obvious from the code. Write no comment where the surrounding code would have none; anything worth recording that the original authors would not put in the code goes in this file or `MIGRATION_PLAN.md`.
+- XML doc comments (`/// <summary>`) appear only on a few public service methods, often as empty stubs. Do not add them to new classes.
+- `#region` blocks are used in `TerminalController` (`#region Picob serial port functions`, `#region General configuration variables`) and `PaymentManagerAbstract` (`#region Main Methods`, `#region Event Handlers`); small classes have none.
+- Language level is C# 7.3 (no `LangVersion` in any csproj, .NET Framework 4.8): no nullable reference types, switch expressions, `using var`, `??=`, target-typed `new` or file-scoped namespaces. Tuples and `out var` are fine.
+- Allman braces, 4 spaces, block namespaces. `using` lines are loosely ordered (project namespaces and `log4net` first, then `System.*`, not strictly sorted). Files are UTF-8 with BOM (225 of 258) and LF line endings in this repo.
+- Logging is log4net: `private ILog log = LogManager.GetLogger("Name");` (or `_log`, or `typeof(...)`), messages built with `+` concatenation (125 uses against 17 interpolated strings in ServiceLayer and the payment projects), uppercase for failures (`"CANNOT CONNECT TO PICOB DEVICE!"`), the exception appended (`log.Error("AMP EX Connect:" + ex)`) or passed as the second argument to `Fatal`.
+- Settings are read inline with `ConfigurationManager.AppSettings["Key"] ?? "default"` and `int.Parse` / `bool.Parse`, often into `static` fields at class level. Errors are caught, logged and turned into a result object (`GeneratePaymentResponse` with `HasError`) rather than thrown to the UI.
+- Naming is inconsistent (`IsPaymetSend`, `picob_OnSerialDataReceived`, `sendMail`); match the class being edited, PascalCase for new public members.
+- `App.config` groups keys under uppercase Spanish comments (`<!--DATOS DE CONEXION A LA PICOV-->`) with short trailing comments for allowed values (`<!--Serial/Output-->`, `<!--V2, V3 ...-->`); indentation mixes tabs and spaces.
+- Projects are old-style csproj with an explicit `Compile Include` per file, `packages.config` and `HintPath`s into `..\packages\`. Generated `Properties\AssemblyInfo.cs` is the Visual Studio template, comments included.
+
 ## Solution layout
 
 Ten projects; the dependency direction is `App / App.Exit -> UI.Utils, ServiceLayer -> Model, Payments.*`.

@@ -48,7 +48,7 @@ Framing is unchanged: 4-byte big-endian length plus UTF-8 text. Pango (.NET Fram
 - One branch and one pull request per task, created from the latest `main` and named `claude/<task id>-<task title>`: lowercase, hyphens, the words of the task's bold title without the size, for example `claude/b1-config-plumbing`, `claude/b3-picobsession`, `claude/e1-parsoclient-project`. Work that is not a task (docs, rule changes) gets its own small branch. Do not start a task on a branch whose pull request is open.
 - New Parso settings are optional with defaults. Existing keys are read with a bare `int.Parse` and a missing one aborts startup; new ones must not.
 - Each task adds the config keys it introduces to the config files it needs, with values that keep Windows behavior unchanged.
-- Code follows the surrounding style and comment density. No notes or files inside the project folders.
+- Code follows the surrounding style and comment density (for Pango see "Code style" in `CLAUDE.md`: few comments, C# 7.3, log4net with string concatenation). Explanations that the original code would not carry go in this file or `CLAUDE.md`. No notes or files inside the project folders.
 - Progress: tick the task's checkbox below in the same commit that completes it, and add a dated line to the decision log (section 8) for any result or decision that later tasks rely on.
 
 ## 5. Tasks
