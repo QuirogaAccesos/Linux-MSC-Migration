@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="HardwareSettings.cs" />
     <Compile Include="LinuxControllerClient.cs" />
+    <Compile Include="LinuxControllerPaymentManager.cs" />
     <Compile Include="LinuxControllerPicob.cs" />
     <Compile Include="LinuxControllerPicobStatus.cs" />
     <Compile Include="LinuxControllerResponse.cs" />
@@ -58,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AA.PangoApp.Payments.Interface\AA.PangoApp.Payments.Interface.csproj">
+      <Project>{331d6129-0916-4f02-b70f-6b2279f8f156}</Project>
+      <Name>AA.PangoApp.Payments.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

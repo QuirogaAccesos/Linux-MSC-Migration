@@ -251,6 +251,17 @@ namespace AA.Pango.ServiceLayer.Controllers
                         }
                     }
                 }
+                else if (ConfigurationManager.AppSettings["PaymentProcessor"].Equals("LinuxController"))
+                {
+                    if (_paymentProcessorService == null)
+                    {
+                        var validator = ConfigurationManager.AppSettings["PaymentProcessorService-LinuxController"];
+                        if (!string.IsNullOrEmpty(validator))
+                        {
+                            _paymentProcessorService = (PaymentManagerAbstract)Activator.CreateInstance(Type.GetType(validator));
+                        }
+                    }
+                }
                 else
                 {
                     if (_paymentProcessorService == null)
