@@ -1,4 +1,5 @@
-﻿using AA.Pango.Model;
+﻿using AA.LinuxController;
+using AA.Pango.Model;
 using AA.Pango.ServiceLayer;
 using AA.Pango.ServiceLayer.ApiDtos;
 using AA.ParkingStation.Service;
@@ -35,6 +36,7 @@ namespace AA.Pango.RestApi.Controllers
 
         private static readonly byte[] ResetCommand = { 0x45 }; //E //RESET
         private static ILog Log = LogManager.GetLogger(typeof(RestController));
+        private static LinuxControllerPrinter linuxControllerPrinter = new LinuxControllerPrinter();
 
         /// <summary>
         /// Forces Opening a Barrier for a terminal
@@ -475,6 +477,27 @@ namespace AA.Pango.RestApi.Controllers
             {
 
                 Log.Debug("Printing ticket...");
+
+                if (HardwareSettings.UseLinuxController)
+                {
+                    var variables = new Dictionary<string, string>
+                    {
+                        { "Header", string.Join("\n", PrinterService.GetTicketHeader().Select(x => x.TrimEnd('\r'))) },
+                        { "TicketId", transientId },
+                        { "Date", DateTime.Now.ToString("MMM dd, yyyy hh:mm tt") },
+                        { "Footer", string.Join("\n", PrinterService.GetTicketFooter().Select(x => x.TrimEnd('\r'))) },
+                        { "QR", PrinterService.generateTicketQR(int.Parse(transientId)) }
+                    };
+
+                    if (!linuxControllerPrinter.Print("B", variables))
+                    {
+                        Log.Error("PRINTER ERROR - Linux Controller could not print the ticket");
+                        return Ok(new { Success = false, Message = "Linux Controller could not print the ticket" });
+                    }
+
+                    Log.DebugFormat("Ticket printed successfully");
+                    return Ok(new { Success = true, Message = "Ticket printed successfully" });
+                }
 
                 Bitmap bitmap = null;
                 string[] header = PrinterService.GetTicketHeader();

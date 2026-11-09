@@ -1,4 +1,5 @@
-﻿using AA.Pango.Model;
+﻿using AA.LinuxController;
+using AA.Pango.Model;
 using AA.Pango.ServiceLayer;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,21 @@ namespace AA.Pango.RestApi.Services
     {
         private static readonly byte[] ResetCommand = { 0x48 };//H NEW RESET             //OLD// E 0x45 //RESET
         private static ILog Log = LogManager.GetLogger(typeof(RestController));
+        private static LinuxControllerPicob linuxControllerPicob = new LinuxControllerPicob();
         public static async void HardReset()
         {
             try
             {
                 Thread.Sleep(2000);
+                if (HardwareSettings.UseLinuxController)
+                {
+                    if (linuxControllerPicob.HardReset())
+                        Log.Info("HardReset -- Successfully Hard Reset through Linux Controller");
+                    else
+                        Log.Error("HardReset -- LINUX CONTROLLER DID NOT ACCEPT THE HARD RESET");
+                    return;
+                }
+
                 int bauds = int.Parse(ConfigurationManager.AppSettings["PicovBauds"] ?? "9600");
                 SerialPort _picobSerialPort = null;
                 _picobSerialPort = new SerialPort
