@@ -54,6 +54,7 @@
     <Compile Include="LinuxControllerPaymentManager.cs" />
     <Compile Include="LinuxControllerPicob.cs" />
     <Compile Include="LinuxControllerPicobStatus.cs" />
+    <Compile Include="LinuxControllerPrinter.cs" />
     <Compile Include="LinuxControllerResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
