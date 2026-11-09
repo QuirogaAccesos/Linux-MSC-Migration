@@ -1,4 +1,5 @@
-﻿using AA.Pango.Model;
+﻿using AA.LinuxController;
+using AA.Pango.Model;
 using AA.Pango.ServiceLayer.ApiDto;
 using AA.Pango.ServiceLayer.ApiDtos;
 using AA.ParkingStation.Service;
@@ -29,6 +30,8 @@ namespace AA.Pango.ServiceLayer
         private static ILog log = LogManager.GetLogger(typeof(PangoService));
 
         public static Dictionary<string, string> TicketInfo = new Dictionary<string, string>();
+
+        private static LinuxControllerPrinter linuxControllerPrinter = new LinuxControllerPrinter();
 
         public static CheckQRCodeResponse CheckQR(CheckQRCodeRequest requestData)
         {
@@ -605,6 +608,23 @@ namespace AA.Pango.ServiceLayer
             return TicketInfo.ContainsKey("Footer") ? TicketInfo["Footer"].Split('\n') : new string[0];
         }
 
+        private static void PrintTicketLinuxController(string transientId, string ticketQR)
+        {
+            var variables = new Dictionary<string, string>
+            {
+                { "Header", string.Join("\n", GetTicketHeader().Select(x => x.TrimEnd('\r'))) },
+                { "TicketId", transientId },
+                { "Date", DateTime.Now.ToString("MMM dd, yyyy hh:mm tt") },
+                { "Footer", string.Join("\n", GetTicketFooter().Select(x => x.TrimEnd('\r'))) },
+                { "QR", ticketQR }
+            };
+
+            if (linuxControllerPrinter.Print("B", variables))
+                log.DebugFormat("Ticket printed successfully");
+            else
+                log.Error("PRINTER ERROR - Linux Controller could not print the ticket");
+        }
+
         public static void PrintTicketQR(string installationId, string terminalId, string transientId, string ticketQR, bool updateTransient, bool openBarrier)
         {
             if (string.IsNullOrEmpty(ticketQR))
@@ -615,7 +635,12 @@ namespace AA.Pango.ServiceLayer
 
             try
             {
-                if (ConfigurationManager.AppSettings["PostPrintTicket"] == "true")
+                if (HardwareSettings.UseLinuxController)
+                {
+                    log.Debug("Printing ticket through Linux Controller...");
+                    PrintTicketLinuxController(transientId, ticketQR);
+                }
+                else if (ConfigurationManager.AppSettings["PostPrintTicket"] == "true")
                 {
                     var url = ConfigurationManager.AppSettings["RestApiUrl"] + "PrintTicket?terminalId=" + terminalId + "&transientId=" + transientId;
                     var client = new RestClient(url);
