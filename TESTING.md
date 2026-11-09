@@ -145,7 +145,7 @@ Add any other file you touched to the `git restore` line. Report the results so 
 
 Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before any work on phases F and G. It needs task F1 (`AttachConsole` only on Windows): without it Entry stops on its first line under Mono, before any window opens. Build from a `main` that has F1.
 
-1. On Windows, build Debug as usual (`CLAUDE.md`, Build), then copy the whole folder `PangoAppQR-develop\AA.Pango.App\bin\Debug\` to the Linux machine, for example to `~/lg1/entry/`. It holds `AA.Pango.App.exe`, the DLLs, `AA.Pango.App.exe.config` and the `.dat` / `.xml` files the app loads by relative name. Running the Windows build answers the questions of the spike; building on Linux is step 6 and optional.
+1. On Windows, build Debug as usual (`CLAUDE.md`, Build), pack the output with `tar -czf "$env:USERPROFILE\Desktop\entry-debug.tar.gz" -C AA.Pango.App\bin\Debug .` (not a Windows zip, which can store backslashes in paths), copy it to the Linux machine (AnyDesk file transfer worked) and unpack it with `mkdir -p ~/lg1/entry && tar -xzf ~/Downloads/entry-debug.tar.gz -C ~/lg1/entry`. It holds `AA.Pango.App.exe`, the DLLs, `AA.Pango.App.exe.config` and the `.dat` / `.xml` files the app loads by relative name. Running the Windows build answers the questions of the spike; building on Linux is step 6 and optional.
 
 2. On Linux, install Mono, the drawing library and fonts (Debian / Ubuntu names; other distributions have the same packages under similar names):
 
@@ -161,7 +161,8 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
 
    - `connectionStrings`, `LiteDB`: `Filename=/home/<user>/lg1/entry/pangodb.db;Connection=shared;` (the committed value is a Windows path).
    - `log4net`, file appender: `<file value="logs/" />` (the committed `logs\` would become a file name with a backslash).
-   - Keep `ReaderSource` `Output` and `HardwareMode` `Direct` for the first run. The Picob does not exist on `COM4`, so expect `CANNOT CONNECT TO PICOB DEVICE!` or `CANNOT CONNECT TO OUTPUT DEVICE!` in the log and a terminal that stays in standby. Entry has no `UseFakePos`; it only matters for Exit.
+   - Both with `sed`, from `~/lg1/entry`: `sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/entry/pangodb.db#' AA.Pango.App.exe.config` and `sed -i 's#<file value="logs\\" />#<file value="logs/" />#' AA.Pango.App.exe.config`.
+   - Set `HardwareMode` to `LinuxController` and keep `ReaderSource` `Output`: in `Direct` mode Mono throws on `SerialPort.ReceivedBytesThreshold` and the app never finishes starting (A3). Set `CheckLoopDetector` to `false` unless Parso and a Picob are running, or the Entry buttons only show the vehicle-not-present panel. Entry has no `UseFakePos`; it only matters for Exit.
 
 4. Run it from its folder, because it loads `styles.dat`, `en.dat`, `es.dat` and `languagesSupported.xml` by relative name:
 
@@ -170,7 +171,7 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
    mono --debug AA.Pango.App.exe 2>&1 | tee spike-run1.txt
    ```
 
-   Close the app with Ctrl+C in the terminal if the window has no way out. Stack traces may lack line numbers: Mono does not read the Windows PDB files of a Visual Studio Debug build.
+   Close the app with Ctrl+C in the terminal if the window has no way out; if it is wedged (a dialog crashed), use `pkill -9 -f AA.Pango.App.exe` from another terminal. Move the previous log away (`mv logs/<date>.log logs/run1.log`) before a new run so each run has its own file. Stack traces may lack line numbers: Mono does not read the Windows PDB files of a Visual Studio Debug build.
 
 5. What to report (send `spike-run1.txt`, the newest file in `~/lg1/entry/logs/`, and screenshots):
 
@@ -195,4 +196,4 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
 
    Build only the Entry project: the RestApi needs IIS build targets and the Exit project needs the AMP DLL path. Report the errors if it fails; this has not been tried.
 
-The results go into the decision log of `MIGRATION_PLAN.md`, and they decide the scope of F2 to F5 and of phase G.
+The results go into the decision log of `MIGRATION_PLAN.md`. The first run (2026-11-09) is recorded there; known problems until F4, F6 and F7 are done: the window stays at 1600x900, the on-screen keyboard lags, and the plate dialog wedges the app when its 10 s keyboard timeout runs out.
