@@ -277,6 +277,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AA.LinuxController\AA.LinuxController.csproj">
+      <Project>{bb259e2d-bb43-4665-8e62-5909b6bd6219}</Project>
+      <Name>AA.LinuxController</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AA.Pango.Model\AA.Pango.Model.csproj">
       <Project>{667b3b9e-8101-4ace-859f-cccda41d1686}</Project>
       <Name>AA.Pango.Model</Name>
