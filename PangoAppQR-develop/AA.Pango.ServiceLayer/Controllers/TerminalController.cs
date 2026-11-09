@@ -84,6 +84,7 @@ namespace AA.Pango.ServiceLayer.Controllers
         private static SerialPort _readerSerialPort = null;
         private SerialPort _picobSerialPort = null;
         private LinuxControllerPicob _linuxControllerPicob = null;
+        private LinuxControllerPrinter _linuxControllerPrinter = null;
         private static Terminal _terminal = null;
         private static volatile PaymentManagerAbstract _paymentProcessorService = null;
         private static decimal? _taxAmount = null;
@@ -184,7 +185,10 @@ namespace AA.Pango.ServiceLayer.Controllers
         {
             InitReader(readerComPort, bauds);
             if (HardwareSettings.UseLinuxController)
+            {
                 _linuxControllerPicob = new LinuxControllerPicob();
+                _linuxControllerPrinter = new LinuxControllerPrinter();
+            }
             else
                 InitPicob(ConfigurationManager.AppSettings["PicovComPort"], int.Parse(ConfigurationManager.AppSettings["PicovBauds"] ?? "9600"));
             _terminal = TerminalService.GetTerminal(terminalNumber.ToString());
@@ -505,6 +509,12 @@ namespace AA.Pango.ServiceLayer.Controllers
                 return;
             }
 
+            if (HardwareSettings.UseLinuxController)
+            {
+                PrintInvoiceLinuxController(transaction);
+                return;
+            }
+
             try
             {
                 _log.Debug("Printing invoice...");
@@ -649,6 +659,45 @@ namespace AA.Pango.ServiceLayer.Controllers
                 sbTextoFactura.Clear();
 
                 _log.DebugFormat("Invoice #{0} printed successfully.", transaction.InvoiceConsecutive);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Cannot print invoice", ex);
+            }
+        }
+
+        private void PrintInvoiceLinuxController(Payment transaction)
+        {
+            try
+            {
+                _log.Debug("Printing invoice through Linux Controller...");
+
+                var amounts = new List<string>();
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ReceiptAmount"]))
+                    amounts.Add(ConfigurationManager.AppSettings["ReceiptAmount"] + "$" + transaction.TotalAmount.ToString("####0.00"));
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ReceiptFee"]))
+                    amounts.Add(ConfigurationManager.AppSettings["ReceiptFee"] + "$" + transaction.TransactionFeeAmount.ToString("####0.00"));
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["ReceiptTotal"]))
+                    amounts.Add(ConfigurationManager.AppSettings["ReceiptTotal"] + "$" + transaction.TotalAmount.ToString("####0.00"));
+
+                var variables = new Dictionary<string, string>
+                {
+                    { "Header", string.Join("\n", GetInvoiceHeader()) },
+                    { "Title", ConfigurationManager.AppSettings["ReceiptTitle"] ?? "" },
+                    { "ReceiptNumber", ConfigurationManager.AppSettings["ReceiptNumber"] + transaction.TicketVisibleNumber },
+                    { "AuthNumber", ConfigurationManager.AppSettings["ReceiptInvoiceNumber"] + transaction.InvoiceConsecutive },
+                    { "Amounts", string.Join("\n", amounts) },
+                    { "Date", ConfigurationManager.AppSettings["ReceiptDate"] + transaction.PaymentDate.ToString(ConfigurationManager.AppSettings["ReceiptDateFormat"]) },
+                    { "Footer", string.Join("\n", GetInvoiceFooter()) }
+                };
+
+                if (bool.Parse(ConfigurationManager.AppSettings["QrPrint"] ?? "false") && !string.IsNullOrEmpty(TicketQrText))
+                    variables.Add("QR", TicketQrText);
+
+                if (_linuxControllerPrinter.Print("C", variables))
+                    _log.DebugFormat("Invoice #{0} printed successfully.", transaction.InvoiceConsecutive);
+                else
+                    _log.Error("PRINTER ERROR - Linux Controller could not print the invoice");
             }
             catch (Exception ex)
             {
