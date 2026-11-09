@@ -138,7 +138,7 @@ Known traps:
 - Serial port names are built as `"COM" + n` in several places (`GlobalComPaymentManager`, AMP `DeviceCommands`, `TerminalController`, `HardResetService`) and the payment request DTO carries `ComPort` as an `int`. Linux needs `/dev/tty*` names. Mono's `SerialPort` also behaves differently, and both vendor DLLs depend on `System.IO.Ports` semantics (`DataReceived`, 115200 baud).
 - `Process.Start` of Windows scripts: `RestarProcess` (`TerminalController`, `GlobalComPaymentManager`), and `RebootTerminal` / `CloseApp` in `RestController`.
 - Printing uses `System.Drawing.Printing.PrintDocument` (`PangoService.PrintTicketQR`, `TerminalController.PrintInvoice`, `RestController.PrintTicket`), which assumes a Windows default printer. `RoundedButton` uses GDI+ regions, and fonts are hard-coded Calibri / Microsoft Sans Serif in the Designer files.
-- Only P/Invoke in the solution: `kernel32!AttachConsole` in both `Program.cs`.
+- Only P/Invoke in the solution: `kernel32!AttachConsole` in both `Program.cs`. Since task F1 it runs only on Windows (`PlatformID.Win32NT`) and a failure is ignored.
 - `AA.Pango.RestApi` depends on IIS, System.Web, MVC 5, Swashbuckle.Core and WebActivatorEx. It has no authentication, and Swagger is enabled. It exposes barrier open, forced reboot and hard-reset endpoints.
 - Windows paths in configs: the LiteDB file, `logs\`, `C:\AccesosAutomaticos\...`, logo paths. The AMP adapter DLL writes `\AMPLog\amppinpadsemi.log` with literal backslashes, which may yield a badly named file on Linux.
 - Picob input parsing (streaming firmware only) splits on `Environment.NewLine`, so it breaks on Linux if the device sends `\r\n`. The barcode reader uses `Encoding.Default`.
