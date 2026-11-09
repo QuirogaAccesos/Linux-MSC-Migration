@@ -27,7 +27,16 @@ namespace AA.Pango.App
         private static void Main()
         {
             // redirect console output to parent process; must be before any calls to Console.WriteLine()
-            AttachConsole(ATTACH_PARENT_PROCESS);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                try
+                {
+                    AttachConsole(ATTACH_PARENT_PROCESS);
+                }
+                catch (Exception)
+                {
+                }
+            }
 
             _log.Debug("*********************************************************");
             _log.Debug("*************** PANGO Application started ***************");
