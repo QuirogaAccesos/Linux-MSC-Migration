@@ -1,5 +1,6 @@
 ﻿using AA.PangoApp.Payments.Interface;
 using AA.PangoApp.Payments.Interface.Dtos;
+using AA.PangoApp.Payments.Interface.Helpers;
 using AA.PangoApp.Payments.Interface.Notifications;
 using CCI.Globalcom.GlobalcomRetailProtocol;
 using log4net;
@@ -213,7 +214,7 @@ namespace AA.PangoApp.Payments.GlobalCom
                         "CRITICAL ERROR LG1 - GLOBALCOM NOT WORKING - POWER OFF y POWE BACK ON",
                         "CRITICAL ERROR LG1 - Installation " + ConfigurationManager.AppSettings["InstallationId"] + ", TerminalId " + ConfigurationManager.AppSettings["TerminalId"] + " - ,  POWER OFF y POWE BACK ON - Error occured when processing the EMV payment - " + ex.Message);
 
-                    Process.Start(ConfigurationManager.AppSettings["RestarProcess"]);
+                    ProcessLauncher.Start(ConfigurationManager.AppSettings["RestarProcess"]);
                     log.Info("LANZANDO REINICIO " + ConfigurationManager.AppSettings["RestarProcess"]);
                 }
 

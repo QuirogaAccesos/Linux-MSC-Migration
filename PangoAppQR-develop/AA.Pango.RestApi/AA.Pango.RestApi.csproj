@@ -289,6 +289,10 @@
       <Project>{ad9d41ea-780b-4cf1-9691-c39a47a2e55f}</Project>
       <Name>AA.Pango.ServiceLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AA.PangoApp.Payments.Interface\AA.PangoApp.Payments.Interface.csproj">
+      <Project>{331d6129-0916-4f02-b70f-6b2279f8f156}</Project>
+      <Name>AA.PangoApp.Payments.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

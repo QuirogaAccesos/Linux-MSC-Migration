@@ -2,6 +2,7 @@
 using AA.Pango.Model;
 using AA.Pango.ServiceLayer;
 using AA.Pango.ServiceLayer.ApiDtos;
+using AA.PangoApp.Payments.Interface.Helpers;
 using AA.ParkingStation.Service;
 using log4net;
 using Swashbuckle.Swagger;
@@ -367,7 +368,7 @@ namespace AA.Pango.RestApi.Controllers
             Log.Info("PostForceReboot - PARAM: installationId:" + installationId + " - terminalId" + terminalId);
             try
             {
-                Process.Start(ConfigurationManager.AppSettings["RebootTerminal"]);
+                ProcessLauncher.Start(ConfigurationManager.AppSettings["RebootTerminal"]);
                 return Ok(new { Success = true, Message = "Launched successfully rebooted" });                
             }
             catch (Exception ex)
@@ -442,7 +443,7 @@ namespace AA.Pango.RestApi.Controllers
                 if (terminal != null)
                 {
                     Log.Info("HardReset -- Close APP");
-                    Process.Start(ConfigurationManager.AppSettings["CloseApp"]);
+                    ProcessLauncher.Start(ConfigurationManager.AppSettings["CloseApp"]);
                     Thread.Sleep(2000);
                     Task.Run(() => HardResetService.HardReset());
                     Log.Info("HardReset -- OK");

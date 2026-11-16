@@ -6,6 +6,7 @@ using AA.Pango.ServiceLayer.Commands;
 using AA.Pango.ServiceLayer.Helpers;
 using AA.PangoApp.Payments.GlobalCom;
 using AA.PangoApp.Payments.Interface;
+using AA.PangoApp.Payments.Interface.Helpers;
 using AA.PangoApp.Payments.Interface.Dtos;
 using AA.ParkingStation.Service;
 using log4net;
@@ -2187,7 +2188,7 @@ namespace AA.Pango.ServiceLayer.Controllers
                         if (ConfigurationManager.AppSettings["PicobErrorReboot"].Equals("1"))
                         {
                             _log.Info("LANZANDO REINICIO");
-                            Process.Start(ConfigurationManager.AppSettings["RestarProcess"]);
+                            ProcessLauncher.Start(ConfigurationManager.AppSettings["RestarProcess"]);
                         }
                     }
                 }
@@ -2214,7 +2215,7 @@ namespace AA.Pango.ServiceLayer.Controllers
                 if (ConfigurationManager.AppSettings["PicobErrorReboot"].Equals("1"))
                 {
                     _log.Info("LANZANDO REINICIO");
-                    Process.Start(ConfigurationManager.AppSettings["RestarProcess"]);
+                    ProcessLauncher.Start(ConfigurationManager.AppSettings["RestarProcess"]);
                 }
             }
             catch (Exception e)
