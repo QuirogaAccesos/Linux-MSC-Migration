@@ -145,7 +145,7 @@ Known traps:
 - `AA.Pango.RestApi` depends on IIS, System.Web, MVC 5, Swashbuckle.Core and WebActivatorEx. It has no authentication, and Swagger is enabled. It exposes barrier open, forced reboot and hard-reset endpoints.
 - Windows paths in configs: the LiteDB file, `C:\AccesosAutomaticos\...`, logo paths (no code builds paths; the Linux value of each setting is listed in the F3 entry of `MIGRATION_PLAN.md`). Since F3 the log4net folder is `logs/` in all three configs. The AMP adapter DLL writes `\AMPLog\amppinpadsemi.log` with literal backslashes, which may yield a badly named file on Linux.
 - Picob input parsing (streaming firmware only) splits on `Environment.NewLine`, so it breaks on Linux if the device sends `\r\n`. The barcode reader uses `Encoding.Default`.
-- LiteDB shared mode uses an OS-level mutex whose behavior under Mono / .NET on Linux has to be verified.
+- LiteDB shared mode uses an OS-level named mutex, which Mono does not share between processes; two Mono processes writing one LiteDB file corrupted it (F5). On Linux only the kiosk app may open `pangodb.db`.
 - Newtonsoft.Json is 13.0.1 in most projects and 13.0.3 in AMP; ZXing.Net is 0.16.8 vs 0.16.9 across `packages.config` files (binding redirect concern).
 - Tuple syntax (`var (a, b)`) needs a Roslyn-based compiler (C# 7+), not Mono's `mcs`.
 
