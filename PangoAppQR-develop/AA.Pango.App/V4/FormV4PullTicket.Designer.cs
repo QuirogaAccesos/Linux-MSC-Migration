@@ -620,6 +620,7 @@
             this.Text = "Pango Terminal - Entry";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.FormV4PullTicket_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tableLayoutFoot.ResumeLayout(false);

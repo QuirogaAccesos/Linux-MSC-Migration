@@ -513,6 +513,7 @@ namespace AA.Pango.App
             {
                 var form = new FormV4PullTicket();
                 form.ShowDialog(this);
+                form.Dispose();
             }
         }
 
@@ -555,6 +556,7 @@ namespace AA.Pango.App
             {
                 var form = new FormV4CheckPermitPlate();
                 form.ShowDialog(this);
+                form.Dispose();
             }
         }
 
