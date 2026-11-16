@@ -221,7 +221,7 @@ Same machine and Mono packages as section 9. Exit has not run under Mono before.
 
    The `grep` must show the Linux LiteDB path, `LinuxController` twice, `UseFakePos` `true` and `<file value="logs/" />`. `UseFakePos` approves every payment without a card reader; `PaymentProcessor=LinuxController` keeps the AMP driver (a COM port) from loading.
 
-3. Run it like Entry: `cd ~/lg1/exit && mono --debug AA.Pango.App.exe 2>&1 | tee exit-run1.txt` (`pkill -9 -f AA.Pango.App.exe` from another terminal if it wedges). Judge timing on site, not through AnyDesk.
+3. Run it like Entry, with the X input method off: `cd ~/lg1/exit && MONO_WINFORMS_XIM_STYLE=disabled mono --debug AA.Pango.App.exe 2>&1 | tee exit-run1.txt`. Without the variable Exit aborted in libX11 after a few presses of the start button (decision log, 2026-11-16) (`pkill -9 -f AA.Pango.App.exe` from another terminal if it wedges). Judge timing on site, not through AnyDesk.
 
 4. What to try and report (`exit-run1.txt`, the newest file in `~/lg1/exit/logs/`, screenshots):
 
