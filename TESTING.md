@@ -196,4 +196,4 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
 
    Build only the Entry project: the RestApi needs IIS build targets and the Exit project needs the AMP DLL path. Report the errors if it fails; this has not been tried.
 
-The results go into the decision log of `MIGRATION_PLAN.md`. The first run (2026-11-09) is recorded there; known problems until F4 and F7 are done: the window stays at 1600x900 and the on-screen keyboard lags. After F6 the plate dialog should close cleanly when its 10 s keyboard timeout runs out (press the plate/phone button and wait without typing: the app must return to the main screen and keep working).
+The results go into the decision log of `MIGRATION_PLAN.md`. The first run (2026-11-09) is recorded there; known problem until F4 is done: the window stays at 1600x900. Judge the speed of the on-screen keyboards on site, not through AnyDesk, which delays every screen update by about a second (F7). After F6 the plate dialog should close cleanly when its 10 s keyboard timeout runs out (press the plate/phone button and wait without typing: the app must return to the main screen and keep working).
