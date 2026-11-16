@@ -35,6 +35,11 @@ namespace AA.Pango.App
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Init();
+        }
+
+        private void FormV4CheckPermitPlate_Shown(object sender, EventArgs e)
+        {
+            this.OpenKeyboard();
 
             Thread _thread = new Thread(() =>
             {
@@ -47,11 +52,6 @@ namespace AA.Pango.App
             });
             _thread.SetApartmentState(ApartmentState.STA);
             _thread.Start();
-        }
-
-        private void FormV4CheckPermitPlate_Shown(object sender, EventArgs e)
-        {
-            this.OpenKeyboard();
         }
 
         private void Init()
