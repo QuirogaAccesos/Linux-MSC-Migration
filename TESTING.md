@@ -253,3 +253,49 @@ Checks whether LiteDB's `Connection=shared` mode keeps two Mono processes from w
    Safe result: `mutex try: acquired=False -> shared between processes`, both writers with 0 errors, and `check` with 2000 documents for each writer and `total: 4000`. Anything else (`acquired=True`, errors, fewer documents, or `check FAILED`) means two Mono processes cannot share one LiteDB file. Run the second line two or three times; a race does not show up on every run.
 
 4. Send the whole terminal output. The result goes into the F5 entry of the decision log and decides G2 (whether the RestApi can be a second process on the same LiteDB file).
+
+## 12. Parso on the Linux kiosk (task H2)
+
+The Linux kiosk (the Debian machine, swapped in on 2026-11-16) runs Parso with `deploy/parso/appsettings.json` from the repo root instead of the committed `appsettings.json`. That profile keeps the Picob port open with DTR and RTS off, sends no clock command, listens only on 127.0.0.1, prints to the CUPS queue `POS58`, and names the serial devices by USB port:
+
+| Device | Linux name (by USB port) | Today |
+|---|---|---|
+| Picob (Silicon Labs CP2102N) | `/dev/serial/by-path/pci-0000:00:14.0-usb-0:4.2:1.0-port0` | `ttyUSB0` |
+| Card reader (Prolific PL2303) | `/dev/serial/by-path/pci-0000:00:14.0-usb-0:4.3:1.0-port0` | `ttyUSB1` |
+
+The `by-path` names stay the same across reboots and replugs as long as each cable stays in the same USB port. If a cable moves, run `ls -l /dev/serial/by-path/` and update the profile. The scanner (`/dev/ttyACM0`) is not used by Parso.
+
+1. On Windows, from the repo root (GitHub Desktop on `main`), publish Parso and copy the profile and the client next to it:
+
+   ```powershell
+   dotnet publish Parso-main\Parso\Parso -c Release -o "$env:USERPROFILE\Desktop\parso-linux"; Copy-Item deploy\parso\appsettings.json, tools\parso_client.py "$env:USERPROFILE\Desktop\parso-linux\"; tar -czf "$env:USERPROFILE\Desktop\parso-linux.tar.gz" -C "$env:USERPROFILE\Desktop\parso-linux" .
+   ```
+
+   The publish is framework-dependent (the Debian machine has the .NET 8 runtime), and the copy of the profile replaces the committed `appsettings.json` in the output.
+
+2. On Debian, stop any Parso that is running, unpack into its own folder and start it:
+
+   ```bash
+   pkill -x TREA; pkill -f 'dotnet TREA.dll'; rm -rf ~/lg1/parso && mkdir -p ~/lg1/parso && tar -xzf ~/Downloads/parso-linux.tar.gz -C ~/lg1/parso && cd ~/lg1/parso && grep -n '"ListenAddress"\|"PersistentConnection"\|"DtrEnable"\|"RtsEnable"\|"AutoSetTimeEnabled"\|"PrinterName"' appsettings.json
+   dotnet TREA.dll
+   ```
+
+   The `grep` must show `127.0.0.1`, `TRUE` for `PersistentConnection`, `FALSE` for the other three, and `POS58`. Leave this terminal open; Parso logs to it and to `~/lg1/parso/logs/`. Wait for `Server started and listening on 127.0.0.1:1994`.
+
+3. In a second terminal, the checks of sections 4, 5 and 6 with the Python client (`cd ~/lg1/parso` first):
+
+   ```bash
+   python3 parso_client.py '{"2":"STATUS"}'
+   python3 parso_client.py '{"2":"C"}'
+   python3 parso_client.py '{"2":"A"}'
+   python3 parso_client.py '{"1":{"A":{"TO":"1500","ST":"1400","DES":"100","NOM":"Test"}}}'
+   python3 parso_client.py '{"1":{"B":{"Header":"Line 1","TicketId":"12345","Date":"Nov 16, 2026 03:45 PM","Footer":"Scan the QR at exit","QR":"https://example.com/ticket/12345"}}}'
+   python3 parso_client.py --listen 60 '{"3":{"amountInPennies":30,"clientTransactionID":"L-APPROVED","testEth":false}}'
+   ```
+
+   - `STATUS`: `"connected":true` within about 10 s of starting, then `ageMs` and `C`. `ERROR: PICOB NOT CONNECTED` means the Picob port did not open (wrong name in the profile, or another program has it) or the Picob does not answer `C`.
+   - `C` follows the loop detector and `A` opens the barrier, as in section 4. Never send `H`: it cuts power to the whole kiosk.
+   - Printing: `SUCCESS: PRINTING COMMAND SENT SUCCESSFULLY`, a test ticket and an entry ticket with its QR on the POS58.
+   - Payment: insert the card when the reader asks; `CARDINSERTED` arrives first, then the reply. Replies as in section 6.
+
+Send the terminal output of both windows and the newest file in `~/lg1/parso/logs/`; results go into the decision log.
