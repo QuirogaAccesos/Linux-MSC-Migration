@@ -41,16 +41,20 @@ namespace AA.Pango.App
             this.Init();
         }
 
-        private void Init()
+        private void FormV4PullTicket_Shown(object sender, EventArgs e)
         {
-            InitSettings();
-            SetVersion();
             if (showPhone == "true")
                 OpenDigitKeyboard();
             else
                 PrintTicket();
             CloseOnTimeout();
             InitWorker();
+        }
+
+        private void Init()
+        {
+            InitSettings();
+            SetVersion();
         }
 
         private void SetVersion()
@@ -236,19 +240,7 @@ namespace AA.Pango.App
             {
                 Thread.Sleep(pullTicketFormTimeout);
 
-                if (this.InvokeRequired)
-                {
-                    this.Invoke((MethodInvoker)(() =>
-                    {
-                        this.Close();
-                        this.Dispose();
-                    }));
-                }
-                else
-                {
-                    this.Close();
-                    this.Dispose();
-                }
+                this.CloseForm();
             })).Start();
         }
 
@@ -403,13 +395,11 @@ namespace AA.Pango.App
                     this.Invoke((MethodInvoker)(() =>
                     {
                         this.Close();
-                        this.Dispose();
                     }));
                 }
                 else
                 {
                     this.Close();
-                    this.Dispose();
                 }
             }
             catch (Exception e)

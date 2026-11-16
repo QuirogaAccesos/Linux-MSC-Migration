@@ -35,7 +35,6 @@ namespace AA.Pango.App
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Init();
-            this.OpenKeyboard();
 
             Thread _thread = new Thread(() =>
             {
@@ -44,11 +43,15 @@ namespace AA.Pango.App
                 if (this.IsDisposed)
                     return;
 
-                this.Close();
-                //this.Dispose();
+                this.CloseForm();
             });
             _thread.SetApartmentState(ApartmentState.STA);
             _thread.Start();
+        }
+
+        private void FormV4CheckPermitPlate_Shown(object sender, EventArgs e)
+        {
+            this.OpenKeyboard();
         }
 
         private void Init()
@@ -366,13 +369,11 @@ namespace AA.Pango.App
                     this.Invoke((MethodInvoker)(() =>
                     {
                         this.Close();
-                        this.Dispose();
                     }));
                 }
                 else
                 {
                     this.Close();
-                    this.Dispose();
                 }
             }
             catch (Exception e)

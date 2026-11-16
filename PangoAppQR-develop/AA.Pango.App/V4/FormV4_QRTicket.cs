@@ -431,6 +431,7 @@ namespace AA.Pango.App
             var form = new FormV4PullTicket();
 
             form.ShowDialog(this);
+            form.Dispose();
         }
 
         private void ActivateShowQrForm()
