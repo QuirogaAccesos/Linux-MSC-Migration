@@ -197,3 +197,59 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
    Build only the Entry project: the RestApi needs IIS build targets and the Exit project needs the AMP DLL path. Report the errors if it fails; this has not been tried.
 
 The results go into the decision log of `MIGRATION_PLAN.md`. The first run (2026-11-09) is recorded there; known problem until F4 is done: the window stays at 1600x900. Judge the speed of the on-screen keyboards on site, not through AnyDesk, which delays every screen update by about a second (F7). After F6 the plate dialog should close cleanly when its 10 s keyboard timeout runs out (press the plate/phone button and wait without typing: the app must return to the main screen and keep working).
+
+## 10. Exit app under Mono
+
+Same machine and Mono packages as section 9. Exit has not run under Mono before. Run it in its own folder with its own LiteDB file, and never at the same time as Entry (both are `AA.Pango.App.exe`).
+
+1. On Windows, from `PangoAppQR-develop` (PowerShell with the `msbuild` alias, `CLAUDE.md`), build AMP first, then Exit, and pack the Exit output:
+
+   ```powershell
+   msbuild AA.PangoApp.Payments.AMP\AA.PangoApp.Payments.AMP.csproj /p:Configuration=Debug /v:m; msbuild AA.Pango.App.Exit\AA.Pango.App.Exit.csproj /p:Configuration=Debug /v:m; tar -czf "$env:USERPROFILE\Desktop\exit-debug.tar.gz" -C AA.Pango.App.Exit\bin\Debug .
+   ```
+
+2. Copy `exit-debug.tar.gz` to Debian (AnyDesk) and set up the copied config, from a terminal there:
+
+   ```bash
+   mkdir -p ~/lg1/exit && tar -xzf ~/Downloads/exit-debug.tar.gz -C ~/lg1/exit && cd ~/lg1/exit
+   sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/exit/pangodb.db#' AA.Pango.App.exe.config
+   sed -i 's#key="HardwareMode" value="Direct"#key="HardwareMode" value="LinuxController"#' AA.Pango.App.exe.config
+   sed -i 's#key="UseFakePos" value="false"#key="UseFakePos" value="true"#' AA.Pango.App.exe.config
+   sed -i 's#key="PaymentProcessor" value="AMP"#key="PaymentProcessor" value="LinuxController"#' AA.Pango.App.exe.config
+   grep -n 'pangodb\|"HardwareMode"\|"UseFakePos"\|"PaymentProcessor"\|<file value' AA.Pango.App.exe.config
+   ```
+
+   The `grep` must show the Linux LiteDB path, `LinuxController` twice, `UseFakePos` `true` and `<file value="logs/" />`. `UseFakePos` approves every payment without a card reader; `PaymentProcessor=LinuxController` keeps the AMP driver (a COM port) from loading.
+
+3. Run it like Entry: `cd ~/lg1/exit && mono --debug AA.Pango.App.exe 2>&1 | tee exit-run1.txt` (`pkill -9 -f AA.Pango.App.exe` from another terminal if it wedges). Judge timing on site, not through AnyDesk.
+
+4. What to try and report (`exit-run1.txt`, the newest file in `~/lg1/exit/logs/`, screenshots):
+
+   - The `V4_1opt` main screen: layout, images, buttons.
+   - Each button and keyboard the main screen offers, including BACK and letting each screen time out without touching it. After every screen closes, the main screen must still react.
+   - A plate or ticket the cloud knows, if there is one: the amount screen (`FormV4ShowReceipt`), the fake payment (approved), and what follows. Receipt printing goes to the Linux Controller and fails without a printer; that failure should only be logged.
+   - Wedge input: type a ticket code and press Enter with the main screen in front (Pango's log: `Got value from output:`).
+   - Anything that throws, or a screen that stays up and stops reacting. A dialog that closes itself while it has another dialog open on top is the case most likely to stick (section 9 and the F6 entry in `MIGRATION_PLAN.md`).
+
+## 11. LiteDB with two processes (task F5)
+
+Checks whether LiteDB's `Connection=shared` mode keeps two Mono processes from writing the same file at once. On Windows it does this with a named mutex. Needs Entry unpacked in `~/lg1/entry` (section 9) for its `LiteDB.dll`; the kiosk app does not have to run.
+
+1. Copy `tools/litedb_shared_test.cs` (repo root) to Debian, or paste it there into a new file with a text editor, as `~/lg1/f5/litedb_shared_test.cs`.
+
+2. Build it and copy `LiteDB.dll` next to it:
+
+   ```bash
+   cd ~/lg1/f5 && cp ~/lg1/entry/LiteDB.dll . && mcs -r:LiteDB.dll -out:f5.exe litedb_shared_test.cs
+   ```
+
+3. Mutex test, then two writers on one file, then the check:
+
+   ```bash
+   mono f5.exe mutex hold & sleep 1; mono f5.exe mutex try; wait
+   rm -f test*.db; mono f5.exe write test.db A 2000 & mono f5.exe write test.db B 2000; wait; mono f5.exe check test.db
+   ```
+
+   Safe result: `mutex try: acquired=False -> shared between processes`, both writers with 0 errors, and `check` with 2000 documents for each writer and `total: 4000`. Anything else (`acquired=True`, errors, fewer documents, or `check FAILED`) means two Mono processes cannot share one LiteDB file. Run the second line two or three times; a race does not show up on every run.
+
+4. Send the whole terminal output. The result goes into the F5 entry of the decision log and decides G2 (whether the RestApi can be a second process on the same LiteDB file).
