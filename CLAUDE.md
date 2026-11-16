@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build, run, test
 
-`dotnet`, `mono` and `msbuild` are not installed in the cloud environment, so nothing can be compiled or run there.
+`dotnet` and `msbuild` are not installed in the cloud environment, so neither project can be built there. Mono can be installed with `apt-get install mono-complete libgdiplus xdotool` (Ubuntu's 6.8.0.105, the kiosk's version) and was used for small reproductions with `mcs` under Xvfb (F5, F7); NuGet and GitHub downloads are blocked there, so third-party DLLs such as LiteDB are not available.
 
 - Pango (Visual Studio 2022, classic .NET Framework 4.8, `packages.config`, NuGet `HintPath`s into a `..\packages\` folder that is not committed). The user's Windows machine has Build Tools for Visual Studio 2022 (MSBuild 17.14, workloads `ManagedDesktopBuildTools` and `WebBuildTools`, .NET Framework 4.8 targeting pack), no Visual Studio IDE, no `nuget.exe` and no `git` on the Developer Command Prompt path. Commands that worked there (2026-10-21), from `PangoAppQR-develop` in "Developer Command Prompt for VS 2022":
   - restore: `msbuild AA.Pango.App.sln -t:Restore -p:RestorePackagesConfig=true` (NU1902 / NU1904 vulnerability warnings for jQuery, LiteDB and log4net are expected);
@@ -28,6 +28,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Parso (SDK-style, net8.0): `dotnet build Parso-main/Parso/Parso.sln`, run with `dotnet run --project Parso-main/Parso/Parso`. The executable's assembly name is `TREA`, not Parso.
 - `tools/parso_client.py` (repo root, Python 3 standard library only) sends one request to Parso and prints the reply: `python3 tools/parso_client.py '{"2":"C"}'`, with `--host`, `--port`, `--timeout`, and `--listen [seconds]` to keep reading broadcast frames such as `CARDINSERTED`. On Windows the interpreter is `py`, and Windows PowerShell 5.1 strips the inner quotes of an argument, so write `'{\"2\":\"C\"}'`. It was checked against a stub server and against the `A1Tester` simulator.
 - `tools/parso_client.ps1` (repo root) has the same for PowerShell without Python: `. .\tools\parso_client.ps1`, then `Send-Parso '{"2":"STATUS"}'` (first frame) and `Send-ParsoPayment '<json>'` (every frame until the reply, for card payments). Its request and reply handling is the code the user ran by hand; the file itself has not been run from the cloud environment.
+- `tools/litedb_shared_test.cs` (repo root, task F5) checks whether a named mutex and LiteDB `Connection=shared` hold across two Mono processes; it is built on the Linux machine against the kiosk build's `LiteDB.dll` (`TESTING.md` section 11).
 - `TESTING.md` (repo root) has the step-by-step test recipes for the Parso side on the machine with the hardware: local config per test, the helper commands, and the expected replies for the Picob, printing and card payments. Keep it current when a task changes a command or a reply, and put test results in the decision log of `MIGRATION_PLAN.md`.
 - Neither project has tests or lint config. In Pango, `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name.
 - The `.gitignore` in `PangoAppQR-develop/` is inherited from an unrelated `AA.PMS` project and does not cover this solution's `bin/`, `obj/` or `packages/`.
