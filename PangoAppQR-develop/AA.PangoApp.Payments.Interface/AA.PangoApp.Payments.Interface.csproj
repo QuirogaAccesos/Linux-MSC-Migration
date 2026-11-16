@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Dtos\GeneratePaymentRequest.cs" />
     <Compile Include="Dtos\GeneratePaymentResponse.cs" />
+    <Compile Include="Helpers\ProcessLauncher.cs" />
     <Compile Include="IPaymentManager.cs" />
     <Compile Include="Notifications\MailSender.cs" />
     <Compile Include="PaymentManagerAbstract.cs" />
