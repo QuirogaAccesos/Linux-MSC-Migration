@@ -160,7 +160,7 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
 3. Edit `~/lg1/entry/AA.Pango.App.exe.config` (the copy, never the repo file):
 
    - `connectionStrings`, `LiteDB`: `Filename=/home/<user>/lg1/entry/pangodb.db;Connection=shared;` (the committed value is a Windows path).
-   - `log4net`, file appender: `<file value="logs/" />` (the committed `logs\` would become a file name with a backslash).
+   - `log4net`, file appender: `<file value="logs/" />`. Builds from F3 on already have it; older builds had `logs\`, which Mono turns into a file name with a backslash.
    - Both with `sed`, from `~/lg1/entry`: `sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/entry/pangodb.db#' AA.Pango.App.exe.config` and `sed -i 's#<file value="logs\\" />#<file value="logs/" />#' AA.Pango.App.exe.config`.
    - Set `HardwareMode` to `LinuxController` and keep `ReaderSource` `Output`: in `Direct` mode Mono throws on `SerialPort.ReceivedBytesThreshold` and the app never finishes starting (A3). Set `CheckLoopDetector` to `false` unless Parso and a Picob are running, or the Entry buttons only show the vehicle-not-present panel. Entry has no `UseFakePos`; it only matters for Exit.
 
