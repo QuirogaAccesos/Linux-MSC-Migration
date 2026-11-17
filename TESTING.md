@@ -265,24 +265,30 @@ The Linux kiosk (the Debian machine, swapped in on 2026-11-16) runs Parso with `
 
 The `by-path` names stay the same across reboots and replugs as long as each cable stays in the same USB port. If a cable moves, run `ls -l /dev/serial/by-path/` and update the profile. The scanner (`/dev/ttyACM0`) is not used by Parso.
 
-1. On Windows, from the repo root (GitHub Desktop on `main`), publish Parso and copy the profile and the client next to it:
+Parso lives in `~/Documents/TREA`, where a GNOME autostart entry (`~/.config/autostart`, named "Pango", `Exec=/home/TREA/Documents/TREA/TREA`, `Terminal=true`) starts it in a terminal window at login. Deploy into that folder so the autostart keeps working, until H3 replaces it with a service.
+
+1. On Windows, from the repo root (GitHub Desktop on `main`), publish Parso for Linux and copy the profile and the client next to it:
 
    ```powershell
-   dotnet publish Parso-main\Parso\Parso -c Release -o "$env:USERPROFILE\Desktop\parso-linux"; Copy-Item deploy\parso\appsettings.json, tools\parso_client.py "$env:USERPROFILE\Desktop\parso-linux\"; tar -czf "$env:USERPROFILE\Desktop\parso-linux.tar.gz" -C "$env:USERPROFILE\Desktop\parso-linux" .
+   dotnet publish Parso-main\Parso\Parso -c Release -r linux-x64 --self-contained false -o "$env:USERPROFILE\Desktop\parso-linux"; Copy-Item deploy\parso\appsettings.json, tools\parso_client.py "$env:USERPROFILE\Desktop\parso-linux\"; tar -czf "$env:USERPROFILE\Desktop\parso-linux.tar.gz" -C "$env:USERPROFILE\Desktop\parso-linux" .
    ```
 
-   The publish is framework-dependent (the Debian machine has the .NET 8 runtime), and the copy of the profile replaces the committed `appsettings.json` in the output.
+   `-r linux-x64` makes the Linux program file `TREA` that the autostart runs; the Debian machine has the .NET 8 runtime, so the publish is framework-dependent. The copy of the profile replaces the committed `appsettings.json` in the output.
 
-2. On Debian, stop any Parso that is running, unpack into its own folder and start it:
+2. On Debian, stop the running Parso, keep the old folder, unpack the new one and put the Linux build of `System.IO.Ports.dll` in place:
 
    ```bash
-   pkill -x TREA; pkill -f 'dotnet TREA.dll'; rm -rf ~/lg1/parso && mkdir -p ~/lg1/parso && tar -xzf ~/Downloads/parso-linux.tar.gz -C ~/lg1/parso && cd ~/lg1/parso && grep -n '"ListenAddress"\|"PersistentConnection"\|"DtrEnable"\|"RtsEnable"\|"AutoSetTimeEnabled"\|"PrinterName"' appsettings.json
-   dotnet TREA.dll
+   pkill -x TREA; mv ~/Documents/TREA ~/Documents/TREA-old-$(date +%Y%m%d)
+   mkdir -p ~/Documents/TREA && tar -xzf ~/Downloads/parso-linux.tar.gz -C ~/Documents/TREA && cd ~/Documents/TREA && chmod +x TREA && mv System.IO.Ports.dll System.IO.Ports.dll.placeholder && cp runtimes/unix/lib/net8.0/System.IO.Ports.dll . && grep -c SafeSerialDeviceHandle System.IO.Ports.dll
+   grep -n '"ListenAddress"\|"PersistentConnection"\|"DtrEnable"\|"RtsEnable"\|"AutoSetTimeEnabled"\|"PrinterName"' appsettings.json
+   ./TREA
    ```
 
-   The `grep` must show `127.0.0.1`, `TRUE` for `PersistentConnection`, `FALSE` for the other three, and `POS58`. Leave this terminal open; Parso logs to it and to `~/lg1/parso/logs/`. Wait for `Server started and listening on 127.0.0.1:1994`.
+   The first `grep` must print a number greater than 0. The publish on 2026-11-17 put the 36 KB "not supported on this platform" build of `System.IO.Ports.dll` in the root of the output, with the real one only under `runtimes/unix/`, and every serial port then failed with `Fail Open SerialPort` before the device was touched; the old Parso in that folder had the same problem. The second `grep` must show `127.0.0.1`, `TRUE` for `PersistentConnection`, `FALSE` for the other three, and `POS58`. Parso logs to the terminal and to `~/Documents/TREA/logs/`; wait for `Server started and listening on 127.0.0.1:1994`, and for `Picob port ... opened` (not `Cannot open Picob port`).
 
-3. In a second terminal, the checks of sections 4, 5 and 6 with the Python client (`cd ~/lg1/parso` first):
+   To go back to the old Parso: `pkill -x TREA; rm -rf ~/Documents/TREA && mv ~/Documents/TREA-old-<date> ~/Documents/TREA`, then log out and in.
+
+3. In a second terminal (`cd ~/Documents/TREA` first), the checks of sections 4, 5 and 6 with the Python client:
 
    ```bash
    python3 parso_client.py '{"2":"STATUS"}'
@@ -290,12 +296,12 @@ The `by-path` names stay the same across reboots and replugs as long as each cab
    python3 parso_client.py '{"2":"A"}'
    python3 parso_client.py '{"1":{"A":{"TO":"1500","ST":"1400","DES":"100","NOM":"Test"}}}'
    python3 parso_client.py '{"1":{"B":{"Header":"Line 1","TicketId":"12345","Date":"Nov 16, 2026 03:45 PM","Footer":"Scan the QR at exit","QR":"https://example.com/ticket/12345"}}}'
-   python3 parso_client.py --listen 60 '{"3":{"amountInPennies":30,"clientTransactionID":"L-APPROVED","testEth":false}}'
+   python3 parso_client.py --timeout 120 --listen 5 '{"3":{"amountInPennies":30,"clientTransactionID":"L-APPROVED-1","testEth":false}}'
    ```
 
-   - `STATUS`: `"connected":true` within about 10 s of starting, then `ageMs` and `C`. `ERROR: PICOB NOT CONNECTED` means the Picob port did not open (wrong name in the profile, or another program has it) or the Picob does not answer `C`.
+   - `STATUS`: `"connected":true` within about 10 s of starting, then `ageMs` and `C`. `ERROR: PICOB NOT CONNECTED` with `Picob poll failed ... No hubo respuesta` in the log means the port opened but the Picob does not answer `C`.
    - `C` follows the loop detector and `A` opens the barrier, as in section 4. Never send `H`: it cuts power to the whole kiosk.
    - Printing: `SUCCESS: PRINTING COMMAND SENT SUCCESSFULLY`, a test ticket and an entry ticket with its QR on the POS58.
-   - Payment: insert the card when the reader asks; `CARDINSERTED` arrives first, then the reply. Replies as in section 6.
+   - Payment: the client waits only 10 s by default, so a payment needs `--timeout 120`. Without it the client gives up before the card is in, the payment still runs on the reader, and its result is lost (`Send message error: Cannot access a disposed object` in the log); a payment started while that one runs gets `BUSY`. Insert the card when the reader asks, wait for the reply before the next payment, and use a new `clientTransactionID` each time. `CARDINSERTED` arrives first, then the reply, as in section 6.
 
-Send the terminal output of both windows and the newest file in `~/lg1/parso/logs/`; results go into the decision log.
+Send the terminal output of both windows and the newest file in `~/Documents/TREA/logs/`; results go into the decision log.
