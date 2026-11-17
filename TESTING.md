@@ -304,4 +304,33 @@ Parso lives in `~/Documents/TREA`, where a GNOME autostart entry (`~/.config/aut
    - Printing: `SUCCESS: PRINTING COMMAND SENT SUCCESSFULLY`, a test ticket and an entry ticket with its QR on the POS58.
    - Payment: the client waits only 10 s by default, so a payment needs `--timeout 120`. Without it the client gives up before the card is in, the payment still runs on the reader, and its result is lost (`Send message error: Cannot access a disposed object` in the log); a payment started while that one runs gets `BUSY`. Insert the card when the reader asks, wait for the reply before the next payment, and use a new `clientTransactionID` each time. `CARDINSERTED` arrives first, then the reply, as in section 6.
 
+Printer queue. Parso prints with `lp -d POS58 -o raw`, and its `SUCCESS` reply only means CUPS accepted the job. On the kiosk the queue `POS58` (raw, from 2025) pointed at a printer that is no longer there (`usb://Gigadevice.../GD32 Printer`), so jobs waited in the queue forever. Check and fix it once per machine:
+
+```bash
+lpstat -v POS58; lpstat -o; sudo lpinfo -v | grep usb
+cancel -a POS58
+sudo lpadmin -p POS58 -v 'usb://0001A0000000/Printer%20in%20FS%20Mode?serial=0001A0000000' && sudo cupsenable POS58 && sudo cupsaccept POS58
+printf 'Prueba CUPS POS58\n\n\n\n\n' | lp -d POS58 -o raw; sleep 3; lpstat -o
+```
+
+The `usb://` address is the one `lpinfo` lists for the printer that is plugged in (the POS58 shows up as `0471:0055`, "Printer in FS Mode"); `cancel -a` clears jobs that would otherwise print as soon as the queue works. The test prints a short strip and leaves `lpstat -o` empty. `printf ... | sudo tee /dev/usb/lp0` writes to the printer without CUPS, to tell a printer problem from a queue problem.
+
 Send the terminal output of both windows and the newest file in `~/Documents/TREA/logs/`; results go into the decision log.
+
+## 14. Kiosk session (trial)
+
+A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1920x1080, turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and Entry from `~/lg1/entry` (sections 12 and 13); closing Entry ends the session. Starting it by itself at boot is part of H3.
+
+1. One-time setup on Debian: install Openbox and put the two files in place (copy them from the repo with AnyDesk, or create them with a text editor):
+
+   ```bash
+   sudo apt install -y openbox
+   mkdir -p ~/kiosk && cp ~/Downloads/start.sh ~/kiosk/start.sh && chmod +x ~/kiosk/start.sh
+   sudo cp ~/Downloads/lg1-kiosk.desktop /usr/share/xsessions/lg1-kiosk.desktop
+   ```
+
+2. Do it on site, not through AnyDesk (the remote view may drop when the session changes). Log out of GNOME (top-right menu, Power Off / Log Out, Log Out). On the login screen click the user, then the gear icon at the bottom right, choose **LG1 Kiosk**, and enter the password.
+
+3. Check: the screen is 1920x1080; Entry covers the whole screen from the top-left corner with no top bar; the plate keyboard, the phone keypad and the result panel open and close full screen; Pull Ticket prints (with the printer queue fixed, section 12); a scanned QR reaches the app. Entry's output goes to `~/lg1/entry/kiosk-session.txt` and its log to `~/lg1/entry/logs/`.
+
+4. To leave: Alt+F4 on Entry ends the session and shows the login screen; pick **GNOME** with the gear icon to get the normal desktop back. If the screen hangs, press Ctrl+Alt+F3, log in on the text console and run `sudo systemctl restart gdm3`, which returns to the login screen.
