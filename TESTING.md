@@ -317,6 +317,38 @@ The `usb://` address is the one `lpinfo` lists for the printer that is plugged i
 
 Send the terminal output of both windows and the newest file in `~/Documents/TREA/logs/`; results go into the decision log.
 
+## 13. Pango on the Linux kiosk (task F4)
+
+Entry on the kiosk, with Parso running as in section 12. One-time setup of the screen and fonts first.
+
+1. Screen: Settings, Displays, Resolution 1920 x 1080, Apply, Keep Changes (the screen reports 1024x768 as preferred, but 1920x1080 is what the Windows machine used on it).
+
+2. Fonts: the forms are scaled by the size of the default font, Microsoft Sans Serif, which Linux replaces with a wider one. Map it to Liberation Sans, which has the same size, by copying `deploy/pango/fonts.conf` (repo root) to `~/.config/fontconfig/fonts.conf`, then check:
+
+   ```bash
+   fc-match "Microsoft Sans Serif"
+   ```
+
+   It must print `Liberation Sans`. If it does not list Liberation at all, install it with `sudo apt install fonts-liberation2`.
+
+3. On Windows, build Entry and pack it (`PangoAppQR-develop`, PowerShell with the `msbuild` alias):
+
+   ```powershell
+   msbuild AA.Pango.App\AA.Pango.App.csproj /p:Configuration=Debug /v:m; tar -czf "$env:USERPROFILE\Desktop\entry-debug.tar.gz" -C AA.Pango.App\bin\Debug .
+   ```
+
+4. On Debian, unpack, set the kiosk values and run:
+
+   ```bash
+   pkill -f AA.Pango.App.exe; rm -rf ~/lg1/entry && mkdir -p ~/lg1/entry && tar -xzf ~/Downloads/entry-debug.tar.gz -C ~/lg1/entry && cd ~/lg1/entry && rm -rf logs
+   sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/entry/pangodb.db#; s#key="HardwareMode" value="[^"]*"#key="HardwareMode" value="LinuxController"#; s#key="ReaderSource" value="[^"]*"#key="ReaderSource" value="Output"#; s#key="CheckLoopDetector" value="[^"]*"#key="CheckLoopDetector" value="false"#; s#key="ShowAllButtons" value="[^"]*"#key="ShowAllButtons" value="true"#; s#key="PullTicketShowPhone" value="[^"]*"#key="PullTicketShowPhone" value="false"#; s#key="ShowTestInput" value="[^"]*"#key="ShowTestInput" value="false"#' AA.Pango.App.exe.config
+   MONO_WINFORMS_XIM_STYLE=disabled mono --debug AA.Pango.App.exe 2>&1 | tee entry-kiosk.txt
+   ```
+
+   `CheckLoopDetector` `false` only while the Picob does not answer; `ShowAllButtons` and `PullTicketShowPhone` show the Pull Ticket button and print without asking for a phone.
+
+5. Check: the main screen covers the whole screen from the top-left corner, with the header text not cut off; the plate keyboard shows all keys, Confirm, CLEAR and BACK; the phone keypad the same; Pull Ticket prints the entry ticket with its QR through Parso. Send screenshots (Print Screen, Screen) and `grep -n -E 'Linux Controller|LINUX CONTROLLER|Ticket printed|PRINTER|ERROR|FATAL' ~/lg1/entry/logs/*.log | tail -30`.
+
 ## 14. Kiosk session (trial)
 
 A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1920x1080, turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and Entry from `~/lg1/entry` (sections 12 and 13); closing Entry ends the session. Starting it by itself at boot is part of H3.
