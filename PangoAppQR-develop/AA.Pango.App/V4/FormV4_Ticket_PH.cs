@@ -74,6 +74,7 @@ namespace AA.Pango.App
             this.WindowState = FormWindowState.Maximized;
             MinimumSize = Screen.PrimaryScreen.Bounds.Size;
             MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+            Location = Screen.PrimaryScreen.Bounds.Location;
 
             bool showTestInput = bool.Parse(ConfigurationManager.AppSettings["ShowTestInput"] ?? "false");
             if (showTestInput)
@@ -456,6 +457,7 @@ namespace AA.Pango.App
                         this.WindowState = FormWindowState.Maximized;
                         MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                         MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                        Location = Screen.PrimaryScreen.Bounds.Location;
                     }));
                 }
                 else
@@ -466,6 +468,7 @@ namespace AA.Pango.App
                     this.WindowState = FormWindowState.Maximized;
                     MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                     MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    Location = Screen.PrimaryScreen.Bounds.Location;
                 }
             }
             catch (Exception e)
@@ -611,6 +614,7 @@ namespace AA.Pango.App
                     this.WindowState = FormWindowState.Maximized;
                     MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                     MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    Location = Screen.PrimaryScreen.Bounds.Location;
                 }));
             }
             else
@@ -619,6 +623,7 @@ namespace AA.Pango.App
                 this.WindowState = FormWindowState.Maximized;
                 MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                 MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                Location = Screen.PrimaryScreen.Bounds.Location;
             }
         }
 

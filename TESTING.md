@@ -321,7 +321,7 @@ Send the terminal output of both windows and the newest file in `~/Documents/TRE
 
 Entry on the kiosk, with Parso running as in section 12. One-time setup of the screen and fonts first.
 
-1. Screen: Settings, Displays, Resolution 1920 x 1080, Apply, Keep Changes (the screen reports 1024x768 as preferred, but 1920x1080 is what the Windows machine used on it).
+1. Screen: 1600x900, the forms' design size, at which the screens fill the kiosk screen exactly as on Windows at 100% scaling. The screen does not list that mode, so the kiosk session (section 14) adds it with `xrandr --newmode` / `--addmode`. 1920x1080 also works after F4, but the keyboards' keys then stay left-aligned at their design size.
 
 2. Fonts: the forms are scaled by the size of the default font, Microsoft Sans Serif, which Linux replaces with a wider one. Map it to Liberation Sans, which has the same size, by copying `deploy/pango/fonts.conf` (repo root) to `~/.config/fontconfig/fonts.conf`, then check:
 
@@ -351,7 +351,7 @@ Entry on the kiosk, with Parso running as in section 12. One-time setup of the s
 
 ## 14. Kiosk session (trial)
 
-A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1920x1080, turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and Entry from `~/lg1/entry` (sections 12 and 13); closing Entry ends the session. Starting it by itself at boot is part of H3.
+A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1600x900 (adding that mode, which the screen does not list), turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and Entry from `~/lg1/entry` (sections 12 and 13); closing Entry ends the session. Starting it by itself at boot is part of H3.
 
 1. One-time setup on Debian: install Openbox and put the two files in place (copy them from the repo with AnyDesk, or create them with a text editor):
 
@@ -363,6 +363,6 @@ A login session that shows only Parso and Entry: no GNOME top bar, no desktop, t
 
 2. Do it on site, not through AnyDesk (the remote view may drop when the session changes). Log out of GNOME (top-right menu, Power Off / Log Out, Log Out). On the login screen click the user, then the gear icon at the bottom right, choose **LG1 Kiosk**, and enter the password.
 
-3. Check: the screen is 1920x1080; Entry covers the whole screen from the top-left corner with no top bar; the plate keyboard, the phone keypad and the result panel open and close full screen; Pull Ticket prints (with the printer queue fixed, section 12); a scanned QR reaches the app. Entry's output goes to `~/lg1/entry/kiosk-session.txt` and its log to `~/lg1/entry/logs/`.
+3. Check: the screen is 1600x900; Entry covers the whole screen from the top-left corner with no top bar; the plate keyboard, the phone keypad and the result panel open and close full screen; Pull Ticket prints (with the printer queue fixed, section 12); a scanned QR reaches the app. Entry's output goes to `~/lg1/entry/kiosk-session.txt` and its log to `~/lg1/entry/logs/`.
 
 4. To leave: Alt+F4 on Entry ends the session and shows the login screen; pick **GNOME** with the gear icon to get the normal desktop back. If the screen hangs, press Ctrl+Alt+F3, log in on the text console and run `sudo systemctl restart gdm3`, which returns to the login screen.

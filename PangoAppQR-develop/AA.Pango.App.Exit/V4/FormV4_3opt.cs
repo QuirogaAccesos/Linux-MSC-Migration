@@ -75,6 +75,7 @@ namespace AA.Pango.App
             this.WindowState = FormWindowState.Maximized;
             MinimumSize = Screen.PrimaryScreen.Bounds.Size;
             MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+            Location = Screen.PrimaryScreen.Bounds.Location;
 
             LanguageLocalizationParser.LoadLocalizations();
             DataFileParser.LoadStyles("styles.dat");
@@ -406,6 +407,7 @@ namespace AA.Pango.App
                     this.WindowState = FormWindowState.Maximized;
                     MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                     MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    Location = Screen.PrimaryScreen.Bounds.Location;
                 }));
             }
             else
@@ -414,6 +416,7 @@ namespace AA.Pango.App
                 this.WindowState = FormWindowState.Maximized;
                 MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                 MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                Location = Screen.PrimaryScreen.Bounds.Location;
             }
         }
 
@@ -467,6 +470,7 @@ namespace AA.Pango.App
                     this.WindowState = FormWindowState.Maximized;
                     MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                     MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    Location = Screen.PrimaryScreen.Bounds.Location;
                 }));
             }
             else
@@ -477,6 +481,7 @@ namespace AA.Pango.App
                 this.WindowState = FormWindowState.Maximized;
                 MinimumSize = Screen.PrimaryScreen.Bounds.Size;
                 MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                Location = Screen.PrimaryScreen.Bounds.Location;
             }
         }
 
