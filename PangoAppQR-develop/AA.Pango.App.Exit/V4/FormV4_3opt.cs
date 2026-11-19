@@ -73,8 +73,8 @@ namespace AA.Pango.App
 
             this.Activate();
             this.WindowState = FormWindowState.Maximized;
-            MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-            MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+            MinimumSize = this.Size;
+            MaximumSize = this.Size;
 
             LanguageLocalizationParser.LoadLocalizations();
             DataFileParser.LoadStyles("styles.dat");
@@ -404,16 +404,16 @@ namespace AA.Pango.App
                 {
                     this.Activate();
                     this.WindowState = FormWindowState.Maximized;
-                    MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                    MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    MinimumSize = this.Size;
+                    MaximumSize = this.Size;
                 }));
             }
             else
             {
                 this.Activate();
                 this.WindowState = FormWindowState.Maximized;
-                MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                MinimumSize = this.Size;
+                MaximumSize = this.Size;
             }
         }
 
@@ -465,8 +465,8 @@ namespace AA.Pango.App
                     this.Activate();
                     //this.TopMost = true;
                     this.WindowState = FormWindowState.Maximized;
-                    MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                    MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    MinimumSize = this.Size;
+                    MaximumSize = this.Size;
                 }));
             }
             else
@@ -475,8 +475,8 @@ namespace AA.Pango.App
                 this.Activate();
                 //this.TopMost = true;
                 this.WindowState = FormWindowState.Maximized;
-                MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                MinimumSize = this.Size;
+                MaximumSize = this.Size;
             }
         }
 

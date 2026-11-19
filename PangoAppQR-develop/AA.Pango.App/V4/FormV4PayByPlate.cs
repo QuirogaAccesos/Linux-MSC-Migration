@@ -522,16 +522,16 @@ namespace AA.Pango.App
                 {
                     this.Activate();
                     this.WindowState = FormWindowState.Maximized;
-                    MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                    MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    MinimumSize = this.Size;
+                    MaximumSize = this.Size;
                 }));
             }
             else
             {
                 this.Activate();
                 this.WindowState = FormWindowState.Maximized;
-                MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                MinimumSize = this.Size;
+                MaximumSize = this.Size;
             }
         }
     }

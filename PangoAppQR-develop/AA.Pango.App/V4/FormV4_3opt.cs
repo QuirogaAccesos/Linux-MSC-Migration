@@ -69,8 +69,8 @@ namespace AA.Pango.App
 
             this.Activate();
             this.WindowState = FormWindowState.Maximized;
-            MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-            MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+            MinimumSize = this.Size;
+            MaximumSize = this.Size;
 
             bool showTestInput = bool.Parse(ConfigurationManager.AppSettings["ShowTestInput"] ?? "false");
             if (showTestInput)
@@ -495,8 +495,8 @@ namespace AA.Pango.App
                         this.Activate();
                         //this.TopMost = true;
                         this.WindowState = FormWindowState.Maximized;
-                        MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                        MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                        MinimumSize = this.Size;
+                        MaximumSize = this.Size;
                     }));
                 }
                 else
@@ -505,8 +505,8 @@ namespace AA.Pango.App
                     this.Activate();
                     //this.TopMost = true;
                     this.WindowState = FormWindowState.Maximized;
-                    MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                    MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    MinimumSize = this.Size;
+                    MaximumSize = this.Size;
                 }
             }
             catch (Exception e)
@@ -563,16 +563,16 @@ namespace AA.Pango.App
                 {
                     this.Activate();
                     this.WindowState = FormWindowState.Maximized;
-                    MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                    MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                    MinimumSize = this.Size;
+                    MaximumSize = this.Size;
                 }));
             }
             else
             {
                 this.Activate();
                 this.WindowState = FormWindowState.Maximized;
-                MinimumSize = Screen.PrimaryScreen.Bounds.Size;
-                MaximumSize = Screen.PrimaryScreen.Bounds.Size;
+                MinimumSize = this.Size;
+                MaximumSize = this.Size;
             }
         }
     }
