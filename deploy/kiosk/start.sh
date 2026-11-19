@@ -2,7 +2,9 @@
 # LG1 kiosk session: screen, Parso (Linux Controller) and Entry, without the GNOME desktop.
 # Closing Entry (Alt+F4) ends the session and returns to the login screen.
 
-xrandr --output HDMI-1 --mode 1920x1080
+xrandr --newmode "1600x900_60.00" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
+xrandr --addmode HDMI-1 1600x900_60.00
+xrandr --output HDMI-1 --mode 1600x900_60.00
 xset s off -dpms s noblank
 
 openbox &
