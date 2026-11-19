@@ -32,7 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `deploy/parso/appsettings.json` (repo root, task H2) is Parso's settings file for the Linux kiosk (persistent Picob with DTR/RTS off, loopback listener, `/dev/serial/by-path` device names, CUPS queue `POS58`); the deployment copies it over the published `appsettings.json` (`TESTING.md` section 12).
 - `deploy/pango/fonts.conf` (repo root, task F4) maps Microsoft Sans Serif to Liberation Sans for the kiosk user (`~/.config/fontconfig/fonts.conf`), so WinForms' font autoscaling under Mono matches Windows (`TESTING.md` section 13).
 - `TESTING.md` (repo root) has the step-by-step test recipes for the Parso side on the machine with the hardware: local config per test, the helper commands, and the expected replies for the Picob, printing and card payments. Keep it current when a task changes a command or a reply, and put test results in the decision log of `MIGRATION_PLAN.md`.
-- `deploy/kiosk/start.sh` and `deploy/kiosk/lg1-kiosk.desktop` (repo root) are a trial login session for the kiosk: Openbox, Parso and Entry with no GNOME desktop (`TESTING.md` section 14). On the kiosk the CUPS queue `POS58` must point at the printer's current `usb://` address (section 12).
+- `deploy/kiosk/start.sh` and `deploy/kiosk/lg1-kiosk.desktop` (repo root) are a trial login session for the kiosk: Openbox, Parso and Entry (or Exit, through `APP_DIR`) with no GNOME desktop (`TESTING.md` section 14). On the kiosk the CUPS queue `POS58` must point at the printer's current `usb://` address (section 12).
 - Neither project has tests or lint config. In Pango, `AA.Pango.TestApp` is a console stub that echoes stdin, and `AA.Pango.TestWinApp` is a UI library despite its name.
 - The `.gitignore` in `PangoAppQR-develop/` is inherited from an unrelated `AA.PMS` project and does not cover this solution's `bin/`, `obj/` or `packages/`.
 
@@ -148,7 +148,7 @@ Known traps:
 - `AA.Pango.RestApi` depends on IIS, System.Web, MVC 5, Swashbuckle.Core and WebActivatorEx. It has no authentication, and Swagger is enabled. It exposes barrier open, forced reboot and hard-reset endpoints.
 - Windows paths in configs: the LiteDB file, `C:\AccesosAutomaticos\...`, logo paths (no code builds paths; the Linux value of each setting is listed in the F3 entry of `MIGRATION_PLAN.md`). Since F3 the log4net folder is `logs/` in all three configs. The AMP adapter DLL writes `\AMPLog\amppinpadsemi.log` with literal backslashes, which may yield a badly named file on Linux.
 - Picob input parsing (streaming firmware only) splits on `Environment.NewLine`, so it breaks on Linux if the device sends `\r\n`. The barcode reader uses `Encoding.Default`.
-- LiteDB shared mode uses an OS-level named mutex, which Mono does not share between processes; two Mono processes writing one LiteDB file corrupted it (F5). On Linux only the kiosk app may open `pangodb.db`.
+- LiteDB shared mode uses an OS-level named mutex, which Mono does not share between processes; two Mono processes writing one LiteDB file corrupted it (F5). On Linux only the kiosk app may open `pangodb.db`; on the kiosk the files are `~/lg1/data/entry.db` and `~/lg1/data/exit.db`, outside the app folders that a reinstall replaces.
 - Newtonsoft.Json is 13.0.1 in most projects and 13.0.3 in AMP; ZXing.Net is 0.16.8 vs 0.16.9 across `packages.config` files (binding redirect concern).
 - Tuple syntax (`var (a, b)`) needs a Roslyn-based compiler (C# 7+), not Mono's `mcs`.
 
