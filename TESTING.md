@@ -159,9 +159,9 @@ Goal: see how far the Entry app gets on the Linux kiosk image under Mono, before
 
 3. Edit `~/lg1/entry/AA.Pango.App.exe.config` (the copy, never the repo file):
 
-   - `connectionStrings`, `LiteDB`: `Filename=/home/<user>/lg1/entry/pangodb.db;Connection=shared;` (the committed value is a Windows path).
+   - `connectionStrings`, `LiteDB`: `Filename=/home/<user>/lg1/data/entry.db;Connection=shared;` (the committed value is a Windows path). The database lives in `~/lg1/data`, outside the app folder, because reinstalling a build replaces the app folder; Exit uses `exit.db` there, and no two processes may open the same file (F5). Create the folder once with `mkdir -p ~/lg1/data`.
    - `log4net`, file appender: `<file value="logs/" />`. Builds from F3 on already have it; older builds had `logs\`, which Mono turns into a file name with a backslash.
-   - Both with `sed`, from `~/lg1/entry`: `sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/entry/pangodb.db#' AA.Pango.App.exe.config` and `sed -i 's#<file value="logs\\" />#<file value="logs/" />#' AA.Pango.App.exe.config`.
+   - Both with `sed`, from `~/lg1/entry`: `sed -i 's#Filename=[^;]*\.db#Filename='"$HOME"'/lg1/data/entry.db#' AA.Pango.App.exe.config` and `sed -i 's#<file value="logs\\" />#<file value="logs/" />#' AA.Pango.App.exe.config`.
    - Set `HardwareMode` to `LinuxController` and keep `ReaderSource` `Output`: in `Direct` mode Mono throws on `SerialPort.ReceivedBytesThreshold` and the app never finishes starting (A3). Set `CheckLoopDetector` to `false` unless Parso and a Picob are running, or the Entry buttons only show the vehicle-not-present panel. Entry has no `UseFakePos`; it only matters for Exit.
 
 4. Run it from its folder, because it loads `styles.dat`, `en.dat`, `es.dat` and `languagesSupported.xml` by relative name:
@@ -211,12 +211,12 @@ Same machine and Mono packages as section 9. Exit has not run under Mono before.
 2. Copy `exit-debug.tar.gz` to Debian (AnyDesk) and set up the copied config, from a terminal there:
 
    ```bash
-   mkdir -p ~/lg1/exit && tar -xzf ~/Downloads/exit-debug.tar.gz -C ~/lg1/exit && cd ~/lg1/exit
-   sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/exit/pangodb.db#' AA.Pango.App.exe.config
+   mkdir -p ~/lg1/exit ~/lg1/data && tar -xzf ~/Downloads/exit-debug.tar.gz -C ~/lg1/exit && cd ~/lg1/exit
+   sed -i 's#Filename=[^;]*\.db#Filename='"$HOME"'/lg1/data/exit.db#' AA.Pango.App.exe.config
    sed -i 's#key="HardwareMode" value="Direct"#key="HardwareMode" value="LinuxController"#' AA.Pango.App.exe.config
    sed -i 's#key="UseFakePos" value="false"#key="UseFakePos" value="true"#' AA.Pango.App.exe.config
    sed -i 's#key="PaymentProcessor" value="AMP"#key="PaymentProcessor" value="LinuxController"#' AA.Pango.App.exe.config
-   grep -n 'pangodb\|"HardwareMode"\|"UseFakePos"\|"PaymentProcessor"\|<file value' AA.Pango.App.exe.config
+   grep -n 'exit.db\|"HardwareMode"\|"UseFakePos"\|"PaymentProcessor"\|<file value' AA.Pango.App.exe.config
    ```
 
    The `grep` must show the Linux LiteDB path, `LinuxController` twice, `UseFakePos` `true` and `<file value="logs/" />`. `UseFakePos` approves every payment without a card reader; `PaymentProcessor=LinuxController` keeps the AMP driver (a COM port) from loading.
@@ -340,18 +340,18 @@ Entry on the kiosk, with Parso running as in section 12. One-time setup of the s
 4. On Debian, unpack, set the kiosk values and run:
 
    ```bash
-   pkill -f AA.Pango.App.exe; rm -rf ~/lg1/entry && mkdir -p ~/lg1/entry && tar -xzf ~/Downloads/entry-debug.tar.gz -C ~/lg1/entry && cd ~/lg1/entry && rm -rf logs
-   sed -i 's#Filename=[^;]*pangodb.db#Filename='"$HOME"'/lg1/entry/pangodb.db#; s#key="HardwareMode" value="[^"]*"#key="HardwareMode" value="LinuxController"#; s#key="ReaderSource" value="[^"]*"#key="ReaderSource" value="Output"#; s#key="CheckLoopDetector" value="[^"]*"#key="CheckLoopDetector" value="false"#; s#key="ShowAllButtons" value="[^"]*"#key="ShowAllButtons" value="true"#; s#key="PullTicketShowPhone" value="[^"]*"#key="PullTicketShowPhone" value="false"#; s#key="ShowTestInput" value="[^"]*"#key="ShowTestInput" value="false"#' AA.Pango.App.exe.config
+   pkill -f AA.Pango.App.exe; mkdir -p ~/lg1/data; [ -f ~/lg1/entry/pangodb.db ] && [ ! -f ~/lg1/data/entry.db ] && mv -v ~/lg1/entry/pangodb.db ~/lg1/data/entry.db; rm -rf ~/lg1/entry && mkdir -p ~/lg1/entry && tar -xzf ~/Downloads/entry-debug.tar.gz -C ~/lg1/entry && cd ~/lg1/entry && rm -rf logs
+   sed -i 's#Filename=[^;]*\.db#Filename='"$HOME"'/lg1/data/entry.db#; s#key="HardwareMode" value="[^"]*"#key="HardwareMode" value="LinuxController"#; s#key="ReaderSource" value="[^"]*"#key="ReaderSource" value="Output"#; s#key="CheckLoopDetector" value="[^"]*"#key="CheckLoopDetector" value="false"#; s#key="ShowAllButtons" value="[^"]*"#key="ShowAllButtons" value="true"#; s#key="PullTicketShowPhone" value="[^"]*"#key="PullTicketShowPhone" value="false"#; s#key="ShowTestInput" value="[^"]*"#key="ShowTestInput" value="false"#' AA.Pango.App.exe.config
    MONO_WINFORMS_XIM_STYLE=disabled mono --debug AA.Pango.App.exe 2>&1 | tee entry-kiosk.txt
    ```
 
-   `CheckLoopDetector` `false` only while the Picob does not answer; `ShowAllButtons` and `PullTicketShowPhone` show the Pull Ticket button and print without asking for a phone.
+   The first line moves a database left in the app folder by an older install to `~/lg1/data` before the folder is replaced. `CheckLoopDetector` `false` only while the Picob does not answer; `ShowAllButtons` and `PullTicketShowPhone` show the Pull Ticket button and print without asking for a phone.
 
 5. Check: the main screen covers the whole screen from the top-left corner, with the header text not cut off; the plate keyboard shows all keys, Confirm, CLEAR and BACK; the phone keypad the same; Pull Ticket prints the entry ticket with its QR through Parso. Send screenshots (Print Screen, Screen) and `grep -n -E 'Linux Controller|LINUX CONTROLLER|Ticket printed|PRINTER|ERROR|FATAL' ~/lg1/entry/logs/*.log | tail -30`.
 
 ## 14. Kiosk session (trial)
 
-A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1600x900 (adding that mode, which the screen does not list), turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and Entry from `~/lg1/entry` (sections 12 and 13); closing Entry ends the session. Starting it by itself at boot is part of H3.
+A login session that shows only Parso and Entry: no GNOME top bar, no desktop, the window at the top-left corner. It is a separate choice on the login screen, so the GNOME desktop stays as it is. The files are in `deploy/kiosk/` (repo root): `start.sh` sets the screen to 1600x900 (adding that mode, which the screen does not list), turns the screen blanking off, starts the Openbox window manager, Parso from `~/Documents/TREA` and the app in `APP_DIR` (`~/lg1/entry`, sections 12 and 13); closing the app ends the session. For Exit: `sed -i 's#^APP_DIR=.*#APP_DIR=$HOME/lg1/exit#' ~/kiosk/start.sh`. Starting it by itself at boot is part of H3.
 
 1. One-time setup on Debian: install Openbox and put the two files in place (copy them from the repo with AnyDesk, or create them with a text editor):
 
